@@ -3,8 +3,8 @@
 
 typedef struct s_stack	{
 	int	*arr;
-	int top;
-	int cap;
+	size_t top;
+	size_t cap;
 }				t_stack;
 
 

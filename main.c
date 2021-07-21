@@ -1,11 +1,15 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include "push_swap.h"
+#include "libft.h"
 
-void	free_split(char **arg_sp)
+void	free_split(void *data)
 {
 	size_t	i;
+	char 	**arg_sp;
 
 	i = 0;
+	arg_sp = (char **)data;
 	while (arg_sp[i])
 	{
 		free(arg_sp[i]);
@@ -14,18 +18,21 @@ void	free_split(char **arg_sp)
 	free(arg_sp);
 }
 
-void	free_stack(t_stack *stack)
+void	free_stack(void *data)
 {
+	t_stack	*stack;
+
+	stack = (t_stack *)data;
 	free(stack->arr);
 	free(stack);
 }
 
-void exit_error(size_t err, void **strct, void (*free_func)(void))
+void exit_error(size_t err, void *strct, void (*free_func)(void *))
 {
 	if (strct)
 	{
 		if (free_func == &free_stack)
-			free_func(*strct);
+			free_func(strct);
 		if (free_func == &free_split)
 			free_func(strct);
 	}
@@ -50,16 +57,29 @@ void exit_error(size_t err, void **strct, void (*free_func)(void))
 //			ПРИБАВИТЬ КОЛИЧЕСТВО ЭЛЕМЕНТОВ
 //			ОСВОБОДИТЬ ПАМЯТЬ СПЛИТА
 //			ПЕРЕЙТИ К СЛЕДУЮЩЕМУ АРГУМЕНТУ
+
+int check_is_zero(char *s) ///////
+{
+	if (*s != '+' && *s != '-' && *s != '0')
+		return (0);
+	while (*s && *s == '0')
+		s++;
+	if (!*s)
+		return (1);
+	else
+		return (0);
+}
+
 size_t	check_input(int argc, char *argv[])
 {
-	size_t	i;
+	int		i;
 	int		j;
 	int		elem;
-	int		counter;
+	int		size;
 	char	**arg_sp;
 	
-		i = 0;
-	counter = 0;
+	i = 0;
+	size = 0;
 	while (++i < argc)
 	{
 		arg_sp = ft_split(argv[i], ' ');
@@ -69,13 +89,13 @@ size_t	check_input(int argc, char *argv[])
 		while (arg_sp[++j])
 		{
 			elem = ft_atoi(arg_sp[j]);
-			if (!elem && !(check_is_int_elem(arg_sp[j])))
-				exit_error(1, arg_sp, &free_split);
+			if (!elem && !(check_is_zero(arg_sp[j]))) ///////
+				exit_error(1, (void *)arg_sp, &free_split);
 		}
-		counter += j;
+		size += j;
 		free_split(arg_sp);
 	}
-	return (counter);
+	return (size);
 }
 
 
@@ -89,18 +109,18 @@ size_t	check_input(int argc, char *argv[])
 //						ЗАВЕРШИТЬ ПРОГРАММУ
 //					ЗАПИСАТЬ ЧИСЛО В МАССИВ НАВЕРХ СТЕКА (МАССИВ1)
 //
-t_stack*	init_stack(size_t counter)
+t_stack*	init_stack(size_t size)
 {
 	t_stack *new_stack;
 
 	new_stack = (t_stack *)malloc(sizeof(t_stack) * 1);
 	if (!new_stack)
-		exit_error(3, NULL, NULL)
-	new_stack->cap = counter;
+		exit_error(3, NULL, NULL);
+	new_stack->cap = size;
 	new_stack->top = 0;
 	new_stack->arr = (int *)malloc(sizeof(int) * new_stack->cap);
 	if (!new_stack->arr)
-		exit_error(3, &new_stack, &free_stack);
+		exit_error(3, (void *)new_stack, &free_stack);
 	return (new_stack);
 }
 
@@ -112,6 +132,20 @@ size_t	ft_spllen(char **arg_sp)
 	while (*arg_sp++)
 		i++;
 	return (i);
+}
+
+int	check_is_uniq_elem(t_stack *stack, int elem)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < stack->top)
+	{
+		if (elem == stack->arr[i])
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 static void	fill_stack(t_stack *stack, int argc, char *argv[])
@@ -126,15 +160,15 @@ static void	fill_stack(t_stack *stack, int argc, char *argv[])
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, &stack, &free_stack);
+			exit_error(3, (void *)stack, &free_stack); 
 		j = ft_spllen(arg_sp);
 		while (--j > -1)
 		{
 			elem = ft_atoi(arg_sp[j]);
-			if (!(check_is_uniq_elem(elem)))
+			if (!(check_is_uniq_elem(stack, elem))) /////
 			{
 				free_split(arg_sp);
-				exit_error(2, &stack, &free_stack);
+				exit_error(2, (void *)stack, &free_stack);
 			}
 			stack->arr[stack->top++] = elem;
 		}
@@ -156,7 +190,7 @@ void	insert(t_stack *stack, size_t cur, int *arr_sorted)
 
 	new_elem = stack->arr[cur];
 	while (--cur > -1 && new_elem < arr_sorted[cur])
-		arr_sorted[cur + 1] = arr_sorted[cur]
+		arr_sorted[cur + 1] = arr_sorted[cur];
 	arr_sorted[cur + 1] = new_elem;
 }
 
@@ -175,13 +209,23 @@ int		*insertion_sort(t_stack *stack)
 	return (arr_sorted);
 }
 
-int main(int argc, char *argv[])
+//void 	partition(stack_)
+#include <stdio.h>
+void print_arr(int *arr, size_t size)
 {
 	size_t	i;
-	size_t	j;
-	int		elem;
-	int		counter;
-	char	**arg_sp;
+
+	i = 0;
+	while (i < size)
+	{
+		printf("%d\n", arr[size - i - 1]);
+		i++;
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	int		size;
 	t_stack *stack_A;
 	t_stack *stack_B;
 	int	*arr_sorted;
@@ -189,22 +233,26 @@ int main(int argc, char *argv[])
 //	ПРОЧИТАТЬ ДАННЫЕ В СТЕК ( СТРОКА ПОСЛЕДНИЙ ЭТО ВНИЗУ СТЕКА, ПЕРВЫЙ - ВВЕРХУ)
 
 //		ПРОВЕРИТЬ ДАННЫЕ
-	counter = check_input(argc, argv);
+	size = check_input(argc, argv);
 
 
 //		ВЫДЕЛИТЬ МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-	stack_A = init_stack(counter);  
+	stack_A = init_stack(size);  
 	fill_stack(stack_A, argc, argv);
 //
 //	ОТСОРТИРОВАТЬ МАССИВ И ВЫДЕЛИТЬ ПАМЯТЬ ПОД СТЕК B
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
 
-	stack_B = init_stack(counter);
+	stack_B = init_stack(size);
 	arr_sorted = insertion_sort(stack_A);
-
+	print_arr(stack_A->arr, stack_A->top);
+	write(1, "\n", 1);
+	print_arr(arr_sorted, size);
 //
 //	ОТСОРТИРОВАТЬ СТЕК
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
+	//partition(stack_A, stack_B, arr_sorted[(stack->cap - 1) / 2]); /////
+
 //			ДЛЯ КАЖДОГО ЭЛЕМЕНТА
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
 //			НАДО ЛИ ПРОВЕРНУТЬ СТЕК A
