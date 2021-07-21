@@ -109,9 +109,10 @@ size_t	check_input(int argc, char *argv[])
 //						ЗАВЕРШИТЬ ПРОГРАММУ
 //					ЗАПИСАТЬ ЧИСЛО В МАССИВ НАВЕРХ СТЕКА (МАССИВ1)
 //
-t_stack*	init_stack(size_t size)
+
+t_stack	*init_stack(size_t size, t_stack *peer)
 {
-	t_stack *new_stack;
+	t_stack	*new_stack;
 
 	new_stack = (t_stack *)malloc(sizeof(t_stack) * 1);
 	if (!new_stack)
@@ -121,6 +122,11 @@ t_stack*	init_stack(size_t size)
 	new_stack->arr = (int *)malloc(sizeof(int) * new_stack->cap);
 	if (!new_stack->arr)
 		exit_error(3, (void *)new_stack, &free_stack);
+	if (peer)
+	{
+		new_stack->peer = peer;
+		peer->peer = new_stack;
+	}
 	return (new_stack);
 }
 
@@ -212,8 +218,60 @@ int		*insertion_sort(t_stack *stack)
 	return (arr_sorted);
 }
 
-//void 	partition(stack_)
+void	rotate(t_stack *stack)
+{
+	int elem;
+	size_t cur;
+
+	elem = stack->arr[stack->top - 1];
+	cur = 0;
+	while (cur < stack->top - 1)
+	{
+		stack->arr[stack->top - cur - 1] = stack->arr[stack->top - cur - 2];
+		cur++;
+	}
+	stack->arr[0] = elem;
+}
+
+void	push(t_stack *stack1)
+{
+	t_stack *peer;
+
+	peer = stack1->peer;
+	stack1->arr[stack1->top] = peer->arr[peer->top - 1];
+	peer->top--;
+	stack1->top++;
+}
+
 #include <stdio.h>
+void 	partition(t_stack *stack1, t_stack *stack2, int medium)
+{
+	size_t	i;
+	void print_arr(int *, size_t);
+
+	i = stack1->top;
+	while (i > 0)
+	{
+		if (stack1->arr[stack1->top - 1] > medium)
+		{
+			push(stack2); ///////
+			printf("pb\n");
+			print_arr(stack1->arr, stack1->top);
+			write(1, "\n", 1);
+			print_arr(stack2->arr, stack2->top);
+		}
+		else
+		{
+			rotate(stack1); //////
+			printf("ra\n");
+			print_arr(stack1->arr, stack1->top);
+			write(1, "\n", 1);
+			print_arr(stack2->arr, stack2->top);
+		}
+		i--;
+	}
+}
+
 void print_arr(int *arr, size_t size)
 {
 	size_t	i;
@@ -240,13 +298,13 @@ int main(int argc, char *argv[])
 
 
 //		ВЫДЕЛИТЬ МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-	stack_A = init_stack(size);  
+	stack_A = init_stack(size, NULL);  
 	fill_stack(stack_A, argc, argv);
 //
 //	ОТСОРТИРОВАТЬ МАССИВ И ВЫДЕЛИТЬ ПАМЯТЬ ПОД СТЕК B
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
 
-	stack_B = init_stack(size);
+	stack_B = init_stack(size, stack_A);
 	arr_sorted = insertion_sort(stack_A);
 
 // 	print_arr(stack_A->arr, stack_A->top);
@@ -257,7 +315,12 @@ int main(int argc, char *argv[])
 //
 //	ОТСОРТИРОВАТЬ СТЕК
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
-	//partition(stack_A, stack_B, arr_sorted[(stack->cap - 1) / 2]); /////
+		print_arr(stack_A->arr, stack_A->top);
+		write(1, "\n", 1);
+		partition(stack_A, stack_B, arr_sorted[(stack_A->cap - 1) / 2]); /////
+		print_arr(stack_A->arr, stack_A->top);
+		write(1, "\n", 1);
+		print_arr(stack_B->arr, stack_B->top);
 
 //			ДЛЯ КАЖДОГО ЭЛЕМЕНТА
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
