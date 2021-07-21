@@ -188,10 +188,13 @@ void	insert(t_stack *stack, size_t cur, int *arr_sorted)
 {
 	int	new_elem;
 
-	new_elem = stack->arr[cur];
-	while (--cur > -1 && new_elem < arr_sorted[cur])
-		arr_sorted[cur + 1] = arr_sorted[cur];
-	arr_sorted[cur + 1] = new_elem;
+	new_elem = stack->arr[stack->top - cur - 1];
+	while (cur > 0 && new_elem < arr_sorted[stack->top - cur])
+	{
+		arr_sorted[stack->top - cur - 1] = arr_sorted[stack->top - cur];
+		cur--;
+	}
+	arr_sorted[stack->top - cur - 1] = new_elem;
 }
 
 int		*insertion_sort(t_stack *stack)
@@ -203,9 +206,9 @@ int		*insertion_sort(t_stack *stack)
 	if (!arr_sorted)
 		exit_error(3, NULL, NULL);
 	
-	cur = -1;
-	while (++cur < stack->cap)
-		insert(stack, cur, arr_sorted);
+	cur = 0;
+	while (cur < stack->cap)
+		insert(stack, cur++, arr_sorted);
 	return (arr_sorted);
 }
 
@@ -245,9 +248,12 @@ int main(int argc, char *argv[])
 
 	stack_B = init_stack(size);
 	arr_sorted = insertion_sort(stack_A);
-	print_arr(stack_A->arr, stack_A->top);
-	write(1, "\n", 1);
-	print_arr(arr_sorted, size);
+
+// 	print_arr(stack_A->arr, stack_A->top);
+// 	write(1, "\n", 1);
+//	print_arr(arr_sorted, size);
+
+
 //
 //	ОТСОРТИРОВАТЬ СТЕК
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
