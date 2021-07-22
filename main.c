@@ -1,5 +1,3 @@
-#include <unistd.h>
-#include <stdlib.h>
 #include "push_swap.h"
 #include "libft.h"
 
@@ -20,11 +18,10 @@ void	free_split(void *data)
 
 void	free_stack(void *data)
 {
-	t_stack	*stack;
+	t_list	*stack;
 
-	stack = (t_stack *)data;
-	free(stack->arr);
-	free(stack);
+	stack = (t_list *)data;
+	ft_lstclear(&stack, &free);
 }
 
 void exit_error(size_t err, void *strct, void (*free_func)(void *))
@@ -89,7 +86,7 @@ size_t	check_input(int argc, char *argv[])
 		while (arg_sp[++j])
 		{
 			elem = ft_atoi(arg_sp[j]);
-			if (!elem && !(check_is_zero(arg_sp[j]))) ///////
+			if (!elem && !(check_is_zero(arg_sp[j])))
 				exit_error(1, (void *)arg_sp, &free_split);
 		}
 		size += j;
@@ -110,75 +107,69 @@ size_t	check_input(int argc, char *argv[])
 //					ЗАПИСАТЬ ЧИСЛО В МАССИВ НАВЕРХ СТЕКА (МАССИВ1)
 //
 
-t_stack	*init_stack(size_t size, t_stack *peer)
+int	check_is_uniq(t_list *stack, int elem)
 {
-	t_stack	*new_stack;
-
-	new_stack = (t_stack *)malloc(sizeof(t_stack) * 1);
-	if (!new_stack)
-		exit_error(3, NULL, NULL);
-	new_stack->cap = size;
-	new_stack->top = 0;
-	new_stack->arr = (int *)malloc(sizeof(int) * new_stack->cap);
-	if (!new_stack->arr)
-		exit_error(3, (void *)new_stack, &free_stack);
-	if (peer)
+	while (stack)
 	{
-		new_stack->peer = peer;
-		peer->peer = new_stack;
-	}
-	return (new_stack);
-}
-
-size_t	ft_spllen(char **arg_sp)
-{
-	size_t	i;
-
-	i = 0;
-	while (*arg_sp++)
-		i++;
-	return (i);
-}
-
-int	check_is_uniq_elem(t_stack *stack, int elem)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < stack->top)
-	{
-		if (elem == stack->arr[i])
+		if (elem == ((t_ps_data *)stack->content)->val)
 			return (0);
-		i++;
+		stack = stack->next;
 	}
 	return (1);
 }
 
-static void	fill_stack(t_stack *stack, int argc, char *argv[])
+int	add_new_elem(t_list *stack, int elem)
+{
+	t_ps_data	*new_data;
+	t_list		*new_list;
+
+	new_data = (t_ps_data *)malloc(sizeof(t_ps_data) * 1);
+	new_data->val = elem;
+	new_data->pos = -1;
+	new_list = ft_lstnew((void *)new_data);
+	if (!new_list)
+		return (0);
+	ft_lstadd_front(&stack, ft_lstnew(new_list));
+	return (1);
+}
+
+size_t	ft_spllen(char **spl)
 {
 	size_t	i;
+
+	i = 0;
+	while (*spl++)
+		i++;
+	return (i);
+}
+
+void	init_stack(t_list *stack, int argc, char *argv[])
+{
+	int		i;
 	int		j;
 	int		elem;
 	char	**arg_sp;
+	int		ret;
 
 	i = argc;
-	while (--i > 0)
+	ret = 0;
+	while (--i > -1)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
 			exit_error(3, (void *)stack, &free_stack); 
 		j = ft_spllen(arg_sp);
-		while (--j > -1)
+		while (--j > -1 && ret == 0)
 		{
 			elem = ft_atoi(arg_sp[j]);
-			if (!(check_is_uniq_elem(stack, elem))) /////
-			{
-				free_split(arg_sp);
-				exit_error(2, (void *)stack, &free_stack);
-			}
-			stack->arr[stack->top++] = elem;
+			if (!(check_is_uniq(stack, elem))) 
+				ret = 2;
+			else if (!(add_new_elem(stack, elem)))
+				ret = 3;
 		}
 		free_split(arg_sp);
+		if (ret)
+			exit_error(ret, (void *)stack, &free_stack);
 	}
 }
 
@@ -190,85 +181,121 @@ static void	fill_stack(t_stack *stack, int argc, char *argv[])
 //					ПРИРАВНЯТЬ СЛЕДУЮЩИЙ ПРЕДЫДУЩЕМУ
 //				ЗАПИСАТЬ НОВОЕ ЧИСЛО В МАССИВ СОРТИРОВКОЙ НА ТЕКУЩЕЕ МЕСТО
 
-void	insert(t_stack *stack, size_t cur, int *arr_sorted)
+void	insert(t_list *cur, size_t i, int *arr_sorted)
 {
 	int	new_elem;
 
-	new_elem = stack->arr[stack->top - cur - 1];
-	while (cur > 0 && new_elem < arr_sorted[stack->top - cur])
+	new_elem = ((t_ps_data *)cur->content)->val;
+	while (i > 0 && new_elem < arr_sorted[i])
 	{
-		arr_sorted[stack->top - cur - 1] = arr_sorted[stack->top - cur];
-		cur--;
+		arr_sorted[i + 1] = arr_sorted[i];
+		i--;
 	}
-	arr_sorted[stack->top - cur - 1] = new_elem;
+	arr_sorted[i] = new_elem;
 }
 
-int		*insertion_sort(t_stack *stack)
+void	correct_pos(t_list *stack, int *arr_sorted)
+{
+	int		elem;
+	size_t	i;
+	t_list	*cur;
+
+	cur = stack;
+	while (cur)
+	{
+		elem = ((t_ps_data *)cur->content)->val;
+		i = 0;
+		while (elem != arr_sorted[i])
+			i++;
+		((t_ps_data *)cur->content)->pos = i;
+	}
+}
+
+int		*insertion_sort(t_list *stack, size_t size)
 {
 	int		*arr_sorted;
-	size_t	cur;
+	size_t	i;
+	t_list  *cur;
 
-	arr_sorted = (int *)malloc(sizeof(int) * stack->cap);
+	cur = stack;
+	arr_sorted = (int *)malloc(sizeof(int) * size);
 	if (!arr_sorted)
 		exit_error(3, NULL, NULL);
-	
-	cur = 0;
-	while (cur < stack->cap)
-		insert(stack, cur++, arr_sorted);
+	i = 0;
+	while (i < size)
+	{
+		insert(cur, i++, arr_sorted);
+		cur = cur->next;
+	}
+	correct_pos(stack, arr_sorted);
 	return (arr_sorted);
 }
 
-void	rotate(t_stack *stack)
+void	rotate(t_list **stack)
 {
-	int elem;
-	size_t cur;
+	t_list	*elem;
 
-	elem = stack->arr[stack->top - 1];
-	cur = 0;
-	while (cur < stack->top - 1)
-	{
-		stack->arr[stack->top - cur - 1] = stack->arr[stack->top - cur - 2];
-		cur++;
-	}
-	stack->arr[0] = elem;
+	elem = *stack;
+	if (!elem || !elem->next)
+		return ;
+	*stack = elem->next;
+	(ft_lstlast(*stack))->next = elem;
+	elem->next = NULL;
 }
 
-void	push(t_stack *stack1)
+void	push(t_list **stack1, t_list **stack2)
 {
-	t_stack *peer;
+	t_list	*elem;
 
-	peer = stack1->peer;
-	stack1->arr[stack1->top] = peer->arr[peer->top - 1];
-	peer->top--;
-	stack1->top++;
+	elem = *stack2;
+	*stack2 = elem->next;
+	elem->next = NULL;
+	ft_lstadd_front(stack1, elem);
+}
+
+void	swap(t_list **stack)
+{
+	t_list	*elem;
+	t_list	*second;
+	t_list	*third;
+
+	elem = *stack;
+	if (!elem)
+		return ;
+	second = elem->next;
+	if (!second)
+		return ;
+	third = second->next;
+	second->next = elem;
+	elem->next = third;
+	*stack = second;
 }
 
 #include <stdio.h>
-void 	partition(t_stack *stack1, t_stack *stack2, int medium)
+void 	partition(t_list **stack2, t_list **stack1, size_t size, int medium)
 {
+	void print_stack(t_list *);
 	size_t	i;
-	void print_arr(int *, size_t);
 
-	i = stack1->top;
-	while (i > 0)
+	i = 0;
+	while (i++ < size)
 	{
-		if (stack1->arr[stack1->top - 1] > medium)
+		if (((t_ps_data *)(*stack1)->content)->val > medium)
 		{
-			push(stack2); ///////
+			push(stack1, stack2); ///////
 			printf("pb\n");
-			print_arr(stack1->arr, stack1->top);
+			print_stack(*stack1);
 			write(1, "\n", 1);
-			print_arr(stack2->arr, stack2->top);
+			print_stack(*stack2);
 		}
 		else
 		{
 			rotate(stack1); //////
 			printf("ra\n");
-			print_arr(stack1->arr, stack1->top);
+			print_stack(*stack1);
 			write(1, "\n", 1);
-			print_arr(stack2->arr, stack2->top);
+			print_stack(*stack2);
 		}
-		i--;
 	}
 }
 
@@ -284,28 +311,39 @@ void print_arr(int *arr, size_t size)
 	}
 }
 
+void print_stack(t_list *stack)
+{
+	t_list *cur;
+
+	cur = stack;
+	while (cur)
+	{
+		printf("%d %zu\n", ((t_ps_data *)cur->content)->val, ((t_ps_data *)cur->content)->pos);
+		cur = cur->next;
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	int		size;
-	t_stack *stack_A;
-	t_stack *stack_B;
+	t_list *stack_A;
+	t_list *stack_B;
 	int	*arr_sorted;
 
 //	ПРОЧИТАТЬ ДАННЫЕ В СТЕК ( СТРОКА ПОСЛЕДНИЙ ЭТО ВНИЗУ СТЕКА, ПЕРВЫЙ - ВВЕРХУ)
 
 //		ПРОВЕРИТЬ ДАННЫЕ
 	size = check_input(argc, argv);
-
+	stack_A = (t_list *)malloc(sizeof(t_list) * 1);
+	stack_B = (t_list *)malloc(sizeof(t_list) * 1);
 
 //		ВЫДЕЛИТЬ МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-	stack_A = init_stack(size, NULL);  
-	fill_stack(stack_A, argc, argv);
+	init_stack(stack_A, argc, argv);
 //
 //	ОТСОРТИРОВАТЬ МАССИВ И ВЫДЕЛИТЬ ПАМЯТЬ ПОД СТЕК B
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
 
-	stack_B = init_stack(size, stack_A);
-	arr_sorted = insertion_sort(stack_A);
+	arr_sorted = insertion_sort(stack_A, size);
 
 // 	print_arr(stack_A->arr, stack_A->top);
 // 	write(1, "\n", 1);
@@ -315,12 +353,12 @@ int main(int argc, char *argv[])
 //
 //	ОТСОРТИРОВАТЬ СТЕК
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
-		print_arr(stack_A->arr, stack_A->top);
+		print_stack(stack_A);
 		write(1, "\n", 1);
-		partition(stack_A, stack_B, arr_sorted[(stack_A->cap - 1) / 2]); /////
-		print_arr(stack_A->arr, stack_A->top);
+		partition(&stack_B, &stack_A, size, arr_sorted[(size - 1) / 2]); /////
+		print_stack(stack_A);
 		write(1, "\n", 1);
-		print_arr(stack_B->arr, stack_B->top);
+		print_stack(stack_B);
 
 //			ДЛЯ КАЖДОГО ЭЛЕМЕНТА
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
