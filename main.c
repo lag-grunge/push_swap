@@ -111,14 +111,14 @@ int	check_is_uniq(t_list *stack, int elem)
 {
 	while (stack)
 	{
-		if (elem == ((t_ps_data *)stack->content)->val)
+		if (elem == ((t_ps_data *)(stack->content))->val)
 			return (0);
 		stack = stack->next;
 	}
 	return (1);
 }
 
-int	add_new_elem(t_list *stack, int elem)
+int	add_new_elem(t_list **stack, int elem)
 {
 	t_ps_data	*new_data;
 	t_list		*new_list;
@@ -126,10 +126,10 @@ int	add_new_elem(t_list *stack, int elem)
 	new_data = (t_ps_data *)malloc(sizeof(t_ps_data) * 1);
 	new_data->val = elem;
 	new_data->pos = -1;
-	new_list = ft_lstnew((void *)new_data);
+	new_list = ft_lstnew(new_data);
 	if (!new_list)
 		return (0);
-	ft_lstadd_front(&stack, ft_lstnew(new_list));
+	ft_lstadd_front(stack, new_list);
 	return (1);
 }
 
@@ -143,34 +143,42 @@ size_t	ft_spllen(char **spl)
 	return (i);
 }
 
-void	init_stack(t_list *stack, int argc, char *argv[])
+int	proc_elem(t_list **stack, char **arg_sp, int j)
+{
+	int elem;
+
+	elem = ft_atoi(arg_sp[j]);
+	if (!(check_is_uniq(*stack, elem))) 
+		return (2);
+	else if (!(add_new_elem(stack, elem)))
+		return (3);
+	return (0);
+}
+
+t_list	*init_stack(int argc, char *argv[])
 {
 	int		i;
 	int		j;
-	int		elem;
 	char	**arg_sp;
 	int		ret;
+	t_list *stack;
 
 	i = argc;
 	ret = 0;
-	while (--i > -1)
+	stack = NULL;
+	while (--i > 0)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
 			exit_error(3, (void *)stack, &free_stack); 
 		j = ft_spllen(arg_sp);
 		while (--j > -1 && ret == 0)
-		{
-			elem = ft_atoi(arg_sp[j]);
-			if (!(check_is_uniq(stack, elem))) 
-				ret = 2;
-			else if (!(add_new_elem(stack, elem)))
-				ret = 3;
-		}
+			ret = proc_elem(&stack, arg_sp, j);
 		free_split(arg_sp);
 		if (ret)
 			exit_error(ret, (void *)stack, &free_stack);
 	}
+	return (stack);
 }
 
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
@@ -185,10 +193,10 @@ void	insert(t_list *cur, size_t i, int *arr_sorted)
 {
 	int	new_elem;
 
-	new_elem = ((t_ps_data *)cur->content)->val;
+	new_elem = ((t_ps_data *)(cur->content))->val;
 	while (i > 0 && new_elem < arr_sorted[i])
 	{
-		arr_sorted[i + 1] = arr_sorted[i];
+		arr_sorted[i] = arr_sorted[i - 1];
 		i--;
 	}
 	arr_sorted[i] = new_elem;
@@ -203,11 +211,12 @@ void	correct_pos(t_list *stack, int *arr_sorted)
 	cur = stack;
 	while (cur)
 	{
-		elem = ((t_ps_data *)cur->content)->val;
+		elem = ((t_ps_data *)(cur->content))->val;
 		i = 0;
 		while (elem != arr_sorted[i])
 			i++;
-		((t_ps_data *)cur->content)->pos = i;
+		((t_ps_data *)(cur->content))->pos = i;
+		cur = cur->next;
 	}
 }
 
@@ -224,8 +233,9 @@ int		*insertion_sort(t_list *stack, size_t size)
 	i = 0;
 	while (i < size)
 	{
-		insert(cur, i++, arr_sorted);
+		insert(cur, i, arr_sorted);
 		cur = cur->next;
+		i++;
 	}
 	correct_pos(stack, arr_sorted);
 	return (arr_sorted);
@@ -248,6 +258,8 @@ void	push(t_list **stack1, t_list **stack2)
 	t_list	*elem;
 
 	elem = *stack2;
+	if (!elem)
+		return ;
 	*stack2 = elem->next;
 	elem->next = NULL;
 	ft_lstadd_front(stack1, elem);
@@ -272,21 +284,23 @@ void	swap(t_list **stack)
 }
 
 #include <stdio.h>
-void 	partition(t_list **stack2, t_list **stack1, size_t size, int medium)
+t_list	*partition(t_list **stack1, size_t size, int medium)
 {
 	void print_stack(t_list *);
 	size_t	i;
+	t_list	*stack2;
 
 	i = 0;
+	stack2 = NULL;
 	while (i++ < size)
 	{
-		if (((t_ps_data *)(*stack1)->content)->val > medium)
+		if (((t_ps_data *)((*stack1)->content))->val > medium)
 		{
-			push(stack1, stack2); ///////
+			push(stack1, &stack2); ///////
 			printf("pb\n");
 			print_stack(*stack1);
 			write(1, "\n", 1);
-			print_stack(*stack2);
+			print_stack(stack2);
 		}
 		else
 		{
@@ -294,9 +308,10 @@ void 	partition(t_list **stack2, t_list **stack1, size_t size, int medium)
 			printf("ra\n");
 			print_stack(*stack1);
 			write(1, "\n", 1);
-			print_stack(*stack2);
+			print_stack(stack2);
 		}
 	}
+	return (stack2);
 }
 
 void print_arr(int *arr, size_t size)
@@ -318,7 +333,7 @@ void print_stack(t_list *stack)
 	cur = stack;
 	while (cur)
 	{
-		printf("%d %zu\n", ((t_ps_data *)cur->content)->val, ((t_ps_data *)cur->content)->pos);
+		printf("%d %zu\n", ((t_ps_data *)(cur->content))->val, ((t_ps_data *)(cur->content))->pos);
 		cur = cur->next;
 	}
 }
@@ -334,11 +349,8 @@ int main(int argc, char *argv[])
 
 //		ПРОВЕРИТЬ ДАННЫЕ
 	size = check_input(argc, argv);
-	stack_A = (t_list *)malloc(sizeof(t_list) * 1);
-	stack_B = (t_list *)malloc(sizeof(t_list) * 1);
-
 //		ВЫДЕЛИТЬ МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-	init_stack(stack_A, argc, argv);
+	stack_A = init_stack(argc, argv);
 //
 //	ОТСОРТИРОВАТЬ МАССИВ И ВЫДЕЛИТЬ ПАМЯТЬ ПОД СТЕК B
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
@@ -355,9 +367,11 @@ int main(int argc, char *argv[])
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
 		print_stack(stack_A);
 		write(1, "\n", 1);
-		partition(&stack_B, &stack_A, size, arr_sorted[(size - 1) / 2]); /////
+		stack_B = partition(&stack_A, size, arr_sorted[(size - 1) / 2]); /////
+		printf("stack_A\n");
 		print_stack(stack_A);
-		write(1, "\n", 1);
+		write(1, "\n\n\n", 3);
+		printf("stack_B\n");
 		print_stack(stack_B);
 
 //			ДЛЯ КАЖДОГО ЭЛЕМЕНТА
