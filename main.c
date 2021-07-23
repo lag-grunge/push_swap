@@ -35,9 +35,9 @@ void exit_error(size_t err, void *strct, void (*free_func)(void *))
 	}
 	if (err == 1)
 		write(2, "Error: non-integer elem\n", 24);
-	if (err == 2)
+	else if (err == 2)
 		write(2, "Error: non-unique elem\n", 23);
-	if (err == 3)
+	else if (err == 3)
 		write(2, "Error: cannot allocate memory or non-correct arg\n", 48);
 	exit (err);
 }
@@ -294,9 +294,9 @@ t_list	*partition(t_list **stack1, size_t size, int medium)
 	stack2 = NULL;
 	while (i++ < size)
 	{
-		if (((t_ps_data *)((*stack1)->content))->val > medium)
+		if (((t_ps_data *)((*stack1)->content))->val <= medium)
 		{
-			push(stack1, &stack2); ///////
+			push(&stack2, stack1); ///////
 			printf("pb\n");
 			print_stack(*stack1);
 			write(1, "\n", 1);
@@ -338,8 +338,24 @@ void print_stack(t_list *stack)
 	}
 }
 
+void	small_size(t_list **stack_A, int size)
+{
+	if (size == 2)
+		small_2(stack_A);
+	else if (size == 3) 
+		small_3(stack_A);
+	else if (size == 4) 
+		small_4(stack_A);
+	else if (size == 5) 
+		small_5(stack_A);
+
+	
+	exit_error(0, (void *)stack_A, &free_stack);
+}
+
 int main(int argc, char *argv[])
 {
+	int		size_A;
 	int		size;
 	t_list *stack_A;
 	t_list *stack_B;
@@ -349,40 +365,36 @@ int main(int argc, char *argv[])
 
 //		ПРОВЕРИТЬ ДАННЫЕ
 	size = check_input(argc, argv);
-//		ВЫДЕЛИТЬ МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
+	size_A = size;
+//		ЗАПИСАТЬ ДАННЫЕ В СТЕК
 	stack_A = init_stack(argc, argv);
-//
-//	ОТСОРТИРОВАТЬ МАССИВ И ВЫДЕЛИТЬ ПАМЯТЬ ПОД СТЕК B
-//		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-
+//	ОТСОРТИРОВАТЬ МАССИВ и произвести изменения в списке 
 	arr_sorted = insertion_sort(stack_A, size);
-
-// 	print_arr(stack_A->arr, stack_A->top);
-// 	write(1, "\n", 1);
-//	print_arr(arr_sorted, size);
 
 
 //
 //	ОТСОРТИРОВАТЬ СТЕК
+//	ЕСЛИ РАЗМЕР 2 .. 5
+	small_size(&stack_A, size);
+
+//  ЕСЛИ РАЗМЕР БОЛЬШЕ 5
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
 		print_stack(stack_A);
 		write(1, "\n", 1);
-		stack_B = partition(&stack_A, size, arr_sorted[(size - 1) / 2]); /////
+		stack_B = partition(&stack_A, size, arr_sorted[size / 2]); /////
 		printf("stack_A\n");
 		print_stack(stack_A);
-		write(1, "\n\n\n", 3);
+		write(1, "\n", 3);
 		printf("stack_B\n");
 		print_stack(stack_B);
 
-//			ДЛЯ КАЖДОГО ЭЛЕМЕНТА
+		
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
 //			НАДО ЛИ ПРОВЕРНУТЬ СТЕК A
 //			НАДО ЛИ ПРОВЕРНУТЬ СТЕК B
 //			СДЕЛАТЬ ЛИ СВОП СТЕК A
 //			СДЕЛАТЬ ЛИ СВОП СТЕК B
-//		СДЕЛАТЬ ДЕЙСТВИЕ
-//			
-//		ЗАПИСАТЬ ДЕЙСТВИЕ
+//		СДЕЛАТЬ ДЕЙСТВИЕ и ЗАПИСАТЬ ДЕЙСТВИЕ
 //			
 //
 
