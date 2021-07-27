@@ -62,3 +62,20 @@ int		*insertion_sort(t_list *stack, size_t size)
 	correct_pos(stack, arr_sorted);
 	return (arr_sorted);
 }
+
+void	check_if_stack_sorted(t_list **stack)
+{
+	t_list	*cur;
+	size_t	i;
+
+	cur = *stack;
+	i = 0;
+	while (cur)
+	{
+		if (!(seek_pos(cur, i, 1)))
+			return ;
+		i++;
+		cur = cur->next;
+	}
+	exit_error(0, (void *)*stack, &free_stack);
+}

@@ -16,21 +16,37 @@ void exit_error(size_t err, void *strct, void (*free_func)(void *));
 void	small_size(t_list **stack_A, int size);
 
 void	rotate(t_list **stack);
+void	reverse_rotate(t_list **stack);
 void	push(t_list **stack1, t_list **stack2);
 void	swap(t_list **stack);
 int		seek_pos(t_list *stack, size_t part, size_t size);
+void	rotate_both(t_list **stack1, t_list **stack2);
+void	reverse_rotate_both(t_list **stack1, t_list **stack2);
+void	swap_both(t_list **stack1, t_list **stack2);
 void	partition(t_list **stack2, t_list **stack1, size_t part, size_t size);
+# define ra rotate(stack_A);
+# define rra reverse_rotate(stack_A);
+# define sa swap(stack_A);
+# define pa push(stack_A, stack_B);
+# define rb rotate(stack_B);
+# define rrb reverse_rotate(stack_B);
+# define sb swap(stack_B);
+# define pb push(stack_B, stack_A);
+# define rrr reverse_rotate_both(stack_A, stack_B);
+# define rr rotate_both(stack_A, stack_B);
+# define ss swap_both(stack_A, stack_B);
 
 void	insert(t_list *cur, size_t i, int *arr_sorted);
 int		*insertion_sort(t_list *stack, size_t size);
 void	correct_pos(t_list *stack, int *arr_sorted);
+void	check_if_stack_sorted(t_list **stack);
 
 int	check_is_uniq(t_list *stack, int elem);
 int	add_new_elem(t_list **stack, int elem);
 int	proc_elem(t_list **stack, char **arg_sp, int j);
-int check_is_zero(char *s);
+int check_is_zero_or_overflow(char *s, int elem);
 size_t	check_input(int argc, char *argv[]);
-t_list	*init_stack(int argc, char *argv[]);
+void	init_stack(int argc, char *argv[], t_list **stack);
 
 void	small_2(t_list	**stack);
 void	small_3(t_list	**stack);

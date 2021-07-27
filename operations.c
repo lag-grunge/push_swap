@@ -14,6 +14,21 @@ void	rotate(t_list **stack)
 	elem->next = NULL;
 }
 
+void	reverse_rotate(t_list **stack)
+{
+	t_list	*elem;
+	t_list	*cur;
+
+	cur = *stack;
+	if (!cur || !cur->next)
+		return ;
+	elem = ft_lstlast(*stack);
+	while (cur->next != elem)
+		cur = cur->next;
+	cur->next = NULL;
+	ft_lstadd_front(stack, elem);
+}
+
 void	push(t_list **stack1, t_list **stack2)
 {
 	t_list	*elem;
@@ -54,19 +69,4 @@ int	seek_pos(t_list *stack, size_t part, size_t size)
 	return (0);
 }
 
-void	partition(t_list **stack2, t_list **stack1, size_t part, size_t size)
-{
-	size_t	i;
 
-	i = 0;
-	while (i < size)
-	{
-		if (seek_pos(*stack1, part, size))
-		{
-			push(stack2, stack1); 
-			i++;
-		}
-		else
-			rotate(stack1);
-	}
-}

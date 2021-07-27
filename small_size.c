@@ -1,64 +1,65 @@
-
 #include "push_swap.h"
 
-void	small_2(t_list	**stack)
+void	small_2(t_list	**stack_A)
 {
-	if ((t_ps_data *)(*stack->content)->pos == 1)
-		swap(stack);
+	if (seek_pos(*stack_A, 1, 1))
+		sa
 	return ;
 }
 
-void	small_3(t_list	**stack)
+void	small_3(t_list	**stack_A)
 {
-	if ((t_ps_data *)(*stack->content)->pos == 2)
-		reverse_rotate(stack);
-	else if ((t_ps_data *)(*stack->next->content)->pos == 2)
-		rotate(stack);
-	if ((t_ps_data *)(*stack->content)->pos == 1)
-		swap(stack);
+	if (seek_pos(*stack_A, 2, 1))
+		rra
+	else if (seek_pos((*stack_A)->next, 2, 1))
+		ra
+	if (seek_pos(*stack_A, 1, 1))
+		sa
 	return ;
 }
 
-void	small_4(t_list	**stack)
+void	small_4(t_list	**stack_A)
 {
-	t_list	*stack2;
+	t_list	**stack_B;
+	t_list	*elem;
 
-	stack2 = NULL;
-	partition(&stack2, stack1, 0, 1);
-	small_3(stack);
-	push(stack, &stack2);
+	elem = NULL;
+	stack_B = &elem;
+	partition(stack_B, stack_A, 0, 1);
+	small_3(stack_A);
+	pa
 	return ;
 }
 
-
-
-void	small_5(t_list	**stack)
+void	small_5(t_list	**stack_A)
 {
-	t_list	*stack2;
-	int	res;
+	t_list	**stack_B;
+	int		res;
+	t_list	*elem;
 
-	stack2 = NULL;
+	elem = NULL;
+	stack_B = &elem;
 	res = 0;
-	partition(&stack2, stack1, 0, 2);
-	if ((t_ps_data *)(*stack2->content)->pos == 0)
+	partition(stack_B, stack_A, 0, 2);
+	if (seek_pos(*stack_B, 0, 1))
 	{
-		if ((t_ps_data *)(*stack->content)->pos == 2)
+		if (seek_pos(*stack_A, 2, 1))
 			res = 1;
-		else if ((t_ps_data *)(*stack->next->content)->pos == 2)
+		else if (seek_pos((*stack_A)->next, 2, 1))
 			res = 2;
 		if (res == 2)
-			reverse_rotate_both(stack, stack2);
+			rrr
 		else if (res == 1)
-			rotate_both(stack, stack2);
-		if ((t_ps_data *)(*stack->content)->pos == 1 && !res)
-			swap_both(stack, stack2);
-		else if ((t_ps_data *)(*stack->content)->pos == 0 && !res)
-			swap(stack2);
+			rr
+		if (!res && seek_pos(*stack_A, 1, 1))
+			ss
+		else if (!res)
+			sb
 	}
 	else
-		small_3(stack);
-	push(stack, &stack2);
-	push(stack, &stack2);
+		small_3(stack_A);
+	push(stack_A, stack_B);
+	push(stack_A, stack_B);
 	return ;
 }
 

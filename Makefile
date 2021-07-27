@@ -2,7 +2,7 @@ NAME = push_swap
 
 SRCS = input.c sorted_array.c \
 	   init_stack.c operations.c \
-		small_size.c
+		both_operations.c small_size.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -22,3 +22,9 @@ ${OBJS} : %.o : %.c
 
 ${LIBFT} : ${LIB_DIR}
 	make -C ${LIB_DIR}
+
+clean :
+	rm ${OBJS}
+
+fclean : clean 
+	rm ${NAME}

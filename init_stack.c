@@ -61,28 +61,28 @@ int	proc_elem(t_list **stack, char **arg_sp, int j)
 	return (0);
 }
 
-t_list	*init_stack(int argc, char *argv[])
+void	init_stack(int argc, char *argv[], t_list **stack)
 {
 	int		i;
 	int		j;
 	char	**arg_sp;
 	int		ret;
-	t_list *stack;
+	t_list *cur_stack;
 
 	i = argc;
 	ret = 0;
-	stack = NULL;
+	cur_stack = NULL;
 	while (--i > 0)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, (void *)stack, &free_stack); 
+			exit_error(3, (void *)cur_stack, &free_stack); 
 		j = ft_spllen(arg_sp);
 		while (--j > -1 && ret == 0)
-			ret = proc_elem(&stack, arg_sp, j);
+			ret = proc_elem(&cur_stack, arg_sp, j);
 		free_split(arg_sp);
 		if (ret)
-			exit_error(ret, (void *)stack, &free_stack);
+			exit_error(ret, (void *)cur_stack, &free_stack);
 	}
-	return (stack);
+	*stack = cur_stack;
 }
