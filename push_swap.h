@@ -49,7 +49,7 @@ size_t	check_input(int argc, char *argv[]);
 void	init_stack(int argc, char *argv[], t_list **stack);
 
 void	small_2(t_list	**stack);
-void	small_3(t_list	**stack);
+void	small_3(t_list	**stack, int start);
 void	small_4(t_list	**stack);
 void	small_5(t_list	**stack);
 

@@ -2,14 +2,16 @@
 
 void	small_size(t_list **stack_A, int size)
 {
+//	print_stack(*stack_A);
 	if (size == 2)
 		small_2(stack_A);
 	else if (size == 3) 
-		small_3(stack_A);
+		small_3(stack_A, 0);
 	else if (size == 4) 
 		small_4(stack_A);
 	else if (size == 5) 
 		small_5(stack_A);
+//	print_stack(*stack_A);
 	exit_error(0, (void *)*stack_A, &free_stack);
 }
 
@@ -32,6 +34,7 @@ int main(int argc, char *argv[])
 	stack_B = NULL;
 //	ОТСОРТИРОВАТЬ МАССИВ и произвести изменения в списке 
 	arr_sorted = insertion_sort(*stack_A, size);
+//	print_arr(arr_sorted, size);
 //  ПРОВЕРИТЬ ОТСОРТИРОВАН ЛИ СТЕК, если ДА завершаем программу.
 	check_if_stack_sorted(stack_A); //////
 

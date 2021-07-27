@@ -57,14 +57,19 @@ void exit_error(size_t err, void *strct, void (*free_func)(void *))
 
 int check_is_zero_or_overflow(char *s, int elem) ///////
 {
-	if (*s != '+' && *s != '-' && *s != '0')
-		return (0);
-	while (*s && *s == '0')
-		s++;
-	if (!*s || ((elem == -1) && (*s != '1' || s[1])))
-		return (1);
+	if (!elem || elem == -1)
+	{
+		if (*s != '+' && *s != '-' && *s != '0')
+			return (0);
+		while (*s && *s == '0')
+			s++;
+		if (!*s || ((elem == -1) && (*s != '1' || s[1])))
+			return (1);
+		else
+			return (0);
+	}
 	else
-		return (0);
+		return (1);
 }
 
 size_t	check_input(int argc, char *argv[])
@@ -86,7 +91,7 @@ size_t	check_input(int argc, char *argv[])
 		while (arg_sp[++j])
 		{
 			elem = ft_atoi(arg_sp[j]);
-			if (!elem && !(check_is_zero_or_overflow(arg_sp[j], elem)))
+			if (!(check_is_zero_or_overflow(arg_sp[j], elem)))
 				exit_error(1, (void *)arg_sp, &free_split);
 		}
 		size += j;

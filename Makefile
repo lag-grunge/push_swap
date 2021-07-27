@@ -2,7 +2,8 @@ NAME = push_swap
 
 SRCS = input.c sorted_array.c \
 	   init_stack.c operations.c \
-		both_operations.c small_size.c
+		both_operations.c small_size.c \
+		print_stack.c
 
 OBJS = ${SRCS:.c=.o}
 

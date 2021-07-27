@@ -16,7 +16,7 @@ void	insert(t_list *cur, size_t i, int *arr_sorted)
 	int	new_elem;
 
 	new_elem = ((t_ps_data *)(cur->content))->val;
-	while (i > 0 && new_elem < arr_sorted[i])
+	while (i > 0 && new_elem < arr_sorted[i - 1])
 	{
 		arr_sorted[i] = arr_sorted[i - 1];
 		i--;
