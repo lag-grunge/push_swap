@@ -103,6 +103,8 @@ size_t	check_input(int argc, char *argv[])
 		size += j;
 		free_split(arg_sp);
 	}
+	if (!size)
+		exit_error(0, NULL, NULL, NULL);
 	return (size);
 }
 

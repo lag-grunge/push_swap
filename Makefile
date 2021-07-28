@@ -33,4 +33,4 @@ clean :
 	rm ${OBJS}
 
 fclean : clean 
-	rm ${NAME}
+	rm ${NAME} ${NAME_2}
