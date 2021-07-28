@@ -12,7 +12,6 @@ void	small_size(t_list **stack_A, int size)
 	else if (size == 5) 
 		small_5(stack_A);
 //	print_stack(*stack_A);
-	exit_error(0, (void *)*stack_A, &free_stack);
 }
 
 int main(int argc, char *argv[])
@@ -36,7 +35,7 @@ int main(int argc, char *argv[])
 	arr_sorted = insertion_sort(*stack_A, size);
 //	print_arr(arr_sorted, size);
 //  ПРОВЕРИТЬ ОТСОРТИРОВАН ЛИ СТЕК, если ДА завершаем программу.
-	check_if_stack_sorted(stack_A); //////
+	check_if_stack_sorted(stack_A, size, 0); //////
 
 //
 //	ОТСОРТИРОВАТЬ СТЕК
@@ -44,6 +43,7 @@ int main(int argc, char *argv[])
 	if (size > 1 && size < 6)
 	{
 		small_size(stack_A, size);
+		exit_error(0, (void *)*stack_A, &free_stack, arr_sorted);
 	}
 	else
 	{

@@ -39,7 +39,7 @@ void	partition(t_list **stack2, t_list **stack1, size_t part, size_t size);
 void	insert(t_list *cur, size_t i, int *arr_sorted);
 int		*insertion_sort(t_list *stack, size_t size);
 void	correct_pos(t_list *stack, int *arr_sorted);
-void	check_if_stack_sorted(t_list **stack);
+void	check_if_stack_sorted(t_list **stack, size_t size, int chckr, int *arr);
 
 int	check_is_uniq(t_list *stack, int elem);
 int	add_new_elem(t_list **stack, int elem);

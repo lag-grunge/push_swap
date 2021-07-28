@@ -24,7 +24,7 @@ void	free_stack(void *data)
 	ft_lstclear(&stack, &free);
 }
 
-void exit_error(size_t err, void *strct, void (*free_func)(void *))
+void exit_error(size_t err, void *strct, void (*free_func)(void *), int *arr)
 {
 	if (strct)
 	{
@@ -33,12 +33,18 @@ void exit_error(size_t err, void *strct, void (*free_func)(void *))
 		if (free_func == &free_split)
 			free_func(strct);
 	}
+	if (arr)
+		free(arr);
 	if (err == 1)
 		write(2, "Error: non-integer elem\n", 24);
 	else if (err == 2)
 		write(2, "Error: non-unique elem\n", 23);
 	else if (err == 3)
 		write(2, "Error: cannot allocate memory or non-correct arg\n", 48);
+	else if (err == 4)
+		write(2, "Error: checker got non-correct command\n", 39);
+	else if (err == 5)
+		write(2, "Error: stack_A is not full or not sorted\n", 41);
 	exit (err);
 }
 //	ПРОЧИТАТЬ ДАННЫЕ В СТЕК ( СТРОКА ПОСЛЕДНИЙ ЭТО ВНИЗУ СТЕКА, ПЕРВЫЙ - ВВЕРХУ)
@@ -86,13 +92,13 @@ size_t	check_input(int argc, char *argv[])
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, NULL, NULL);
+			exit_error(3, NULL, NULL, NULL);
 		j = -1;
 		while (arg_sp[++j])
 		{
 			elem = ft_atoi(arg_sp[j]);
 			if (!(check_is_zero_or_overflow(arg_sp[j], elem)))
-				exit_error(1, (void *)arg_sp, &free_split);
+				exit_error(1, (void *)arg_sp, &free_split, NULL);
 		}
 		size += j;
 		free_split(arg_sp);

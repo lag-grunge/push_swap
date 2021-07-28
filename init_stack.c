@@ -76,13 +76,13 @@ void	init_stack(int argc, char *argv[], t_list **stack)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, (void *)cur_stack, &free_stack); 
+			exit_error(3, (void *)cur_stack, &free_stack, NULL); 
 		j = ft_spllen(arg_sp);
 		while (--j > -1 && ret == 0)
 			ret = proc_elem(&cur_stack, arg_sp, j);
 		free_split(arg_sp);
 		if (ret)
-			exit_error(ret, (void *)cur_stack, &free_stack);
+			exit_error(ret, (void *)cur_stack, &free_stack, NULL);
 	}
 	*stack = cur_stack;
 }
