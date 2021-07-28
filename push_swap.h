@@ -12,7 +12,7 @@ typedef struct s_ps_data	{
 
 void	free_split(void *data);
 void	free_stack(void *data);
-void exit_error(size_t err, void *strct, void (*free_func)(void *));
+void exit_error(size_t err, void *strct, void (*free_func)(void *), int *arr);
 void	small_size(t_list **stack_A, int size);
 
 void	rotate(t_list **stack);

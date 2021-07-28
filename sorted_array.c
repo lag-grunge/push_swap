@@ -74,7 +74,7 @@ void	check_if_stack_sorted(t_list **stack, size_t size, int chckr, int *arr)
 	{
 		if (!(seek_pos(cur, i, 1)))
 		{
-			if (checker)
+			if (chckr)
 				break ;
 			return ;
 		}
@@ -86,7 +86,7 @@ void	check_if_stack_sorted(t_list **stack, size_t size, int chckr, int *arr)
 		write(1, "KO\n", 3);
 		exit_error(5, (void *)*stack, &free_stack, arr);
 	}
-	else if (checker)
+	else if (chckr)
 		write(1, "OK\n", 3);
 	else 
 		exit_error(0, (void *)*stack, &free_stack, arr);

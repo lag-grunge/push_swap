@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	arr_sorted = insertion_sort(*stack_A, size);
 //	print_arr(arr_sorted, size);
 //  ПРОВЕРИТЬ ОТСОРТИРОВАН ЛИ СТЕК, если ДА завершаем программу.
-	check_if_stack_sorted(stack_A, size, 0); //////
+	check_if_stack_sorted(stack_A, size, 0, arr_sorted); //////
 
 //
 //	ОТСОРТИРОВАТЬ СТЕК
