@@ -20,6 +20,7 @@ void	reverse_rotate(t_list **stack);
 void	push(t_list **stack1, t_list **stack2);
 void	swap(t_list **stack);
 int		seek_pos(t_list *stack, size_t part, size_t size);
+size_t	get_pos(t_list *stack, size_t i);
 void	rotate_both(t_list **stack1, t_list **stack2);
 void	reverse_rotate_both(t_list **stack1, t_list **stack2);
 void	swap_both(t_list **stack1, t_list **stack2);

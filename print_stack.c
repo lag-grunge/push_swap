@@ -2,6 +2,7 @@
 
 void	print_stack(t_list *stack)
 {
+
 	while (stack)
 	{
 		printf("%d\n", ((t_ps_data *)(stack->content))->val);

@@ -69,4 +69,12 @@ int	seek_pos(t_list *stack, size_t part, size_t size)
 	return (0);
 }
 
+size_t	get_pos(t_list *stack, size_t i)
+{
+	size_t	j;
 
+	j = 0;
+	while (j++ < i)
+		stack = stack->next;
+	return (((t_ps_data *)(stack->content))->pos);
+}
