@@ -1,5 +1,4 @@
 #include "push_swap.h"
-#include "libft.h"
 
 void	free_split(void *data)
 {
@@ -181,6 +180,7 @@ t_list	*init_stack(int argc, char *argv[])
 	return (stack);
 }
 
+
 //		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
 //		ОТСОРТИРОВАТЬ МАССИВ (СОРТИРОВКА ВСТАВКОЙ)
 //			ДЛЯ КАЖДОГО ЭЛЕМЕНТА МАССИВА
@@ -283,35 +283,38 @@ void	swap(t_list **stack)
 	*stack = second;
 }
 
+void	seek_pos(t_list *stack, int a, int b)
+{
+	int	c;
+	int	d;
+
+	if (b == -1)
+		return ((t_ps_data*)(stack->content)->pos == a);
+	else if (b > 0)
+	{
+		c = ((t_ps_data*)(stack->content)->pos >= a);
+		d = ((t_ps_data*)(stack->content)->pos < b);
+		return (c && d);
+	}
+}
+
 #include <stdio.h>
-t_list	*partition(t_list **stack1, size_t size, int medium)
+void 	partition(t_list **stack2, t_list **stack1, int part, size_t size)
 {
 	void print_stack(t_list *);
 	size_t	i;
-	t_list	*stack2;
 
 	i = 0;
-	stack2 = NULL;
-	while (i++ < size)
+	while (i < size)
 	{
-		if (((t_ps_data *)((*stack1)->content))->val <= medium)
+		if (seek_pos(stack())
 		{
-			push(&stack2, stack1); ///////
-			printf("pb\n");
-			print_stack(*stack1);
-			write(1, "\n", 1);
-			print_stack(stack2);
+			i++;
+			push(&stack2, stack1);
 		}
 		else
-		{
-			rotate(stack1); //////
-			printf("ra\n");
-			print_stack(*stack1);
-			write(1, "\n", 1);
-			print_stack(stack2);
-		}
+			rotate(stack1); 
 	}
-	return (stack2);
 }
 
 void print_arr(int *arr, size_t size)
@@ -381,7 +384,7 @@ int main(int argc, char *argv[])
 //		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
 		print_stack(stack_A);
 		write(1, "\n", 1);
-		stack_B = partition(&stack_A, size, arr_sorted[size / 2]); /////
+		stack_B = partition(&stack_A, size); /////
 		printf("stack_A\n");
 		print_stack(stack_A);
 		write(1, "\n", 3);
