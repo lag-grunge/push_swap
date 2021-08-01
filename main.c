@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
 	int		size;
 	int		*arr_sorted;
 	t_list 	**stack_B;
-	int		part = 5;
 
 //	ПРОЧИТАТЬ ДАННЫЕ В СТЕК ( СТРОКА ПОСЛЕДНИЙ ЭТО ВНИЗУ СТЕКА, ПЕРВЫЙ - ВВЕРХУ)
 
@@ -46,24 +45,9 @@ int main(int argc, char *argv[])
 		exit_error(0, (void *)*stack_A, &free_stack, arr_sorted);
 	}
 	else
-	{
 //  ЕСЛИ РАЗМЕР БОЛЬШЕ 5
-//		РАЗДЕЛИТЬ ДАННЫЕ ПОПОЛАМ МЕЖДУ СТЕКОМ A и СТЕКОМ B
-		//part = how_many_parts(); ////////
-		while (1)
-		{
-		
-			print_stack(*stack_A);
-			write(1, "\n", 1);
-			partition(stack_B, stack_A, 0, size/part); /////
-			ra
-			printf("stack_A\n");
-			print_stack(*stack_A);
-			write(1, "\n", 3);
-			printf("stack_B\n");
-			print_stack(*stack_B);
-		}
-	}
+	big_sort(stack_A, stack_B, size);
+
 		
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
 //			НАДО ЛИ ПРОВЕРНУТЬ СТЕК A

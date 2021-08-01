@@ -1,6 +1,5 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-
 #include <unistd.h>
 #include <stdlib.h>
 #include "libft.h"
@@ -24,6 +23,7 @@ size_t	get_pos(t_list *stack, size_t i);
 void	rotate_both(t_list **stack1, t_list **stack2);
 void	reverse_rotate_both(t_list **stack1, t_list **stack2);
 void	swap_both(t_list **stack1, t_list **stack2);
+int 	execute_command(char *op_line, t_list **stack_A, t_list **stack_B);
 void	partition(t_list **stack2, t_list **stack1, size_t part, size_t size);
 # define ra rotate(stack_A);
 # define rra reverse_rotate(stack_A);
@@ -53,6 +53,9 @@ void	small_2(t_list	**stack);
 void	small_3(t_list	**stack, int start);
 void	small_4(t_list	**stack);
 void	small_5(t_list	**stack);
+
+void radix_sort(t_list **stack_A, t_list **stack_B, size_t size);
+void big_sort(t_list **stack_A, t_list **stack_B, size_t size);
 
 #include <stdio.h>
 void print_arr(int *arr, size_t size);
