@@ -104,13 +104,14 @@ int execute_command(char *op_line, t_list **stack_A, t_list **stack_B)
 		ss
 	else
 		return (0);
-	printf("%s\n", op_line);
-	printf("stack_A\n");
+	write(1, op_line, ft_strlen(op_line));
+	write(1, "\n", 1);
+	/*printf("stack_A\n");
 	print_stack(*stack_A);
 	if (stack_B)
 	{
 		printf("stack_B\n");
 		print_stack(*stack_B);
-	}
+	}*/
 	return (1);
 }

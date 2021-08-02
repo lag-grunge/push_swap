@@ -23,8 +23,10 @@ size_t	get_pos(t_list *stack, size_t i);
 void	rotate_both(t_list **stack1, t_list **stack2);
 void	reverse_rotate_both(t_list **stack1, t_list **stack2);
 void	swap_both(t_list **stack1, t_list **stack2);
-int 	execute_command(char *op_line, t_list **stack_A, t_list **stack_B);
 void	partition(t_list **stack2, t_list **stack1, size_t part, size_t size);
+
+int get_next_line(char **line);
+int 	execute_command(char *op_line, t_list **stack_A, t_list **stack_B);
 # define ra rotate(stack_A);
 # define rra reverse_rotate(stack_A);
 # define sa swap(stack_A);

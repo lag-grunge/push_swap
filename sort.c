@@ -12,32 +12,50 @@ void 	half(t_list **stack_A, t_list **stack_B, size_t 	size)
 	}
 }
 
+void	debug_print_stack(t_list **stack_A, t_list **stack_B)
+{
+	printf("stack_A\n");
+	print_stack(*stack_A);
+	if (stack_B)
+	{
+		printf("stack_B\n");
+		print_stack(*stack_B);
+	}
+}
+
 void	operate_chunk(t_list **stack_A, t_list **stack_B, size_t size, size_t chunk)
 {
-	size_t  i;
+	size_t	i;
+	size_t  i_A;
 	int		retA;
 	int		retB;
+	char	*op_line;
 	
+	i_A = ft_lstsize(*stack_A);
 	i = 0;
-	if (chunk == 1)
-	{
-		while (i < size / 2 - 1)
-		{	
-			retA = 0;
-			retB = 0;
-			if (get_pos(*stack_A, 0) > get_pos(*stack_B, 1))
-				retA = 1;
-			if (get_pos(*stack_B, 0) > get_pos(*stack_B, 1))
-				retB = 1;
-			if (retA && retB)
-				execute_command("ss", stack_A, stack_B);
-			else if (retA)
-				execute_command("sa", stack_A, stack_B);
-			else if (retB)
-				execute_command("sb", stack_A, stack_B);
-			execute_command("rr", stack_A, stack_B);
-			execute_command("rr", stack_A, stack_B);
-		}
+	while (i < i_A - 1 || i < size - i_A - 1)
+	{	
+		retA = 0;
+		retB = 0;
+		op_line = "rr";
+		if (get_pos(*stack_A, 0) > get_pos(*stack_A, 1) && i < i_A - 1)
+			retA = 1;
+		if (get_pos(*stack_B, 0) > get_pos(*stack_B, 1) && i < size - i_A - 1)
+			retB = 1;
+		if (retA && retB)
+			execute_command("ss", stack_A, stack_B);
+		else if (retA)
+			execute_command("sa", stack_A, stack_B);
+		else if (retB)
+			execute_command("sb", stack_A, stack_B);
+		if (i >= i_A - 1 && i < size - i_A - 1)
+			op_line = "rb";
+		else if (i < i_A - 1 && i >= size - i_A - 1)
+			op_line = "ra";
+		execute_command(op_line, stack_A, stack_B);
+		execute_command(op_line, stack_A, stack_B);
+		i += 2;
+		debug_print_stack(stack_A, stack_B);
 	}
 }
 
@@ -45,9 +63,10 @@ int 	merge_sort(t_list **stack_A, t_list **stack_B, size_t size)
 {
 	size_t chunk;
 	
-	chunk = 1;
 	half(stack_A, stack_B, size);
-	operate_chunk(stack_A, stack_B, chunk, size);
+	debug_print_stack(stack_A, stack_B);
+	chunk = 1;
+	operate_chunk(stack_A, stack_B, size, chunk);
 	return (chunk);	
 }
 
@@ -94,5 +113,6 @@ void radix_sort(t_list **stack_A, t_list **stack_B, size_t size)
 
 void big_sort(t_list **stack_A, t_list **stack_B, size_t size)
 {
-	radix_sort(stack_A, stack_B, size);
+	//radix_sort(stack_A, stack_B, size);
+	merge_sort(stack_A, stack_B, size);
 }

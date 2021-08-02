@@ -21,7 +21,8 @@ void	free_stack(void *data)
 	t_list	*stack;
 
 	stack = (t_list *)data;
-	ft_lstclear(&stack, &free);
+	if (stack)
+		ft_lstclear(&stack, &free);
 }
 
 void exit_error(size_t err, void *strct, void (*free_func)(void *), int *arr)

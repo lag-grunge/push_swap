@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
 //		ЗАПИСАТЬ ДАННЫЕ В СТЕК
 	stack_A = (t_list **)malloc(sizeof(t_list *) * 1);
 	init_stack(argc, argv, stack_A);
-	stack_B = NULL;
 //	ОТСОРТИРОВАТЬ МАССИВ и произвести изменения в списке 
 	arr_sorted = insertion_sort(*stack_A, size);
 //	print_arr(arr_sorted, size);
@@ -40,14 +39,16 @@ int main(int argc, char *argv[])
 //	ОТСОРТИРОВАТЬ СТЕК
 //	ЕСЛИ РАЗМЕР 2 .. 5
 	if (size > 1 && size < 6)
-	{
 		small_size(stack_A, size);
-		exit_error(0, (void *)*stack_A, &free_stack, arr_sorted);
-	}
 	else
+	{
 //  ЕСЛИ РАЗМЕР БОЛЬШЕ 5
-	big_sort(stack_A, stack_B, size);
-
+		stack_B = (t_list **)malloc(sizeof(t_list *) * 1);
+		init_stack(0, NULL, stack_B);
+		big_sort(stack_A, stack_B, size);
+		free_stack(*stack_B);
+	}
+	exit_error(0, (void *)*stack_A, &free_stack, arr_sorted);
 		
 //		ОПРЕДЕЛИТЬ КАКОЕ ДЕЙСТВИЕ НЕОБХОДИМО, ИСХОДЯ ИЗ АЛГОРИТМА СОРТИРОВКИ
 //			НАДО ЛИ ПРОВЕРНУТЬ СТЕК A
