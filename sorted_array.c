@@ -63,7 +63,7 @@ int		*insertion_sort(t_list *stack, size_t size)
 	return (arr_sorted);
 }
 
-void	check_if_stack_sorted(t_list **stack, size_t size, int chckr, int *arr)
+void	check_if_stack_sorted(t_list **stack, int chckr, t_stck_data *data)
 {
 	t_list	*cur;
 	size_t	i;
@@ -81,13 +81,13 @@ void	check_if_stack_sorted(t_list **stack, size_t size, int chckr, int *arr)
 		i++;
 		cur = cur->next;
 	}
-	if (i < size)
+	if (i < data->size)
 	{
 		write(1, "KO\n", 3);
-		exit_error(5, (void *)*stack, &free_stack, arr);
+		exit_error(5, (void *)*stack, &free_stack, data);
 	}
 	else if (chckr)
 		write(1, "OK\n", 3);
 	else 
-		exit_error(0, (void *)*stack, &free_stack, arr);
+		exit_error(0, (void *)*stack, &free_stack, data);
 }

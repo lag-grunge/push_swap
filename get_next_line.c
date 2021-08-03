@@ -1,5 +1,4 @@
-#include "checker.h"
-
+#include "push_swap.h"
 
 int	get_next_line(char **line)
 {
@@ -9,6 +8,7 @@ int	get_next_line(char **line)
 
 	i = 0;
 	buf = malloc(sizeof(char) * 4);
+	*line = buf;
 	ret = read(0, buf, 1);
 	while (ret)
 	{
@@ -17,9 +17,5 @@ int	get_next_line(char **line)
 		ret = read(0, buf + ++i, 1);
 	}
 	buf[i] = 0;
-	*line = buf;
-	if (!ret)
-		return (0);
-	else
-		return (1);
+	return (ret);
 }

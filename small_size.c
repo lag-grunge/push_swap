@@ -14,6 +14,7 @@ void	small_3(t_list	**stack_A, int start)
 	else if (seek_pos((*stack_A)->next, start + 2, 1))
 		execute_command("rra", stack_A, NULL);
 	if (seek_pos(*stack_A, start + 1, 1))
+		execute_command("sa", stack_A, NULL);
 	return ;
 }
 
@@ -58,3 +59,16 @@ void	small_5(t_list	**stack_A)
 	free(stack_B);
 	return ;
 }
+
+void	small_size(t_list **stack_A, int size)
+{
+	if (size == 2)
+		small_2(stack_A);
+	else if (size == 3) 
+		small_3(stack_A, 0);
+	else if (size == 4) 
+		small_4(stack_A);
+	else if (size == 5) 
+		small_5(stack_A);
+}
+

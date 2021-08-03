@@ -23,50 +23,70 @@ void	debug_print_stack(t_list **stack_A, t_list **stack_B)
 	}
 }
 
-void	operate_chunk(t_list **stack_A, t_list **stack_B, size_t size, size_t chunk)
+void	o_chnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
 {
-	size_t	i;
-	size_t  i_A;
 	int		retA;
 	int		retB;
 	char	*op_line;
-	
-	i_A = ft_lstsize(*stack_A);
-	i = 0;
-	while (i < i_A - 1 || i < size - i_A - 1)
-	{	
-		retA = 0;
-		retB = 0;
-		op_line = "rr";
-		if (get_pos(*stack_A, 0) > get_pos(*stack_A, 1) && i < i_A - 1)
-			retA = 1;
-		if (get_pos(*stack_B, 0) > get_pos(*stack_B, 1) && i < size - i_A - 1)
-			retB = 1;
-		if (retA && retB)
-			execute_command("ss", stack_A, stack_B);
-		else if (retA)
-			execute_command("sa", stack_A, stack_B);
-		else if (retB)
-			execute_command("sb", stack_A, stack_B);
-		if (i >= i_A - 1 && i < size - i_A - 1)
-			op_line = "rb";
-		else if (i < i_A - 1 && i >= size - i_A - 1)
-			op_line = "ra";
-		execute_command(op_line, stack_A, stack_B);
-		execute_command(op_line, stack_A, stack_B);
-		i += 2;
-		debug_print_stack(stack_A, stack_B);
-	}
+
+	retA = 0;
+	retB = 0;
+	op_line = "rr";
+	if (get_pos(*stack_A, 0) > get_pos(*stack_A, 1) && i < data->i_A - 1)
+		retA = 1;
+	if (get_pos(*stack_B, 0) > get_pos(*stack_B, 1) && i < data->i_B - 1)
+		retB = 1;
+	if (retA && retB)
+		execute_command("ss", stack_A, stack_B);
+	else if (retA)
+		execute_command("sa", stack_A, stack_B);
+	else if (retB)
+		execute_command("sb", stack_A, stack_B);
+	if (i >= data->i_A - 1 && i < data->i_B - 1)
+		op_line = "rb";
+	else if (i < data->i_A - 1 && i >= data->i_B - 1)
+		op_line = "ra";
+	execute_command(op_line, stack_A, stack_B);
+	execute_command(op_line, stack_A, stack_B);
+	debug_print_stack(stack_A, stack_B);
 }
 
-int 	merge_sort(t_list **stack_A, t_list **stack_B, size_t size)
+void	o_tchnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
+{
+	if (i == data->i_A - 1 && i == data->i_B - 1)
+	{
+		if (get_pos(*stack_A, 0) < get_pos(*stack_B, 0))
+			execute_command("pb", stack_A, stack_B);
+		else	
+			execute_command("pa", stack_A, stack_B);
+	}
+	else if (i == data->i_A - 1)
+			execute_command("rra", stack_A, stack_B);
+	else if (i == data->i_B - 1)
+			execute_command("rrb", stack_A, stack_B);
+}
+
+void	merge_chunk(t_list **stack_A, t_list **stack_B, t_stck_data *data, size_t chunk)
+{
+	size_t	i;
+	
+	i = 0;
+	while (i < data->i_A - 1 || i < data->i_B - 1)
+	{	
+		o_chnk(stack_A, stack_B, i, data);
+		i += 2;
+	}
+	o_tchnk(stack_A, stack_B, i, data);
+}
+
+int 	merge_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 {
 	size_t chunk;
 	
-	half(stack_A, stack_B, size);
+	half(stack_A, stack_B, data->size);
 	debug_print_stack(stack_A, stack_B);
 	chunk = 1;
-	operate_chunk(stack_A, stack_B, size, chunk);
+	merge_chunk(stack_A, stack_B, data, chunk);
 	return (chunk);	
 }
 
@@ -111,8 +131,8 @@ void radix_sort(t_list **stack_A, t_list **stack_B, size_t size)
 	}
 }
 
-void big_sort(t_list **stack_A, t_list **stack_B, size_t size)
+void big_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 {
-	//radix_sort(stack_A, stack_B, size);
-	merge_sort(stack_A, stack_B, size);
+	//radix_sort(stack_A, stack_B, data->size);
+	merge_sort(stack_A, stack_B, data);
 }

@@ -25,17 +25,16 @@ void	free_stack(void *data)
 		ft_lstclear(&stack, &free);
 }
 
-void exit_error(size_t err, void *strct, void (*free_func)(void *), int *arr)
+void exit_error(size_t err, void *strct, free_func f, t_stck_data *data)
 {
 	if (strct)
+		f(strct);
+	if (data)
 	{
-		if (free_func == &free_stack)
-			free_func(strct);
-		if (free_func == &free_split)
-			free_func(strct);
+		if (data->arr_sorted)
+			free(data->arr_sorted);
+		free(data);
 	}
-	if (arr)
-		free(arr);
 	if (err == 1)
 		write(2, "Error: non-integer elem\n", 24);
 	else if (err == 2)
@@ -79,33 +78,33 @@ int check_is_zero_or_overflow(char *s, int elem) ///////
 		return (1);
 }
 
-size_t	check_input(int argc, char *argv[])
+void	check_input(int argc, char *argv[], t_stck_data *data)
 {
 	int		i;
 	int		j;
 	int		elem;
-	int		size;
 	char	**arg_sp;
 	
 	i = 0;
-	size = 0;
+	data->size = 0;
 	while (++i < argc)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, NULL, NULL, NULL);
+			exit_error(3, NULL, NULL, data);
 		j = -1;
 		while (arg_sp[++j])
 		{
 			elem = ft_atoi(arg_sp[j]);
 			if (!(check_is_zero_or_overflow(arg_sp[j], elem)))
-				exit_error(1, (void *)arg_sp, &free_split, NULL);
+				exit_error(1, (void *)arg_sp, &free_split, data);
 		}
-		size += j;
+		data->size += j;
 		free_split(arg_sp);
 	}
-	if (!size)
-		exit_error(0, NULL, NULL, NULL);
-	return (size);
+	if (!data->size)
+		exit_error(0, NULL, NULL, data);
+	data->i_A = data->size;
+	data->i_B = 0;
 }
 
