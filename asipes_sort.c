@@ -56,10 +56,10 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 	cur_max = data->mid;
 	data->flag++;
 	data->mid = (cur_max - data->next) / 2 + data->next;
-	while (cur_max > data->next)
+	while (cur_max >= data->next)
 	{
 		i = data->next;
-		while (i++ < cur_max)
+		while (i++ <= cur_max)
 		{
 			if (((t_asip_data *)(*stack_B)->content)->pos == data->next)
 			{
@@ -68,7 +68,7 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 				execute_command("ra", stack_A, stack_B);
 				data->next++;
 			}
-			else if (((t_asip_data *)(*stack_B)->content)->pos <= data->mid)
+			else if (((t_asip_data *)(*stack_B)->content)->pos < data->mid)
 				execute_command("rb", stack_A, stack_B);
 			else 
 			{
@@ -77,7 +77,7 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 			}
 		}
 		sleep(10);
-		cur_max = data->mid;
+		cur_max = data->mid - 1;
 		data->mid = (cur_max - data->next) / 2 + data->next;
 		data->flag++;
 		debug_print_stack(stack_A, stack_B);
