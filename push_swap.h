@@ -16,6 +16,20 @@ typedef struct s_stck_data	{
 	int		*arr_sorted;
 }				t_stck_data;
 
+typedef struct s_asip_data	{
+	int		val;
+	size_t 	pos;
+	int		flag;
+	t_list	*prev;
+}				t_asip_data;
+
+typedef	struct s_cmn_asip_data	{
+	size_t	max;
+	size_t	mid;
+	size_t	next;
+	size_t	flag;
+}				t_cmn_asip_data;
+
 typedef void (*free_func)(void *);
 
 void	free_split(void *data);
@@ -28,7 +42,8 @@ void	reverse_rotate(t_list **stack);
 void	push(t_list **stack1, t_list **stack2);
 void	swap(t_list **stack);
 int		seek_pos(t_list *stack, size_t part, size_t size);
-size_t	get_pos(t_list *stack, size_t i);
+size_t	get_pos(t_list *stack_elem);
+int		get_val(t_list *stack_elem);
 void	rotate_both(t_list **stack1, t_list **stack2);
 void	reverse_rotate_both(t_list **stack1, t_list **stack2);
 void	swap_both(t_list **stack1, t_list **stack2);
@@ -66,9 +81,12 @@ void	small_4(t_list	**stack);
 void	small_5(t_list	**stack);
 
 void radix_sort(t_list **stack_A, t_list **stack_B, size_t size);
+int 	merge_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
+int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
 void big_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
 
 #include <stdio.h>
 void print_arr(int *arr, size_t size);
 void print_stack(t_list *stack);
+void	debug_print_stack(t_list **stack_A, t_list **stack_B);
 #endif

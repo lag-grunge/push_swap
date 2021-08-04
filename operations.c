@@ -67,18 +67,18 @@ int	seek_pos(t_list *stack, size_t part, size_t size)
 	return (0);
 }
 
-size_t	get_pos(t_list *stack, size_t i)
+size_t	get_pos(t_list *stack_elem)
 {
-	size_t	j;
+	return (((t_ps_data *)(stack_elem->content))->pos);
+}
 
-	j = 0;
-	while (j++ < i)
-		stack = stack->next;
-	return (((t_ps_data *)(stack->content))->pos);
+int		get_val(t_list *stack_elem)
+{
+	return (((t_ps_data *)(stack_elem->content))->val);
 }
 
 #include <stdio.h>
-int execute_command(char *op_line, t_list **stack_A, t_list **stack_B, t_stck_data *data)
+int execute_command(char *op_line, t_list **stack_A, t_list **stack_B)
 {
 	if (!ft_strncmp("ra", op_line, 3))
 		ra
