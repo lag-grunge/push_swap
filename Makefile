@@ -14,7 +14,7 @@ LIB_DIR = ./libft
 
 LIBFT = libft.a
 
-CFLAGS = -g -Wall -Wextra #-Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 all : ${LIBFT} ${NAME} ${NAME_2}
 
@@ -35,3 +35,7 @@ clean :
 
 fclean : clean 
 	rm ${NAME} ${NAME_2}
+
+re :	fclean all
+
+.PHONY : re clean fclean all

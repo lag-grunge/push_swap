@@ -19,11 +19,12 @@ typedef struct s_stck_data	{
 typedef struct s_asip_data	{
 	int		val;
 	size_t 	pos;
-	int		flag;
+	size_t	flag;
 	t_list	*prev;
 }				t_asip_data;
 
 typedef	struct s_cmn_asip_data	{
+	size_t  size;	
 	size_t	max;
 	size_t	mid;
 	size_t	next;

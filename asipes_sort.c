@@ -26,6 +26,7 @@ static void 	data_change(t_list **stack_A)
 
 static void	init_cmn_asip_data(t_cmn_asip_data *cmn_data, t_stck_data *data)
 {
+	cmn_data->size = data->size - 1;
 	cmn_data->max = data->size - 1;
 	cmn_data->mid = (cmn_data->max - cmn_data->next) / 2 + cmn_data->next;
 }
@@ -37,33 +38,39 @@ static void moveA_B(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 	i = data->next;
 	while (i < data->mid + 1)
 	{
-		if (((t_asip_data *)(*stack_A)->content)->pos <= data->mid)
+		if (((t_asip_data *)(*stack_A)->content)->pos > data->mid)
+			execute_command("ra", stack_A, stack_B);
+		else if (((t_asip_data *)(*stack_A)->content)->pos < data->next)
+			execute_command("ra", stack_A, stack_B);
+		else if (((t_asip_data *)(*stack_A)->content)->pos > data->next)
 		{
 			execute_command("pb", stack_A, stack_B);
 			i++;
 		}
-		else 
+		else if (((t_asip_data *)(*stack_A)->content)->pos == data->next)
+		{ 
 			execute_command("ra", stack_A, stack_B);
+			i++;
+			data->next++;
+		}
 	}
+	data->flag++;
 	debug_print_stack(stack_A, stack_B);
 }
 
 static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 {
 	size_t	i;
-	size_t	cur_max;
 
-	cur_max = data->mid;
-	data->flag++;
-	data->mid = (cur_max - data->next) / 2 + data->next;
-	while (cur_max >= data->next)
+	data->max = data->mid;
+	while (data->max >= data->next)
 	{
+		data->mid = (data->max - data->next) / 2 + data->next;
 		i = data->next;
-		while (i++ <= cur_max)
+		while (i++ <= data->max)
 		{
 			if (((t_asip_data *)(*stack_B)->content)->pos == data->next)
 			{
-				((t_asip_data *)(*stack_B)->content)->flag = data->flag;
 				execute_command("pa", stack_A, stack_B);
 				execute_command("ra", stack_A, stack_B);
 				data->next++;
@@ -76,13 +83,45 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 				execute_command("pa", stack_A, stack_B);
 			}
 		}
-		sleep(10);
-		cur_max = data->mid - 1;
-		data->mid = (cur_max - data->next) / 2 + data->next;
+		data->max = data->mid - 1;
 		data->flag++;
 		debug_print_stack(stack_A, stack_B);
 	}
 }
+
+void restore_data_max_mid(t_cmn_asip_data *data, size_t cur_flag)
+{
+	size_t	i;
+
+	data->max = data->size >> 1;
+	i = 1;
+	while (i++ < cur_flag)
+		data->max >>= 1;
+	data->mid = (data->max - data->next) / 2 + data->next;
+}
+
+void	operA(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
+{
+	size_t cur_flag;
+
+	while (((t_asip_data *)(*stack_A)->content)->flag)
+	{
+		cur_flag = ((t_asip_data *)(*stack_A)->content)->flag;
+		while (((t_asip_data *)(*stack_A)->content)->flag == cur_flag)
+		{
+			if (((t_asip_data *)(*stack_A)->content)->pos <= data->next)
+			{
+				execute_command("ra", stack_A, stack_B);
+				data->next++;
+			}
+			else
+				execute_command("pb", stack_A, stack_B);
+		}
+		restore_data_max_mid(data, cur_flag);
+		operB(stack_A, stack_B, data);
+	}
+}
+
 
 int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 {
@@ -94,5 +133,6 @@ int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 	init_cmn_asip_data(&cmn_data, data);
 	moveA_B(stack_A, stack_B, &cmn_data);	
 	operB(stack_A, stack_B, &cmn_data);	
+	operA(stack_A, stack_B, &cmn_data);	
 	return (0);
 }

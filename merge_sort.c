@@ -56,7 +56,7 @@ void	o_tchnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
 			execute_command("rrb", stack_A, stack_B);
 }
 
-void	merge_chunk(t_list **stack_A, t_list **stack_B, t_stck_data *data, size_t chunk)
+void	merge_chunk(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 {
 	size_t	i;
 	
@@ -76,7 +76,7 @@ int 	merge_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 	half(stack_A, stack_B, data->size);
 	debug_print_stack(stack_A, stack_B);
 	chunk = 1;
-	merge_chunk(stack_A, stack_B, data, chunk);
+	merge_chunk(stack_A, stack_B, data);
 	return (chunk);	
 }
 
