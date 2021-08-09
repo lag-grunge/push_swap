@@ -7,10 +7,10 @@ int main(int argc, char *argv[])
 	t_stck_data *data;
 
 	data = (t_stck_data *)malloc(sizeof(t_stck_data) * 1);
+	data->arr_sorted = NULL;
 	if (!data)
 		exit_error(3, NULL, NULL, NULL);
 	check_input(argc, argv, data);
-	data->arr_sorted = NULL;
 	stack_A = (t_list **)malloc(sizeof(t_list *) * 1);
 	if (!stack_A)
 		exit_error(3, NULL, NULL, data);
