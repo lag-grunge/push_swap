@@ -56,7 +56,7 @@ static void	init_cmn_asip_data(t_cmn_asip_data *cmn_data, t_stck_data *data)
 {
 	cmn_data->size = data->size - 1;
 	cmn_data->max = data->size - 1;
-	cmn_data->mid = (cmn_data->max - cmn_data->next) / 2 + cmn_data->next;
+	cmn_data->mid = (cmn_data->max + cmn_data->next) / 2;
 }
 
 static void moveA_B(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
@@ -159,15 +159,17 @@ void restore_data_max_mid(t_cmn_asip_data *data)
 	{
 		cur_next = data->size - data->next;
 		cur_max = data->size >> 1;
-		while (cur_max >= cur_next)
+		while (cur_max > 1 && cur_max >= cur_next)
 			cur_max >>= 1;
-		data->max = data->size - cur_max;
+		data->max = data->size - cur_max - 1;
+		if (!cur_max)
+			data->max++;
 	}
 	else
 	{
 		cur_max = data->size >> 1;
 		cur_next = data->next;
-		while ((cur_max >> 1) >= cur_next)
+		while (cur_max && (cur_max >> 1) >= cur_next)
 			cur_max >>= 1;
 		data->max = cur_max;
 	}	
