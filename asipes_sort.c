@@ -145,7 +145,8 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data, int
 		cur_next = data->next;
 		while (i < Ib)
 			i += operBelem(stack_A, stack_B, data, sec);
-		Ib -= (int)(data->max - data->mid) + (int)(data->next - cur_next);
+		Ib = ft_lstsize(*stack_B);
+		//Ib -= (int)(data->max - data->mid) + (int)(data->next - cur_next);
 		data->max = data->mid;
 	}
 }
@@ -159,11 +160,11 @@ void restore_data_max_mid(t_cmn_asip_data *data)
 	{
 		cur_next = data->size - data->next;
 		cur_max = data->size >> 1;
-		while (cur_max > 1 && cur_max >= cur_next)
+		while (cur_max && (cur_max >> 1) >= cur_next)
 			cur_max >>= 1;
-		data->max = data->size - cur_max - 1;
-		if (!cur_max)
-			data->max++;
+		data->max = data->size - cur_max;
+		if ((cur_max >> 1) != 0)
+			data->max += cur_max >> 1;
 	}
 	else
 	{
@@ -207,7 +208,6 @@ int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 	data_change(stack_A);
 	cmn_data.flag = 0;
 	cmn_data.next = 0;
-	size_t i = 0;
 	while (cmn_data.next != data->size)
 	{
 		init_cmn_asip_data(&cmn_data, data);
@@ -218,7 +218,6 @@ int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
 		operB(stack_A, stack_B, &cmn_data, 0);	
 		debug_print_stack(stack_A, stack_B);
 		printf("oper A\n");
-		i++;
 		operA(stack_A, stack_B, &cmn_data);	
 		debug_print_stack(stack_A, stack_B);
 	}

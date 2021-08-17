@@ -25,6 +25,7 @@ void	print_arr(int *arr, size_t size)
 
 void	debug_print_stack(t_list **stack_A, t_list **stack_B)
 {
+	static int i;
 
 	printf("stack_A\n");
 	print_stack(*stack_A);
@@ -33,4 +34,7 @@ void	debug_print_stack(t_list **stack_A, t_list **stack_B)
 		printf("stack_B\n");
 		print_stack(*stack_B);
 	}
+
+	sleep(i * (12 - i));
+	i++;
 }
