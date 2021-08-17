@@ -59,22 +59,32 @@ static void	init_cmn_asip_data(t_cmn_asip_data *cmn_data, t_stck_data *data)
 	cmn_data->mid = (cmn_data->max + cmn_data->next) / 2;
 }
 
-static void moveA_B(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
+void moveA_B(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 {
 	size_t	i;
 	size_t 	cur_pos;
+	t_list	*last_A;
+	size_t	last_A_pos;
 
 	i = data->next;
+	last_A = ft_lstlast(*stack_A);
 	while (i <= data->mid)
 	{
 		cur_pos = get_content_asip(*stack_A)->pos;
-		if (cur_pos > data->mid || cur_pos < data->next)
+		last_A_pos = get_content_asip(last_A)->pos;
+		if (cur_pos == data->next && (!data->next || last_A_pos == data->next - 1))
+		{
+			execute_asip_command("ra", stack_A, stack_B);
+			data->next++;
+		}
+		else if (cur_pos > data->mid || cur_pos < data->next)
 			execute_asip_command("ra", stack_A, stack_B);
 		else
-		{
 			execute_asip_command("pb", stack_A, stack_B);
+		if (last_A->next)
+			last_A = last_A->next;
+		if (cur_pos <= data->mid && cur_pos >= data->next)
 			i++;
-		}
 	}
 	data->max = data->mid;
 }
@@ -145,8 +155,7 @@ static void operB(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data, int
 		cur_next = data->next;
 		while (i < Ib)
 			i += operBelem(stack_A, stack_B, data, sec);
-		Ib = ft_lstsize(*stack_B);
-		//Ib -= (int)(data->max - data->mid) + (int)(data->next - cur_next);
+		Ib -= (int)(data->max - data->mid) + (int)(data->next - cur_next);
 		data->max = data->mid;
 	}
 }
