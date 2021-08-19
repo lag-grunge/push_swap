@@ -84,6 +84,12 @@ void	small_5(t_list	**stack);
 void radix_sort(t_list **stack_A, t_list **stack_B, size_t size);
 int 	merge_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
 int 	asipes_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
+	void 	data_change(t_list **stack_A);
+	t_asip_data *get_content_asip(t_list *stack);
+	void execute_asip_command(char *s, t_list **stack_A, t_list **stack_B);
+	void restore_data_max_mid(t_cmn_asip_data *data);
+	int operBelem(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data, int sec);
+	
 void big_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data);
 
 #include <stdio.h>

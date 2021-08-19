@@ -6,7 +6,10 @@ SRCS = input.c sorted_array.c \
 	   init_stack.c operations.c \
 		both_operations.c small_size.c \
 		print_stack.c get_next_line.c \
-		sort.c asipes_sort.c merge_sort.c radix_sort.c
+		sort.c \
+		asipes_sort.c asipes_utils.c asipes_utils_two.c \
+		merge_sort.c \
+		radix_sort.c
 
 OBJS = ${SRCS:.c=.o}
 
