@@ -35,6 +35,6 @@ void	debug_print_stack(t_list **stack_A, t_list **stack_B)
 		print_stack(*stack_B);
 	}
 
-	sleep(i * (12 - i));
+	sleep(7);
 	i++;
 }
