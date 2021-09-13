@@ -40,13 +40,13 @@ static int correctAchain(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *da
 	while ((get_content_asip(last_A))->pos != data->next - 1)
 	{
 		if (cur_pos == data->next || cur_pos > data->mid)
-			execute_asip_command("rra", stack_A, stack_B);
+			execute_asip_command("ra", stack_A, stack_B);
 		else
 		{
-			execute_asip_command("rrr", stack_A, stack_B);
+			execute_asip_command("rr", stack_A, stack_B);
 			res++;
 		}
-		last_A = (get_content_asip(last_A))->prev;
+		last_A = last_A->next;
 		cur_pos = (get_content_asip(*stack_B))->pos;
 	}
 	return (res);
