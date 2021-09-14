@@ -45,6 +45,7 @@ void	swap(t_list **stack);
 int		seek_pos(t_list *stack, size_t part, size_t size);
 size_t	get_pos(t_list *stack_elem);
 int		get_val(t_list *stack_elem);
+size_t	*set_flag(t_list *stack_elem);
 void	rotate_both(t_list **stack1, t_list **stack2);
 void	reverse_rotate_both(t_list **stack1, t_list **stack2);
 void	swap_both(t_list **stack1, t_list **stack2);

@@ -1,15 +1,5 @@
 #include "push_swap.h"
 
-int	seek_pos(t_list *stack, size_t part, size_t size)
-{
-	size_t	pos;
-
-	pos = ((t_ps_data *)(stack->content))->pos;
-	if (pos >= part && pos < part + size)
-		return (1);
-	return (0);
-}
-
 size_t	get_pos(t_list *stack_elem)
 {
 	return (((t_ps_data *)(stack_elem->content))->pos);
@@ -18,6 +8,21 @@ size_t	get_pos(t_list *stack_elem)
 int		get_val(t_list *stack_elem)
 {
 	return (((t_ps_data *)(stack_elem->content))->val);
+}
+
+size_t	*set_flag(t_list *stack_elem)
+{
+	return &(((t_asip_data *)(stack_elem->content))->flag);
+}
+
+int	seek_pos(t_list *stack, size_t part, size_t size)
+{
+	size_t	pos;
+
+	pos = ((t_ps_data *)(stack->content))->pos;
+	if (pos >= part && pos < part + size)
+		return (1);
+	return (0);
 }
 
 void	partition(t_list **stack_B, t_list **stack_A, size_t part, size_t size)
