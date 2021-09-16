@@ -1,6 +1,18 @@
 #include "push_swap.h"
 
-void 	half(t_list **stack_A, t_list **stack_B, size_t sizet_stck_data *data)
+void 	merge_fl_change(t_list **stack_A)
+{
+	t_list		*cur;
+
+	cur = *stack_A;
+	while (cur)
+	{
+		cur->content->flag = cur->content->pos;
+		cur = cur->next;
+	}
+}
+
+void 	half(t_dlist **stack_A, t_dlist **stack_B, size_t size, t_stck_data *data)
 {
 	size_t	i;
 
@@ -14,53 +26,103 @@ void 	half(t_list **stack_A, t_list **stack_B, size_t sizet_stck_data *data)
 	data->i_B = i;
 }
 
-void set_chunk_flag(t_list *stack, size_t chunk_size, size_t flag)
+void	move_chunk_bottom(t_dlist *stack_A, t_dlist *stack_B, size_t new_flag, t_stck_data *data)
 {
-	size_t	i;
-	t_list	*cur_list;
+	size_t	flag;
+	t_dlist *stack;
+	size_t	chunks;
+	char	*op_line;
 
-	i = 0;
-	cur_list = stack_A;
-	while (i < chunk_size)
+	stack = stack_A;
+	chunks = data->i_A;
+	op_line = "ra";
+	if (stack_B)
 	{
-		*(set_flag(cur_list)) = flag;
-		cur_list = cur_list->next;
-		i++;
+		stack = stack_B;
+		chunks = data->i_B;
+		op_line = "rb";
+	}
+	if (chunks == 1)
+		return ;
+	flag = stack->content->flag;
+	while (stack->content->flag == flag)
+	{
+		execute_command(op_line, stack_A, stack_B);
+		*set_flag(stack->prev) = new_flag;
 	}
 }
 
-void	o_chnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
+size_t	find_chunk_size(t_dlist *stack, size_t chunk_size, size_t cur_flag)
 {
-	int		retA;
-	int		retB;
-	char	*op_line;
-	static size_t	flag;	
+	size_t	flag;
+	size_t	ret;
 
-	retA = 0;
-	retB = 0;
-	chunk_size = 2;
-	op_line = "rr";
-	set_chunk_flag(stack_A, chunk_size, );
-	if (get_pos(*stack_A) > get_pos((*stack_A)->next) && i < data->i_A - 1)
-		retA = 1;
-	if (get_pos(*stack_B) > get_pos((*stack_B)->next) && i < data->i_B - 1)
-		retB = 1;
-	if (retA && retB)
-		execute_command("ss", stack_A, stack_B);
-	else if (retA)
-		execute_command("sa", stack_A, stack_B);
-	else if (retB)
-		execute_command("sb", stack_A, stack_B);
-	if (i >= data->i_A - 1 && i < data->i_B - 1)
-		op_line = "rb";
-	else if (i < data->i_A - 1 && i >= data->i_B - 1)
-		op_line = "ra";
-	execute_command(op_line, stack_A, stack_B);
-	execute_command(op_line, stack_A, stack_B);
+	ret = 1;
+	flag = stack->content->flag;
+	stack = stack->next;
+	while (stack->content->flag == flag)
+	{
+		ret++;
+		stack = stack->next;
+	}
+	if (ret > chunk_size)
+		ret = 0;
+	return (ret);
+}
+
+void	one_chnk(t_dlist **stack_A, t_dlist **stack_B, size_t chunk_size, t_stck_data *data)
+{
+	int				rotate;
+	size_t 			chunk_a;
+	size_t 			chunk_b;
+	static size_t	cur_flag;
+
+	rotate = 0;
+	chunk_a = find_chunk_size(*stack_A, chunk_size, cur_flag);
+	chunk_b = find_chunk_size(*stack_B, chunk_size, cur_flag);
+	if (chunk_a && chunk_b)
+		rotate = two_chnk_merge(stack_A, stack_B, data);
+	else if (!chunk_a && chunk_b)
+	{
+		rotate = 2;
+		move_chunk_bottom(NULL, *stack_B, cur_flag, data);
+	}
+	else if (!chunk_b && chunk_a)
+	{
+		rotate = 1;
+		move_chunk_bottom(*stack_A, NULL, cur_flag, data);
+	}
+}
+
+int two_chnk_merge(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+{
+	if (chunk_size == 1)
+	{
+		int		retA;
+		int		retB;
+		retA = 0;
+		retB = 0;
+		op_line = "rr";
+		if (get_pos(*stack_A) > get_pos((*stack_A)->next))
+			retA = 1;
+		if (get_pos(*stack_B) > get_pos((*stack_B)->next))
+			retB = 1;
+		if (retA && retB)
+			execute_command("ss", stack_A, stack_B);
+		else if (retA)
+			execute_command("sa", stack_A, stack_B);
+		else if (retB)
+			execute_command("sb", stack_A, stack_B);
+		set_chunk_flag(stack, chunk_size, flag);
+	}
+	else
+	{
+
+	}
 	debug_print_stack(stack_A, stack_B);
 }
 
-void	o_tchnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
+void	o_tail_chnk(t_dlist **stack_A, t_dlist **stack_B, size_t i, t_stck_data *data)
 {
 	if (i == data->i_A - 1 && i == data->i_B - 1)
 	{
@@ -82,26 +144,36 @@ void	o_tchnk(t_list **stack_A, t_list **stack_B, size_t i, t_stck_data *data)
 	execute_command("ra", stack_A, stack_B);
 }
 
-void	merge_chunk(t_list **stack_A, t_list **stack_B, t_stck_data *data)
+void	merge_chunks(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data, size_t chunk_size)
 {
 	size_t	i;
+	size_t	iterations;
 	
 	i = 0;
-	while (i < data->i_A - 1 && i < data->i_B - 1)
-	{	
-		o_chnk(stack_A, stack_B, i, data);
-		i += 2;
+	iterations = (data->i_A + data->i_B + 1) / 2;
+	while (i < iterations)
+	{
+		one_chnk(stack_A, stack_B, data, chunk_size);
+		i++;
 	}
-	o_tchnk(stack_A, stack_B, i, data);
 }
 
-int 	merge_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
+void 	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
 {
-	size_t chunk;
+	size_t chunk_size;
 	
-	data_change(stack_A);
 	half(stack_A, stack_B, data->size);
-	chunk = 1;
-	merge_chunk(stack_A, stack_B, data);
-	return (chunk);	
+	chunk_size = 1;
+	while (data->i_A > 1 && data->i_B > 0)
+	{
+		merge_chunks(stack_A, stack_B, data, chunk_size);
+		chunk_size *= 2;
+	}
+	return ;	
 }
+
+//ПЕРЕБРОСИТЬ ПОЛОВИНУ В СТЕК Б
+//РАЗМЕР ЦЕПОЧЕК = 1
+//ПОКА НЕ ПОЛУЧИТСЯ БОЛЬШАЯ ЦЕПОЧКА (=data->size)
+//	ОБЪЕДИНЯТЬ ЦЕПОЧКИ (ИЗ РАЗНЫХ СТЕКОВ >= 2 из ОДНОГО ЕСЛИ == 1, кроме случая когда на конце осталось по 1 элементу ) 
+

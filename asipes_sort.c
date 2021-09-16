@@ -24,13 +24,13 @@ static void moveA_B(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 			i++;
 		if (cur_pos == data->next && (!data->next || last_A_pos == data->next - 1))
 		{
-			execute_asip_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B);
 			data->next++;
 		}
 		else if (cur_pos > data->mid || cur_pos < data->next)
-			execute_asip_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B);
 		else
-			execute_asip_command("pb", stack_A, stack_B);
+			execute_command("pb", stack_A, stack_B);
 		if (last_A->next)
 			last_A = last_A->next;
 	}
@@ -64,20 +64,20 @@ static void	operA(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
 {
 	size_t cur_flag;
 
-	while (((t_asip_data *)(*stack_A)->content)->flag)
+	while (((t_ps_data *)(*stack_A)->content)->flag)
 	{
-		cur_flag = ((t_asip_data *)(*stack_A)->content)->flag;
+		cur_flag = ((t_ps_data *)(*stack_A)->content)->flag;
 		restore_data_max_mid(data);
-		while (((t_asip_data *)(*stack_A)->content)->flag == cur_flag)
+		while (((t_ps_data *)(*stack_A)->content)->flag == cur_flag)
 		{
-			if (((t_asip_data *)(*stack_A)->content)->pos <= data->next)
+			if (((t_ps_data *)(*stack_A)->content)->pos <= data->next)
 			{
-				if (((t_asip_data *)(*stack_A)->content)->pos == data->next)
+				if (((t_ps_data *)(*stack_A)->content)->pos == data->next)
 					data->next++;
-				execute_asip_command("ra", stack_A, stack_B);
+				execute_command("ra", stack_A, stack_B);
 			}
 			else
-				execute_asip_command("pb", stack_A, stack_B);
+				execute_command("pb", stack_A, stack_B);
 		}
 		operB(stack_A, stack_B, data, 1);
 	}

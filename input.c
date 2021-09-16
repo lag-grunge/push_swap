@@ -1,5 +1,4 @@
 #include "push_swap.h"
-#include "libft.h"
 
 void	free_split(void *data)
 {
@@ -18,11 +17,11 @@ void	free_split(void *data)
 
 void	free_stack(void *data)
 {
-	t_list	*stack;
+	t_dlist	*stack;
 
-	stack = (t_list *)data;
+	stack = (t_dlist *)data;
 	if (stack)
-		ft_lstclear(&stack, &free);
+		ft_dlst_clear(&stack, &free);
 }
 
 void exit_error(size_t err, void *strct, free_func f, t_stck_data *data)

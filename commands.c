@@ -6,30 +6,30 @@ static void	put_command(char *op_line)
 	write(1, "\n", 1);
 }
 
-int execute_command(char *op_line, t_list **stack_A, t_list **stack_B)
+int execute_command(char *op_line, t_dlist **stack_A, t_dlist **stack_B)
 {
 	if (!ft_strncmp("ra", op_line, 3))
-		ra
+		rotate(stack_A);
 	else if (!ft_strncmp("rra", op_line, 3))
-		rra
+		reverse_rotate(stack_A);
 	else if (!ft_strncmp("pa", op_line, 3))
-		pa
+		push(stack_A, stack_B);
 	else if (!ft_strncmp("sa", op_line, 3))
-		sa
+		swap(stack_A);
 	else if (!ft_strncmp("rb", op_line, 3))
-		rb
+		rotate(stack_B);
 	else if (!ft_strncmp("rrb", op_line, 3))
-		rrb
+		reverse_rotate(stack_B);
 	else if (!ft_strncmp("pb", op_line, 3))
-		pb
+		push(stack_B, stack_A);
 	else if (!ft_strncmp("sb", op_line, 3))
-		sb
+		swap(stack_B);
 	else if (!ft_strncmp("rr", op_line, 3))
-		rr
+		rotate_both(stack_A, stack_B);
 	else if (!ft_strncmp("rrr", op_line, 3))
-		rrr
+		reverse_rotate_both(stack_A, stack_B);
 	else if (!ft_strncmp("ss", op_line, 3))
-		ss
+		swap_both(stack_A, stack_B);
 	else
 		return (0);
 	put_command(op_line);
