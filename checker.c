@@ -2,18 +2,18 @@
 
 int main(int argc, char *argv[])
 {
-	t_list	**stack_A;
-	t_list	**stack_B;
+	t_dlist	**stack_A;
+	t_dlist	**stack_B;
 	char	*op_line;
 	t_stck_data *data;
 
 	data = (t_stck_data *)malloc(sizeof(t_stck_data) * 1);
 	check_input(argc, argv, data);
-	stack_A = (t_list **)malloc(sizeof(t_list *) * 1);
+	stack_A = (t_dlist **)malloc(sizeof(t_dlist *) * 1);
 	init_stack(argc, argv, stack_A, data);
 	data->arr_sorted = insertion_sort(*stack_A, data->size);
 	op_line = 0;
-	stack_B = (t_list **)malloc(sizeof(t_list *) * 1);
+	stack_B = (t_dlist **)malloc(sizeof(t_dlist *) * 1);
 	init_stack(0, NULL, stack_B, data);
 	while (get_next_line(&op_line))
 	{

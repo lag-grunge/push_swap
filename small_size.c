@@ -1,13 +1,13 @@
 #include "push_swap.h"
 
-void	small_2(t_list	**stack_A)
+void	small_2(t_dlist	**stack_A)
 {
 	if (seek_pos(*stack_A, 1, 1))
 		execute_command("sa", stack_A, NULL);
 	return ;
 }
 
-void	small_3(t_list	**stack_A, int start)
+void	small_3(t_dlist	**stack_A, int start)
 {
 	if (seek_pos(*stack_A, start + 2, 1))
 		execute_command("ra", stack_A, NULL);
@@ -18,10 +18,10 @@ void	small_3(t_list	**stack_A, int start)
 	return ;
 }
 
-void	small_4(t_list	**stack_A)
+void	small_4(t_dlist	**stack_A)
 {
-	t_list	**stack_B;
-	t_list	*elem;
+	t_dlist	**stack_B;
+	t_dlist	*elem;
 
 	elem = NULL;
 	stack_B = &elem;
@@ -31,12 +31,12 @@ void	small_4(t_list	**stack_A)
 	return ;
 }
 
-void	small_5(t_list	**stack_A)
+void	small_5(t_dlist	**stack_A)
 {
-	t_list	**stack_B;
+	t_dlist	**stack_B;
 	int		res;
 
-	stack_B = (t_list **)malloc(sizeof(t_list *) * 1);
+	stack_B = (t_dlist **)malloc(sizeof(t_dlist *) * 1);
 	res = 1;
 	partition(stack_B, stack_A, 0, 2);
 	if (seek_pos(*stack_B, 0, 1))
@@ -60,7 +60,7 @@ void	small_5(t_list	**stack_A)
 	return ;
 }
 
-void	small_size(t_list **stack_A, int size)
+void	small_size(t_dlist **stack_A, size_t size)
 {
 	if (size == 2)
 		small_2(stack_A);

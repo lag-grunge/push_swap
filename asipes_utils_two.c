@@ -26,50 +26,50 @@ void restore_data_max_mid(t_cmn_asip_data *data)
 	data->mid = (data->max + data->next) / 2;
 }
 
-static int correctAchain(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data)
+static int correctAchain(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data)
 {
-	t_list	*last_A;
+	t_dlist	*last_A;
 	size_t	cur_pos;
 	int		res;
 		
-	cur_pos = (get_content_asip(*stack_B))->pos;
-	last_A = ft_lstlast(*stack_A);
+	cur_pos = get_pos(*stack_B);
+	last_A = (*stack_A)->prev;
 	res = 0;
 	if (data->next == 0)
 		return (0);
-	while ((get_content_asip(last_A))->pos != data->next - 1)
+	while (get_pos(last_A) != data->next - 1)
 	{
 		if (cur_pos == data->next || cur_pos > data->mid)
-			execute_asip_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B);
 		else
 		{
-			execute_asip_command("rr", stack_A, stack_B);
+			execute_command("rr", stack_A, stack_B);
 			res++;
 		}
 		last_A = last_A->next;
-		cur_pos = (get_content_asip(*stack_B))->pos;
+		cur_pos = get_pos(*stack_B);
 	}
 	return (res);
 }
 
 
-int operBelem(t_list **stack_A, t_list **stack_B, t_cmn_asip_data *data, int sec)
+int operBelem(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data, int sec)
 {
 	size_t 	cur_pos;
 	int		res;
 
 	res = correctAchain(stack_A, stack_B, data);
-	cur_pos = (get_content_asip(*stack_B))->pos;
+	cur_pos = get_pos(*stack_B);
 	if (cur_pos <= data->mid && cur_pos != data->next)
-		execute_asip_command("rb", stack_A, stack_B);
+		execute_command("rb", stack_A, stack_B);
 	else
 	{
 		if (!sec)
-			get_content_asip(*stack_B)->flag = data->flag;
-		execute_asip_command("pa", stack_A, stack_B);
+            ((t_ps_data *)(*stack_B)->content)->flag = data->flag;
+		execute_command("pa", stack_A, stack_B);
 		if (cur_pos == data->next)
 		{
-			execute_asip_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B);
 			data->next++;
 		}
 	}

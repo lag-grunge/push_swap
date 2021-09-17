@@ -2,16 +2,7 @@
 #include "push_swap.h"
 #include "libft.h"
 
-/*		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-		ОТСОРТИРОВАТЬ МАССИВ (СОРТИРОВКА ВСТАВКОЙ)
-			ДЛЯ КАЖДОГО ЭЛЕМЕНТА МАССИВА
-				СРАВНИВАТЬ НОВОЕ ЧИСЛО С ПОСЛЕДНИМ ЭЛЕМЕНТОМ МАССИВА СОРТИРОВКОЙ
-				ПОКА НИ НЕ ДОЙДЕМ ДО НАЧАЛА И НЕ БУДЕТ БОЛЬШЕ НОВЫЙ ЭЛЕМЕНТ СРАВНИТЬ С ПРЕДЫДУЩИМ 
-					ПРИРАВНЯТЬ СЛЕДУЮЩИЙ ПРЕДЫДУЩЕМУ
-				ЗАПИСАТЬ НОВОЕ ЧИСЛО В МАССИВ СОРТИРОВКОЙ НА ТЕКУЩЕЕ МЕСТО
-*/			
-
-void	insert(t_list *cur, size_t i, int *arr_sorted)
+void	insert(t_dlist *cur, size_t i, int *arr_sorted)
 {
 	int	new_elem;
 
@@ -24,11 +15,11 @@ void	insert(t_list *cur, size_t i, int *arr_sorted)
 	arr_sorted[i] = new_elem;
 }
 
-void	correct_pos(t_list *stack, int *arr_sorted)
+void	correct_pos(t_dlist *stack, int *arr_sorted)
 {
 	int		elem;
 	size_t	i;
-	t_list	*cur;
+	t_dlist	*cur;
 
 	cur = stack;
 	while (cur)
@@ -42,11 +33,11 @@ void	correct_pos(t_list *stack, int *arr_sorted)
 	}
 }
 
-int		*insertion_sort(t_list *stack, size_t size)
+int		*insertion_sort(t_dlist *stack, size_t size)
 {
 	int		*arr_sorted;
 	size_t	i;
-	t_list  *cur;
+	t_dlist  *cur;
 
 	cur = stack;
 	arr_sorted = (int *)malloc(sizeof(int) * size);
@@ -63,9 +54,9 @@ int		*insertion_sort(t_list *stack, size_t size)
 	return (arr_sorted);
 }
 
-void	check_if_stack_sorted(t_list **stack, int chckr, t_stck_data *data)
+void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 {
-	t_list	*cur;
+	t_dlist	*cur;
 	size_t	i;
 
 	cur = *stack;
