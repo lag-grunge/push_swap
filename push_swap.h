@@ -69,7 +69,7 @@ void	small_5(t_dlist	**stack);
 void radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 int 	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 int 	asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
-	void 	merge_fl_change(t_dlist **stack_A);
+void 	merge_fl_change(t_dlist **stack_A, int mode, size_t flag);
 	void 	asip_fl_change(t_dlist **stack_A);
 	void restore_data_max_mid(t_cmn_asip_data *data);
     int operBelem(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data, int sec);
