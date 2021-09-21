@@ -2,8 +2,8 @@
 # define PUSH_SWAP_H
 #include <unistd.h>
 #include <stdlib.h>
-#include "libft.h"
-#include "ft_dlst.h"
+#include "libft/libft.h"
+#include "libft/ft_dlst/ft_dlst.h"
 
 typedef struct s_ps_data	{
 	int		val;

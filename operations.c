@@ -15,15 +15,15 @@ void	reverse_rotate(t_dlist **stack)
 void	push(t_dlist **stack1, t_dlist **stack2)
 {
 	t_dlist *elem;
-    t_dlist *neigh_next;
-    t_dlist *neigh_prev;
 
 	elem = *stack2;
-    ft_dlst_pop(stack2, elem, &free);
+    ft_dlst_pop(stack2, elem);
 
 	elem->next = *stack1;
     elem->prev = (*stack1)->prev;
-
+    (*stack1)->prev->next = elem;
+    (*stack1)->prev = elem;
+    *stack1 = elem;
 }
 
 void	swap(t_dlist **stack)
@@ -31,15 +31,25 @@ void	swap(t_dlist **stack)
 	t_dlist	*elem;
 	t_dlist	*second;
 	t_dlist	*third;
+    t_dlist *last;
 
 	elem = *stack;
 	if (!elem)
 		return ;
 	second = elem->next;
-	if (!second)
+	if (second == elem)
 		return ;
 	third = second->next;
+    if (third == elem)
+    {
+        *stack = second;
+        return ;
+    }
+    last = elem->prev;
+    elem->next = third;
 	second->next = elem;
-	elem->next = third;
+    last->next = second;
+    elem->prev = ;
+    third->prev = elem;
 	*stack = second;
 }

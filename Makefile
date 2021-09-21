@@ -2,8 +2,7 @@ NAME = push_swap
 
 NAME_2 = checker
 
-SRCS = 	ft_dlst/ft_dlst.c \
-		input.c sorted_array.c \
+SRCS = 	input.c sorted_array.c \
 	   	init_stack.c operations.c \
 		both_operations.c \
 		commands.c get_pos_val.c \
@@ -17,12 +16,13 @@ SRCS = 	ft_dlst/ft_dlst.c \
 OBJS = ${SRCS:.c=.o}
 
 LIB_DIR = ./libft
+LIB_DLST_DIR = ${LIB_DIR}/ft_dlst
 
 LIBFT = libft.a
 
 CFLAGS = -g -Wall -Wextra -Werror
 
-INCLUDE = -I${LIB_DIR} -I./ft_dlst
+INCLUDE = -I${LIB_DIR} -I${LIB_DLST_DIR}
 
 all : ${LIBFT} ${NAME} ${NAME_2}
 
