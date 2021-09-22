@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-size_t	bytes_count(size_t size)
+static size_t	bytes_count(size_t size)
 {
 	size_t	bytes;
 
@@ -14,7 +14,7 @@ size_t	bytes_count(size_t size)
 	return (bytes);
 }
 
-void radix_sort(t_list **stack_A, t_list **stack_B, size_t size)
+void radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size)
 {
 	size_t	byte;
 	size_t	bytes;
@@ -40,4 +40,3 @@ void radix_sort(t_list **stack_A, t_list **stack_B, size_t size)
 		byte++;
 	}
 }
-

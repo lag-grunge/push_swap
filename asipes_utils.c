@@ -2,12 +2,14 @@
 
 void 	asip_fl_change(t_dlist **stack_A)
 {
-	t_list		*cur;
+	t_dlist		*cur;
+    t_ps_data   *content;
 
 	cur = *stack_A;
 	while (cur)
 	{
-        ((t_ps_data *)cur->content)->flag = 0;
+        content = cur->content;
+        content->flag = 0;
 		cur = cur->next;
 	}
 }

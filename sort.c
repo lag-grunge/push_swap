@@ -1,7 +1,7 @@
 #include "push_swap.h"
 
-void big_sort(t_list **stack_A, t_list **stack_B, t_stck_data *data)
+void big_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
 {
 	//radix_sort(stack_A, stack_B, data->size);
-	asipes_sort(stack_A, stack_B, data);
+	merge_sort(stack_A, stack_B, data);
 }

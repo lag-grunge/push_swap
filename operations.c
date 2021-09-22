@@ -18,7 +18,6 @@ void	push(t_dlist **stack1, t_dlist **stack2)
 
 	elem = *stack2;
     ft_dlst_pop(stack2, elem);
-
 	elem->next = *stack1;
     elem->prev = (*stack1)->prev;
     (*stack1)->prev->next = elem;
@@ -28,28 +27,24 @@ void	push(t_dlist **stack1, t_dlist **stack2)
 
 void	swap(t_dlist **stack)
 {
-	t_dlist	*elem;
+	t_dlist	*first;
 	t_dlist	*second;
 	t_dlist	*third;
     t_dlist *last;
 
-	elem = *stack;
-	if (!elem)
+	first = *stack;
+	if (!first)
 		return ;
-	second = elem->next;
-	if (second == elem)
-		return ;
-	third = second->next;
-    if (third == elem)
-    {
-        *stack = second;
+	second = first->next;
+    third = second->next;
+    last = first->prev;
+    *stack = second;
+    if (second == first || third == first)
         return ;
-    }
-    last = elem->prev;
-    elem->next = third;
-	second->next = elem;
+    first->next = third;
+	second->next = first;
     last->next = second;
-    elem->prev = ;
-    third->prev = elem;
-	*stack = second;
+    first->prev = second;
+    second->prev = last;
+    third->prev = first;
 }

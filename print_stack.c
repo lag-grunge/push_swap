@@ -1,11 +1,11 @@
 #include "push_swap.h"
 
-void	print_stack(t_list *stack)
+void	print_stack(t_dlist *stack)
 {
 
 	while (stack)
 	{
-		printf("%zu %d %zu\n", ((t_ps_data *)(stack->content))->pos, ((t_ps_data *)(stack->content))->val, ((t_asip_data *)(stack->content))->flag);
+		printf("%zu %d %zu\n", ((t_ps_data *)(stack->content))->pos, ((t_ps_data *)(stack->content))->val, ((t_ps_data *)(stack->content))->flag);
 		stack = stack->next;
 	}
 }
@@ -23,7 +23,7 @@ void	print_arr(int *arr, size_t size)
 	}
 }
 
-void	debug_print_stack(t_list **stack_A, t_list **stack_B)
+void	debug_print_stack(t_dlist **stack_A, t_dlist **stack_B)
 {
 	static int i;
 

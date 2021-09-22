@@ -2,6 +2,7 @@
 # define PUSH_SWAP_H
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h> //----------------------------------
 #include "libft/libft.h"
 #include "libft/ft_dlst/ft_dlst.h"
 
@@ -39,7 +40,7 @@ void	push(t_dlist **stack1, t_dlist **stack2);
 void	swap(t_dlist **stack);
 int		seek_pos(t_dlist *stack, size_t part, size_t size);
 size_t	get_pos(t_dlist *stack_elem);
-int		get_flag(t_dlist *stack_elem);
+size_t	get_flag(t_dlist *stack_elem);
 size_t	*set_flag(t_dlist *stack_elem);
 void	rotate_both(t_dlist **stack1, t_dlist **stack2);
 void	reverse_rotate_both(t_dlist **stack1, t_dlist **stack2);
@@ -66,10 +67,9 @@ void	small_3(t_dlist	**stack, int start);
 void	small_4(t_dlist	**stack);
 void	small_5(t_dlist	**stack);
 
-void radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
-int 	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
+void    merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
+void    radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 int 	asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
-void 	merge_fl_change(t_dlist **stack_A, int mode, size_t flag);
 	void 	asip_fl_change(t_dlist **stack_A);
 	void restore_data_max_mid(t_cmn_asip_data *data);
     int operBelem(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data, int sec);
@@ -83,8 +83,7 @@ void big_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 #define ERROR_4 "Error: checker got non-correct command\n"
 #define ERROR_5 "Error: stack_A is not full or not sorted\n"
 
-#include <stdio.h>
-void print_arr(int *arr, size_t size);
-void print_stack(t_dlist *stack);
-void	debug_print_stack(t_dlist **stack_A, t_dlist **stack_B);
+void    print_arr(int *arr, size_t size);
+void    print_stack(t_dlist *stack);
+void    debug_print_stack(t_dlist **stack_A, t_dlist **stack_B);
 #endif
