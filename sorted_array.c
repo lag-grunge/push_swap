@@ -15,23 +15,32 @@ void	insert(t_dlist *cur, size_t i, int *arr_sorted)
 	arr_sorted[i] = new_elem;
 }
 
-void	correct_pos(t_dlist *stack, int *arr_sorted)
+static void correct_pos_for_elem(t_dlist *cur, void *arr_sorted)
 {
-	int		elem;
+    t_ps_data   *content;
+    int         elem;
+    size_t      i;
+
+    content = cur->content;
+    elem = content->val;
+    i = 0;
+    while (elem != ((int *)arr_sorted)[i])
+        i++;
+    content->pos = i;
+}
+
+/*void	correct_pos(t_dlist *stack, int *arr_sorted)
+{
 	size_t	i;
 	t_dlist	*cur;
 
 	cur = stack;
 	while (cur)
 	{
-		elem = ((t_ps_data *)(cur->content))->val;
-		i = 0;
-		while (elem != arr_sorted[i])
-			i++;
-		((t_ps_data *)(cur->content))->pos = i;
+        correct_pos_for_elem(cur, arr_sorted);
 		cur = cur->next;
 	}
-}
+}*/
 
 int		*insertion_sort(t_dlist *stack, size_t size)
 {
@@ -50,7 +59,7 @@ int		*insertion_sort(t_dlist *stack, size_t size)
 		cur = cur->next;
 		i++;
 	}
-	correct_pos(stack, arr_sorted);
+    ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
 	return (arr_sorted);
 }
 

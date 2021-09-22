@@ -8,8 +8,8 @@ MERGE_DIR = ./merge
 LIBFT = libft.a
 
 SRCS = 	input.c sorted_array.c \
-	   	init_stack.c operations.c \
-		both_operations.c \
+	   	init_stack.c init_stack_utils.c \
+	   	operations.c both_operations.c \
 		commands.c get_pos_val.c \
 		small_size.c \
 		print_stack.c get_next_line.c \

@@ -55,12 +55,9 @@ int		*insertion_sort(t_dlist *stack, size_t size);
 void	correct_pos(t_dlist *stack, int *arr_sorted);
 void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data);
 
-//int	check_is_uniq(t_dlist *stack, int elem);
-//int	add_new_elem(t_dlist **stack, int elem);
-//int	proc_elem(t_dlist **stack, char **arg_sp, int j);
-//int check_is_zero_or_overflow(char *s, int elem);
 void	check_input(int argc, char *argv[], t_stck_data *stck_data);
 void	init_stack(int argc, char *argv[], t_dlist **stack, t_stck_data *data);
+int	    proc_elem(t_dlist **stack, char **arg_sp, int j);
 
 void	small_2(t_dlist	**stack);
 void	small_3(t_dlist	**stack, int start);

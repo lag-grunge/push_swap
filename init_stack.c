@@ -1,53 +1,5 @@
 #include "push_swap.h"
 
-int	check_is_uniq(t_dlist *stack, int elem)
-{
-	while (stack)
-	{
-		if (elem == ((t_ps_data *)(stack->content))->val)
-			return (0);
-		stack = stack->next;
-	}
-	return (1);
-}
-
-static int	add_new_elem(t_dlist **stack, int elem)
-{
-	t_ps_data	*new_data;
-	t_dlist		*new_list;
-
-	new_data = (t_ps_data *)malloc(sizeof(t_ps_data) * 1);
-	new_data->val = elem;
-	new_data->pos = -1;
-	new_list = ft_dlst_new_elem(new_data);
-	if (!new_list)
-		return (0);
-    ft_dlst_add(stack, new_list);
-	return (1);
-}
-
-static size_t	ft_spllen(char **spl)
-{
-	size_t	i;
-
-	i = 0;
-	while (*spl++)
-		i++;
-	return (i);
-}
-
-static int	proc_elem(t_dlist **stack, char **arg_sp, int j)
-{
-	int elem;
-
-	elem = ft_atoi(arg_sp[j]);
-	if (!(check_is_uniq(*stack, elem))) 
-		return (2);
-	else if (!(add_new_elem(stack, elem)))
-		return (3);
-	return (0);
-}
-
 void	init_stack(int argc, char *argv[], t_dlist **stack, t_stck_data *data)
 {
 	int		i;
