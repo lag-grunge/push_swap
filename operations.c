@@ -18,6 +18,12 @@ void	push(t_dlist **stack1, t_dlist **stack2)
 
 	elem = *stack2;
     ft_dlst_pop(stack2, elem);
+    if (!*stack1)
+    {
+        elem->next = elem;
+        elem->prev = elem;
+        *stack1 = elem;
+    }
 	elem->next = *stack1;
     elem->prev = (*stack1)->prev;
     (*stack1)->prev->next = elem;
