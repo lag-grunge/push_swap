@@ -69,6 +69,7 @@ static void	o_tail_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *da
         o_both_tail_equal(stack_A, stack_B, data);
     else
         o_a_tail_longer(stack_A, stack_B, data);
+    data->cur_flag = 0;
 }
 
 static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
@@ -90,12 +91,12 @@ static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
         execute_command("sb", stack_A, stack_B);
     execute_command("rr", stack_A, stack_B);
     execute_command("rr", stack_A, stack_B);
-    merge_fl_change(*stack_A, 2, data->cur_flag);
-    merge_fl_change(*stack_B, 2, data->cur_flag + 1);
+    merge_fl_change(*stack_B, 2, data->cur_flag);
+    merge_fl_change(*stack_A, 2, data->cur_flag + 1);
     data->cur_flag += 2;
 }
 
-void init_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+void init_2chnks(t_merge_data *data)
 {
     size_t  ib;
     size_t  ia;
@@ -103,14 +104,18 @@ void init_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
     ib = data->i_B;
     ia = data->i_A;
     while (ib > 1) {
-        oper_two_top_elem(stack_A, stack_B, data);
+        oper_two_top_elem(data->stack_A, data->stack_B, data);
         ib -= 2;
         ia -= 2;
     }
     data->i_A = data->i_B / 2;
     data->i_B = data->i_B / 2;
     if (!ib && !ia)
-        return ;
-    o_tail_2chnks(stack_A, stack_B, data);
-    data->cur_flag = 0;
+    {
+        data->cur_flag = 0;
+        //debug_print_stack(data->stack_A, data->stack_B);
+        return;
+    }
+    o_tail_2chnks(data->stack_A, data->stack_B, data);
+    //debug_print_stack(data->stack_A, data->stack_B);
 }
