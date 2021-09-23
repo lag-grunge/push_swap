@@ -21,7 +21,8 @@ static int	check_is_uniq(t_dlist *stack, int elem)
         cur = check_item_and_next(cur, elem);
     if (!cur)
         return (0);
-	return (1);
+    else
+	    return (1);
 }
 
 static int	add_new_elem(t_dlist **stack, int elem)

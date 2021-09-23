@@ -1,13 +1,19 @@
 #include "push_swap.h"
+#include <stdarg.h>
+
+static void print_string(t_dlist *stack, void *arg)
+{
+    t_ps_data   *content;
+
+    content = stack->content;
+    if (!arg)
+        printf("%zu %d %zu\n", content->pos, content->val, content->flag);
+}
 
 void	print_stack(t_dlist *stack)
 {
-
-	while (stack)
-	{
-		printf("%zu %d %zu\n", ((t_ps_data *)(stack->content))->pos, ((t_ps_data *)(stack->content))->val, ((t_ps_data *)(stack->content))->flag);
-		stack = stack->next;
-	}
+    if (stack)
+        ft_dlstmap(stack, &print_string, NULL);
 }
 
 void	print_arr(int *arr, size_t size)
