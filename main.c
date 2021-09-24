@@ -20,8 +20,9 @@ int main(int argc, char *argv[])
     init_data_stuff(&data);
 	init_stack(argc, argv, &stack_A, &data);
 	data.arr_sorted = insertion_sort(stack_A, data.size);
-    if (!data.arr_sorted)
-        exit_error(3, (void *)stack_A, &free_stack, &data);
+    if (!data.arr_sorted) {
+        exit_error(3, (void *) stack_A, &free_stack, &data);
+    }
 	check_if_stack_sorted(&stack_A, IS_CHECKER, &data);
     data.cmd_array = init_command_array(&data);
     if (!data.cmd_array || !data.op_lines)

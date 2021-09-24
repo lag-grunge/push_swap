@@ -8,7 +8,7 @@ void	put_command(char *op_line)
 
 static void fill_op_lines(t_stck_data *data)
 {
-    data->op_lines = malloc(sizeof(char *) * CMDS_NUMBER);
+    data->op_lines = (char **)malloc(sizeof(char *) * (CMDS_NUMBER + 1));
     data->op_lines[ra] = ft_strdup("ra");
     data->op_lines[rra] = ft_strdup("rra");
     data->op_lines[sa] = ft_strdup("sa");

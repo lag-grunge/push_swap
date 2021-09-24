@@ -103,19 +103,19 @@ static void operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_de
     i++;
 }
 
-static void zero_flag_chunks2stack_b(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+static void zero_flag_chunks2stack_b(t_dlist **stack_A, t_merge_data *data)
 {
     size_t      next_dest;
     size_t      prev_dest;
 
     data->i_A = 0;
     data->i_B = 0;
+    data->cur_flag = 0;
     operate_chain(data, &next_dest, &prev_dest);
-    debug_print_stack(stack_A, stack_B);
     while (next_dest != ft_dlst_size(*stack_A)) {
         operate_chain(data, &next_dest, NULL);
-        debug_print_stack(stack_A, stack_B);
     }
+    data->cur_flag = 0;
 }
 
 void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data, t_stck_data *cmn_data)
@@ -131,8 +131,6 @@ void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge
     }
     else if (data->algo_type == 2) {
         merge_fl_change(*stack_A, -2, 0);
-        debug_print_stack(stack_A, stack_B);
-        data->cur_flag = 0;
-        zero_flag_chunks2stack_b(stack_A, stack_B, data);
+        zero_flag_chunks2stack_b(stack_A, data);
     }
 }

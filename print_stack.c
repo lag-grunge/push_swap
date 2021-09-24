@@ -35,14 +35,16 @@ void	debug_print_stack(t_dlist **stack_A, t_dlist **stack_B)
         printf("stack_A\n");
         print_stack(*stack_A);
     }
-    else
+    else {
         printf("stack_A is null\n");
+    }
 	if (stack_B)
 	{
 		printf("stack_B\n");
 		print_stack(*stack_B);
 	}
-    else
+    else {
         printf("stack_A is null\n");
+    }
 	sleep(7);
 }
