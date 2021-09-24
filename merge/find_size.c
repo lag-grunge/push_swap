@@ -49,32 +49,3 @@ size_t	find_chunk_size(t_dlist *stack, size_t cur_flag)
     }
     return (ret);
 }
-
-static void move_bottom_chunk(t_merge_data *data, t_dlist **stack, size_t bottom_chunk)
-{
-    size_t  i;
-    char    *op_line;
-
-    i = 0;
-    if (stack == data->stack_A)
-        op_line = ft_strdup("rra");
-    else
-        op_line = ft_strdup("rrb");
-    while (i < bottom_chunk)
-    {
-        execute_command(op_line, data->stack_A, data->stack_B);
-        i++;
-    }
-    free(op_line);
-}
-
-void shift_small_bottom_chunk(t_merge_data *data, t_dlist **stck_ptr[4])
-{
-    size_t  bottom_chunk;
-    size_t  forward_chunk;
-
-    bottom_chunk = find_bottom_chunk_size(*stck_ptr[first_stack]);
-    forward_chunk = find_chunk_size(*stck_ptr[first_stack], 0);
-    if (forward_chunk / bottom_chunk >= CHUNKS_DIFF)
-        move_bottom_chunk(data, stck_ptr[first_stack], bottom_chunk);
-}

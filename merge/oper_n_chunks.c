@@ -89,7 +89,7 @@ static int oper_one_nchnk(t_dlist **stck_ptr[4], t_merge_data *data)
         if (chunk_1)
             chunk_1 -= oper_one_elem(data, stck_ptr, chunk_1 && chunk_0, &crit_of_action);
     }
-    merge_fl_change(*stck_ptr[stack_for_input], chunk_res, data->cur_flag);
+    merge_fl_change_bottom(*stck_ptr[stack_for_input], chunk_res, data->cur_flag);
     data->cur_flag++;
     return (1);
 }
@@ -111,7 +111,7 @@ static void init_merge_chunks_of_one_size(t_merge_data *data, size_t *i_min, siz
         *i_min = data->i_A;
         *i_max = data->i_B;
     }
-    shift_small_bottom_chunk(data, stck_ptr);
+    //shift_small_bottom_chunk(data, stck_ptr);
     data->i_A = 0;
     data->i_B = 0;
 }
@@ -141,22 +141,3 @@ void	merge_chunks_of_one_size(t_merge_data *data)
     }
     data->cur_flag = 0;
 }
-
-/*static void	o_tail_nchnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data, t_dlist *second)
-{
-    if (data->i_A == data->i_B)
-    {
-        oper_one_nchnk(stack_A, stack_B, second);
-    }
-    else if (data->i_A > data->i_B)
-    {
-        oper_one_nchnk(stack_A, stack_B, stack_B);
-        oper_one_nchnk(stack_A, stack_B, stack_A);
-    }
-    else if (data->i_A < data->i_B)
-    {
-        oper_one_nchnk(stack_A, stack_B, stack_A);
-        oper_one_nchnk(stack_A, stack_B, stack_B);
-    }
-}
-*/

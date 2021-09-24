@@ -26,7 +26,7 @@ static void o_both_tail_equal(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
         execute_command("pb", stack_A, stack_B);
         execute_command("rb", stack_A, stack_B);
         execute_command("rb", stack_A, stack_B);
-        merge_fl_change(*stack_B, 2, data->cur_flag);
+        merge_fl_change_bottom(*stack_B, 2, data->cur_flag);
         data->i_B++;
     }
     else
@@ -34,7 +34,7 @@ static void o_both_tail_equal(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
         execute_command("pa", stack_A, stack_B);
         execute_command("ra", stack_A, stack_B);
         execute_command("ra", stack_A, stack_B);
-        merge_fl_change(*stack_A, 2, data->cur_flag);
+        merge_fl_change_bottom(*stack_A, 2, data->cur_flag);
         data->i_A++;
     }
 }
@@ -47,13 +47,13 @@ static void o_a_tail_longer(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *
             execute_command("sa", stack_A, stack_B);
         execute_command("rr", stack_A, stack_B);
         execute_command("ra", stack_A, stack_B);
-        merge_fl_change(*stack_A, 2, data->cur_flag);
-        merge_fl_change(*stack_B, 1, data->cur_flag + 1);
+        merge_fl_change_bottom(*stack_A, 2, data->cur_flag);
+        merge_fl_change_bottom(*stack_B, 1, data->cur_flag + 1);
     }
     else
     {
         execute_command("ra", stack_A, stack_B);
-        merge_fl_change(*stack_A, 1, data->cur_flag);
+        merge_fl_change_bottom(*stack_A, 1, data->cur_flag);
     }
     data->i_A++;
 }
@@ -91,8 +91,8 @@ static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
         execute_command("sb", stack_A, stack_B);
     execute_command("rr", stack_A, stack_B);
     execute_command("rr", stack_A, stack_B);
-    merge_fl_change(*stack_B, 2, data->cur_flag);
-    merge_fl_change(*stack_A, 2, data->cur_flag + 1);
+    merge_fl_change_bottom(*stack_B, 2, data->cur_flag);
+    merge_fl_change_bottom(*stack_A, 2, data->cur_flag + 1);
     data->cur_flag += 2;
 }
 

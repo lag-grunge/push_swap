@@ -6,17 +6,25 @@
 #include "libft/libft.h"
 #include "libft/ft_dlst/ft_dlst.h"
 
+typedef void (*free_func)(void *);
+typedef void (*command)();
+enum cmds_codes {ra, rra, sa, pa, rb, rrb, sb, pb, rr, rrr, ss};
+#define CMDS_NUMBER 11
+
 typedef struct s_ps_data	{
 	int		val;
 	size_t	pos;
 	size_t	flag;
 }				t_ps_data;
 
+
 typedef struct s_stck_data	{
 	size_t	size;
 	size_t	i_A;
 	size_t	i_B;
 	int		*arr_sorted;
+    command *cmd_array;
+    char    **op_lines;
 }				t_stck_data;
 
 typedef	struct s_cmn_asip_data	{
@@ -27,7 +35,6 @@ typedef	struct s_cmn_asip_data	{
 	size_t	flag;
 }				t_cmn_asip_data;
 
-typedef void (*free_func)(void *);
 
 void	free_split(void *data);
 void	free_stack(void *data);
@@ -48,7 +55,9 @@ void	swap_both(t_dlist **stack1, t_dlist **stack2);
 void	partition(t_dlist **stack2, t_dlist **stack1, size_t part, size_t size);
 
 int 	get_next_line(char **line);
+void	put_command(char *op_line);
 int 	execute_command(char *op_line, t_dlist **stack_A, t_dlist **stack_B);
+command *init_command_array(t_stck_data *data);
 
 void	insert(t_dlist *cur, size_t i, int *arr_sorted);
 int		*insertion_sort(t_dlist *stack, size_t size);
@@ -65,6 +74,7 @@ void	small_4(t_dlist	**stack);
 void	small_5(t_dlist	**stack);
 
 void    merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
+void    merge_sort2(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *cmn_data);
 void    radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 int 	asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 	void 	asip_fl_change(t_dlist **stack_A);

@@ -31,16 +31,18 @@ void	print_arr(int *arr, size_t size)
 
 void	debug_print_stack(t_dlist **stack_A, t_dlist **stack_B)
 {
-	static int i;
-
-	printf("stack_A\n");
-	print_stack(*stack_A);
+    if (stack_A) {
+        printf("stack_A\n");
+        print_stack(*stack_A);
+    }
+    else
+        printf("stack_A is null\n");
 	if (stack_B)
 	{
 		printf("stack_B\n");
 		print_stack(*stack_B);
 	}
-
+    else
+        printf("stack_A is null\n");
 	sleep(7);
-	i++;
 }

@@ -23,17 +23,26 @@ void	free_stack(void *data)
     ft_dlst_clear(&stack, &free);
 }
 
-void exit_error(size_t err, void *strct, free_func f, t_stck_data *data)
+void    free_data_stuff(void *stck_data)
+{
+    t_stck_data *data;
+
+    data = stck_data;
+    if (data->arr_sorted)
+        free(data->arr_sorted);
+    if (data->cmd_array)
+        free(data->cmd_array);
+    if (data->op_lines)
+        free_split(data->op_lines);
+}
+
+void exit_error(size_t err, void *strct, free_func fr_func, t_stck_data *data)
 {
 	if (strct)
-		f(strct);
+		fr_func(strct);
 	if (data)
-	{
-		if (data->arr_sorted)
-			free(data->arr_sorted);
-		free(data);
-	}
-	exit (err);
+        free_data_stuff(data);
+	exit(err);
 }
 
 void	check_input(int argc, char *argv[], t_stck_data *data)
@@ -45,6 +54,7 @@ void	check_input(int argc, char *argv[], t_stck_data *data)
 	
 	i = 0;
 	data->size = 0;
+    ovflw = 0;
 	while (++i < argc)
 	{
 		arg_sp = ft_split(argv[i], ' ');
@@ -62,7 +72,5 @@ void	check_input(int argc, char *argv[], t_stck_data *data)
 	}
 	if (!data->size)
 		exit_error(0, NULL, NULL, data);
-	data->i_A = data->size;
-	data->i_B = 0;
 }
 
