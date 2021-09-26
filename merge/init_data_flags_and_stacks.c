@@ -19,7 +19,7 @@ static int is_same_chain(size_t a, size_t b)
 {
     if ((a + 1 == 0) && (b + 1 == 0))
         return (1);
-    if ((a + 1 > 0) && (b + 1 > 0))
+    if ((a + 1 > 1) && (b + 1 > 1))
         return (1);
     return (0);
 }
@@ -73,7 +73,7 @@ static void    execute_n_command(int cmd_num, size_t n, t_merge_data *data)
     }
 }
 
-static void operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_dest)
+static void operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_dest, size_t changes)
 {
     t_dlist **stack_A;
     t_dlist **stack_B;
@@ -84,36 +84,54 @@ static void operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_de
     find_dest_to_neigh_chain(*stack_A, next_dest, prev_dest);
     if (!i && (get_flag(*stack_A) + 1 == 0))
         execute_n_command(rra, *prev_dest, data);
-    else if (!i) {
-        execute_n_command(ra, *next_dest, data);
-        merge_fl_change_bottom(*stack_A, *next_dest + *prev_dest, data->cur_flag++);
-        data->i_A++;
-    }
     else if (i % 2 == 1) {
         execute_n_command(pb, *next_dest, data);
-        merge_fl_change_next(*stack_B, *next_dest, data->cur_flag++);
+        merge_fl_change_next(*stack_B, *next_dest, changes - 1 - data->cur_flag);
         data->i_B++;
     }
-    else if (i % 2 == 0 && i) {
+    else if (!i || (i % 2 == 0 && i)) {
         execute_n_command(ra, *next_dest, data);
-        merge_fl_change_bottom(*stack_A, *next_dest, data->cur_flag++);
+        if (!i)
+            merge_fl_change_bottom(*stack_A, *next_dest + *prev_dest, data->cur_flag++);
+        else
+            merge_fl_change_bottom(*stack_A, *next_dest, data->cur_flag++);
         data->i_A++;
     }
-    find_dest_to_neigh_chain(*stack_A, next_dest, NULL);
     i++;
+}
+
+static size_t get_chain_changes(t_dlist *stack_A) {
+    t_dlist *cur;
+    size_t cur_flag;
+    size_t next_flag;
+    size_t changes;
+
+    changes = 0;
+    cur = stack_A;
+    while (cur != stack_A || !changes)
+    {
+        cur_flag = get_flag(cur);
+        next_flag = get_flag(cur->next);
+        if (!is_same_chain(cur_flag, next_flag))
+            changes++;
+        cur = cur->next;
+    }
+    return (changes);
 }
 
 static void zero_flag_chunks2stack_b(t_dlist **stack_A, t_merge_data *data)
 {
     size_t      next_dest;
     size_t      prev_dest;
+    size_t      changes;
 
     data->i_A = 0;
     data->i_B = 0;
     data->cur_flag = 0;
-    operate_chain(data, &next_dest, &prev_dest);
-    while (next_dest != ft_dlst_size(*stack_A)) {
-        operate_chain(data, &next_dest, NULL);
+    changes = get_chain_changes(*stack_A);
+    operate_chain(data, &next_dest, &prev_dest, changes);
+    while (data->i_A != changes / 2 || data->i_B != changes / 2) {
+        operate_chain(data, &next_dest, NULL, changes);
     }
     data->cur_flag = 0;
 }

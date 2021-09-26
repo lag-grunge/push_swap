@@ -59,7 +59,7 @@ void	check_input(int argc, char *argv[], t_stck_data *data)
 	{
 		arg_sp = ft_split(argv[i], ' ');
 		if (!arg_sp)
-			exit_error(3, NULL, NULL, data);
+			exit_error(3, NULL, NULL, NULL);
 		j = -1;
 		while (arg_sp[++j])
 		{
@@ -71,6 +71,6 @@ void	check_input(int argc, char *argv[], t_stck_data *data)
 		free_split(arg_sp);
 	}
 	if (!data->size)
-		exit_error(0, NULL, NULL, data);
+		exit_error(0, NULL, NULL, NULL);
 }
 

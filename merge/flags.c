@@ -38,18 +38,24 @@ static void    merge_set_flag_chain(t_dlist *cur, void *params)
 {
     t_ps_data   *content;
     t_ps_data   *content_next;
+    t_ps_data   *content_prev;
 
     content = cur->content;
     content_next = cur->next->content;
+    content_prev = cur->prev->content;
     if (content->pos < content_next->pos)
     {
         merge_set_flag_chain(cur->next, params);
-        content->flag = 1 + content_next->flag;
-        if (content_next->flag + 1 == 0)
-            content->flag = 1;
+        if (content_prev->pos < content->pos)
+            content->flag = 1 + content_next->flag;
+        else
+            content->flag = -1;
     }
     else {
-        content->flag = -1;
+        if (content_prev->pos < content->pos)
+            content->flag = 1;
+        else
+            content->flag = -1;
     }
 }
 
