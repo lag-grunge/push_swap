@@ -36,27 +36,18 @@ void 	merge_fl_change_bottom(t_dlist *stack_A, size_t count, size_t flag)
 
 static void    merge_set_flag_chain(t_dlist *cur, void *params)
 {
-    t_ps_data   *content;
-    t_ps_data   *content_next;
-    t_ps_data   *content_prev;
-
-    content = cur->content;
-    content_next = cur->next->content;
-    content_prev = cur->prev->content;
-    if (content->pos < content_next->pos)
+    if (get_pos(cur) < get_pos(cur->next))
     {
         merge_set_flag_chain(cur->next, params);
-        if (content_prev->pos < content->pos)
-            content->flag = 1 + content_next->flag;
+        if (get_pos(cur->prev) < get_pos(cur))
+            *set_flag(cur) = 1 + get_flag(cur->next);
         else
-            content->flag = -1;
+            *set_flag(cur) = -1;
     }
-    else {
-        if (content_prev->pos < content->pos && params)
-            content->flag = 1;
-        else
-            content->flag = -1;
-    }
+    else if (get_pos(cur->prev) < get_pos(cur))
+        *set_flag(cur) = 1;
+    else
+        *set_flag(cur) = -1;
 }
 
 void    merge_fl_change_next(t_dlist *stack, size_t count, size_t flag)
@@ -74,6 +65,8 @@ void    merge_fl_change_next(t_dlist *stack, size_t count, size_t flag)
 
 void 	merge_fl_change(t_dlist *stack_A, int mode, size_t flag)
 {
+    size_t  chunks;
+
     if (mode == -1)
         ft_dlstmap(stack_A, &merge_set_flag_default, &flag);
     else if (mode == 0)
@@ -81,5 +74,5 @@ void 	merge_fl_change(t_dlist *stack_A, int mode, size_t flag)
     else if (mode == -2)
         ft_dlstmap(stack_A, &merge_set_flag_chain, NULL);
     else if (mode == -3)
-        ft_dlstmap(stack_A, &merge_set_flag_chain, &mode);
+        ft_dlstmap(stack_A, &merge_set_flag_second, &chunks);
 }

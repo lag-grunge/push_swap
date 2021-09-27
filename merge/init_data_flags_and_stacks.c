@@ -53,26 +53,6 @@ static void find_dest_to_neigh_chain(t_dlist *stack, size_t *next_dest, size_t *
     *prev_dest = z - 1;
 }
 
-static void    execute_n_command(int cmd_num, size_t n, t_merge_data *data)
-{
-    size_t  i;
-
-    i = 0;
-    while (i < n)
-    {
-        if (ra <= cmd_num && cmd_num < pa)
-            data->cmd_array[cmd_num](data->stack_A);
-        else if (rb <= cmd_num && cmd_num < pb)
-            data->cmd_array[cmd_num](data->stack_B);
-        else if (pa == cmd_num || (rr <= cmd_num && cmd_num <= ss))
-            data->cmd_array[cmd_num](data->stack_A, data->stack_B);
-        else if (pb == cmd_num)
-            data->cmd_array[cmd_num](data->stack_B, data->stack_A);
-        put_command(data->op_lines[cmd_num]);
-        i++;
-    }
-}
-
 static int operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_dest, size_t changes)
 {
     t_dlist         **stack_A;
@@ -86,21 +66,18 @@ static int operate_chain(t_merge_data *data, size_t *next_dest, size_t *prev_des
         execute_n_command(rra, *prev_dest, data);
     else if (i % 2 == 1 && *next_dest > 1) {
             execute_n_command(pb, *next_dest, data);
-            merge_fl_change_next(*stack_B, *next_dest, changes - 1 - data->cur_flag);
+            merge_fl_change_next(*stack_B, *next_dest, changes / 2 - 1 - data->cur_flag);
+            data->cur_flag++;
             data->i_B++;
         }
-    else if (i % 2 == 1)
+    else if ((i % 2 == 1) || (!i) || (i % 2 == 0 && i))
         execute_n_command(ra, *next_dest, data);
-    else if (!i || (i % 2 == 0 && i)) {
-        execute_n_command(ra, *next_dest, data);
-        if (!i)
-            merge_fl_change_bottom(*stack_A, *next_dest + *prev_dest, data->cur_flag++);
-        else
-            merge_fl_change_bottom(*stack_A, *next_dest, data->cur_flag++);
-        data->i_A++;
+    if (++i == changes)
+    {
+        i = 0;
+        return (0);
     }
-    i++;
-    return (i - 1);
+    return (1);
 }
 
 static size_t get_chain_changes(t_dlist *stack_A) {
@@ -129,21 +106,31 @@ static void zero_flag_chunks2stack_b(t_dlist **stack_A, t_merge_data *data)
     size_t      changes;
     size_t      ret;
 
-    data->i_A = 0;
-    data->i_B = 0;
-    data->cur_flag = 0;
     changes = get_chain_changes(*stack_A);
     ret = operate_chain(data, &next_dest, &prev_dest, changes);
-    while (ret < changes / 2) {
+    while (ret)
         ret = operate_chain(data, &next_dest, NULL, changes);
-    }
-    data->cur_flag = 0;
 }
+
+/*static int crit_stop(t_dlist *stack_A)
+{
+    t_dlist     *cur;
+    t_dlist     *next;
+
+    cur = stack_A;
+    next = NULL;
+    while (cur != stack_A || next == NULL)
+    {
+        next = cur->next;
+        if ((get_flag(cur) + 1 == 0) &&  (get_flag(next) + 1 == 0))
+            return (1);
+        cur = cur->next;
+    }
+    return (0);
+}*/
 
 void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data, t_stck_data *cmn_data)
 {
-    size_t  changes;
-
     data->stack_A = stack_A;
     data->stack_B = stack_B;
     data->cmd_array = cmn_data->cmd_array;
@@ -154,11 +141,11 @@ void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge
         data->cur_flag = 0;
     }
     else if (data->algo_type == 2) {
+        data->cur_flag = 0;
+        data->i_A = 0;
+        data->i_B = 0;
         merge_fl_change(*stack_A, -2, 0);
-        changes = get_chain_changes(*stack_A);
-        while (data->i_A != changes / 2) {
-            zero_flag_chunks2stack_b(stack_A, data);
-            merge_fl_change(*stack_A, -3, 0);
-        }
+        zero_flag_chunks2stack_b(stack_A, data);
+        merge_fl_change(*stack_A, -3, 0);
     }
 }

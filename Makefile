@@ -19,9 +19,9 @@ SRCS = 	input.c sorted_array.c \
 
 HEADER = push_swap.h
 
-MERGE_SRCS_LIST = merge_sort.c flags.c \
+MERGE_SRCS_LIST = merge_sort.c flags.c flags_two.c \
 		init_pair_chunks.c oper_n_chunks.c \
-		find_size.c \
+		find_size.c execute_n_command.c \
 		init_data_flags_and_stacks.c
 MERGE_SRCS = ${addprefix ${MERGE_DIR}/, ${MERGE_SRCS_LIST}}
 MERGE_HEADER = ${MERGE_DIR}/merge_sort.h
