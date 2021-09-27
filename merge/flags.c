@@ -52,7 +52,7 @@ static void    merge_set_flag_chain(t_dlist *cur, void *params)
             content->flag = -1;
     }
     else {
-        if (content_prev->pos < content->pos)
+        if (content_prev->pos < content->pos && params)
             content->flag = 1;
         else
             content->flag = -1;
@@ -80,4 +80,6 @@ void 	merge_fl_change(t_dlist *stack_A, int mode, size_t flag)
         ft_dlstmap(stack_A, &merge_set_flag_default, NULL);
     else if (mode == -2)
         ft_dlstmap(stack_A, &merge_set_flag_chain, NULL);
+    else if (mode == -3)
+        ft_dlstmap(stack_A, &merge_set_flag_chain, &mode);
 }
