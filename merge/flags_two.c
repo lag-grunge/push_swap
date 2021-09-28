@@ -1,20 +1,16 @@
 #include "push_swap.h"
 #include "merge_sort.h"
 
-static size_t correct_set_flag_second(t_dlist *cur)
+static void correct_set_flag_second(t_dlist *cur, size_t start)
 {
-    size_t  res;
-
     while (get_pos(cur->prev) < get_pos(cur))
     {
-        *set_flag(cur->prev) = 0;
+        *set_flag(cur->prev) = start;
         cur = cur->prev;
-        res++;
     }
-    return (res);
 }
 
-void    merge_set_flag_second(t_dlist *cur, void *params)
+void merge_set_flag_second(t_dlist *cur, size_t *start)
 {
     static int          flag;
     size_t              next_flag;
@@ -25,8 +21,10 @@ void    merge_set_flag_second(t_dlist *cur, void *params)
     next_flag = get_flag(cur->next);
     cur_pos = get_pos(cur);
     next_pos = get_pos(cur->next);
-    if (!flag || (next_flag == 0 && cur_pos < next_pos))
-        *set_flag(cur) = 0;
+    if (get_flag(cur) < *start)
+        return ;
+    if (!flag || (next_flag == *start && cur_pos < next_pos))
+        *set_flag(cur) = *start;
     else
     {
         prev_pos = get_pos(cur->prev);
@@ -37,6 +35,6 @@ void    merge_set_flag_second(t_dlist *cur, void *params)
     }
     if (!flag)
         flag = 1;
-    if (next_flag == 0 && cur_pos < next_pos)
-        *(size_t *) params =  1 + correct_set_flag_second(cur);
+    if (next_flag == *start && cur_pos < next_pos)
+        correct_set_flag_second(cur, *start);
 }

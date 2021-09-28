@@ -1,13 +1,12 @@
 #include "push_swap.h"
 #include <stdarg.h>
 
-static void print_string(t_dlist *stack, void *arg)
+static void print_string(t_dlist *stack)
 {
     t_ps_data   *content;
 
     content = stack->content;
-    if (!arg)
-        printf("%zu %d %zu\n", content->pos, content->val, content->flag);
+    printf("%zu %zu\n", content->pos, content->flag);
 }
 
 void	print_stack(t_dlist *stack)

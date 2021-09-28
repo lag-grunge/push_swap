@@ -95,49 +95,69 @@ static int oper_one_nchnk(t_dlist **stck_ptr[4], t_merge_data *data)
 }
 
 
-static void init_merge_chunks_of_one_size(t_merge_data *data, size_t *i_min, size_t *i_max, t_dlist **stck_ptr[4])
+static void init_merge_chunks_of_one_size(t_merge_data *data, size_t **i_min, size_t **i_max, t_dlist **stck_ptr[4])
 {
     t_dlist **cur_stack;
 
     stck_ptr[first_stack] = data->stack_A;
     stck_ptr[second_stack] = data->stack_B;
-    *i_min = data->i_B;
-    *i_max = data->i_A;
+    *i_min = &data->i_B;
+    *i_max = &data->i_A;
     if (data->i_A <= data->i_B)
     {
         cur_stack = stck_ptr[second_stack];
         stck_ptr[second_stack] = stck_ptr[first_stack];
         stck_ptr[first_stack] = cur_stack;
-        *i_min = data->i_A;
-        *i_max = data->i_B;
+        *i_min = &data->i_A;
+        *i_max = &data->i_B;
     }
-    //shift_small_bottom_chunk(data, stck_ptr);
-    data->i_A = 0;
-    data->i_B = 0;
+}
+
+void    merge2_chunks_of_one_size(t_merge_data *data)
+{
+    t_dlist **stck_ptr[4];
+    size_t  *i_min;
+    size_t  *i_max;
+    size_t  i;
+    int     flag;
+
+    init_merge_chunks_of_one_size(data, &i_min, &i_max, stck_ptr);
+    i = *i_min;
+    flag = i % 2;
+    while (i)
+    {
+        if (i % 2 == flag || (*i_max / *i_min >= CHUNKS_DIFF))
+            stck_ptr[stack_for_input] = stck_ptr[second_stack];
+        else
+            stck_ptr[stack_for_input] = stck_ptr[first_stack];
+        oper_one_nchnk(stck_ptr, data);
+        *i_max = *i_max - 1;
+        *i_min = *i_min - 1;
+        i--;
+    }
+    merge_fl_change(*stck_ptr[first_stack], -3, &data->cur_flag);
+    data->cur_flag = 0;
 }
 
 void	merge_chunks_of_one_size(t_merge_data *data)
 {
     t_dlist **stck_ptr[4];
-    size_t  i_min;
-    size_t  i_max;
+    size_t  *i_min;
+    size_t  *i_max;
 
     init_merge_chunks_of_one_size(data, &i_min, &i_max, stck_ptr);
-    while (i_max || i_min)
+    while (*i_max || *i_min)
     {
         stck_ptr[stack_for_input] = stck_ptr[second_stack];
-        if (i_max)
+        if (*i_max)
             oper_one_nchnk(stck_ptr, data);
-        i_min -= (i_max > 0 && i_min > 0);
-        i_max -= (i_max > 0);
-        //
-        // debug_print_stack(data->stack_A, data->stack_B);
+        *i_min -= (*i_max > 0 && *i_min > 0);
+        *i_max -= (*i_max > 0);
         stck_ptr[stack_for_input] = stck_ptr[first_stack];
-        if (i_min)
+        if (*i_min)
             oper_one_nchnk(stck_ptr, data);
-        i_max -= (i_min > 0 && i_max > 0);
-        i_min -= (i_min > 0);
-        //debug_print_stack(data->stack_A, data->stack_B);
+        *i_max -= (*i_min > 0 && *i_max > 0);
+        *i_min -= (*i_min > 0);
     }
     data->cur_flag = 0;
 }

@@ -34,11 +34,11 @@ void 	merge_fl_change_bottom(t_dlist *stack_A, size_t count, size_t flag)
     }
 }
 
-static void    merge_set_flag_chain(t_dlist *cur, void *params)
+static void    merge_set_flag_chain(t_dlist *cur)
 {
     if (get_pos(cur) < get_pos(cur->next))
     {
-        merge_set_flag_chain(cur->next, params);
+        merge_set_flag_chain(cur->next);
         if (get_pos(cur->prev) < get_pos(cur))
             *set_flag(cur) = 1 + get_flag(cur->next);
         else
@@ -63,16 +63,14 @@ void    merge_fl_change_next(t_dlist *stack, size_t count, size_t flag)
     }
 }
 
-void 	merge_fl_change(t_dlist *stack_A, int mode, size_t flag)
+void 	merge_fl_change(t_dlist *stack_A, int mode, size_t *flag)
 {
-    size_t  chunks;
-
     if (mode == -1)
-        ft_dlstmap(stack_A, &merge_set_flag_default, &flag);
+        ft_dlstmap(stack_A, &merge_set_flag_default, flag);
     else if (mode == 0)
         ft_dlstmap(stack_A, &merge_set_flag_default, NULL);
     else if (mode == -2)
         ft_dlstmap(stack_A, &merge_set_flag_chain, NULL);
     else if (mode == -3)
-        ft_dlstmap(stack_A, &merge_set_flag_second, &chunks);
+        ft_dlstmap(stack_A, &merge_set_flag_second, flag);
 }
