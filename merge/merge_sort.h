@@ -21,7 +21,8 @@ enum oper_mode {from_b_to_a, from_a_to_a, from_a_to_b, from_b_to_b };
 void 	merge_fl_change(t_dlist *stack_A, int mode, size_t *flag);
 void 	merge_fl_change_bottom(t_dlist *stack_A, size_t count, size_t flag);
 void 	merge_fl_change_next(t_dlist *stack_A, size_t count, size_t flag);
-void merge_set_flag_second(t_dlist *cur, size_t *start);
+void    merge_set_flag_second(t_dlist *cur, size_t *start);
+void    merge_set_flag_third(t_dlist *cur, size_t start);
 
 void    init_2chnks(t_merge_data *data);
 void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data, t_stck_data *cmn_data);

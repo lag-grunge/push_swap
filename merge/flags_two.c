@@ -21,8 +21,6 @@ void merge_set_flag_second(t_dlist *cur, size_t *start)
     next_flag = get_flag(cur->next);
     cur_pos = get_pos(cur);
     next_pos = get_pos(cur->next);
-    if (get_flag(cur) < *start)
-        return ;
     if (!flag || (next_flag == *start && cur_pos < next_pos))
         *set_flag(cur) = *start;
     else

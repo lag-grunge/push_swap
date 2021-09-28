@@ -106,7 +106,7 @@ void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge
         merge_fl_change(*stack_A, -2, NULL);
         minus_flag_chains2stack_b(stack_A, data);
         merge_fl_change(*stack_A, -3, &data->cur_flag);
-        data->i_A = count_chunks(*stack_A);
         operate_chain(data, &next_dest, &prev_dest, 1);
+        data->i_A = count_chunks(*stack_A);
     }
 }

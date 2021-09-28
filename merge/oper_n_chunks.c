@@ -64,10 +64,6 @@ static size_t init_oper_one_nchnk(t_dlist **stck_ptr[4], t_merge_data *data, siz
         stck_ptr[stack_for_input] = stck_ptr[second_stack];
     if (!*chunk_1 && stck_ptr[stack_for_input] == stck_ptr[second_stack])
         stck_ptr[stack_for_input] = stck_ptr[first_stack];
-    if (stck_ptr[stack_for_input] == data->stack_A)
-        data->i_A++;
-    else
-        data->i_B++;
     return (*chunk_0 + *chunk_1);
 }
 
@@ -91,6 +87,10 @@ static int oper_one_nchnk(t_dlist **stck_ptr[4], t_merge_data *data)
     }
     merge_fl_change_bottom(*stck_ptr[stack_for_input], chunk_res, data->cur_flag);
     data->cur_flag++;
+    if (stck_ptr[stack_for_input] == data->stack_A)
+        data->i_A++;
+    else
+        data->i_B++;
     return (1);
 }
 
@@ -119,7 +119,7 @@ void    merge2_chunks_of_one_size(t_merge_data *data)
     size_t  *i_min;
     size_t  *i_max;
     size_t  i;
-    int     flag;
+    size_t  flag;
 
     init_merge_chunks_of_one_size(data, &i_min, &i_max, stck_ptr);
     i = *i_min;
@@ -127,14 +127,20 @@ void    merge2_chunks_of_one_size(t_merge_data *data)
     while (i)
     {
         if (i % 2 == flag || (*i_max / *i_min >= CHUNKS_DIFF))
+        {
             stck_ptr[stack_for_input] = stck_ptr[second_stack];
+            *i_max = *i_max - 1;
+        }
         else
+        {
             stck_ptr[stack_for_input] = stck_ptr[first_stack];
+            *i_min = *i_min - 1;
+        }
         oper_one_nchnk(stck_ptr, data);
-        *i_max = *i_max - 1;
-        *i_min = *i_min - 1;
         i--;
     }
+    if (!*stck_ptr[first_stack])
+        return;
     merge_fl_change(*stck_ptr[first_stack], -3, &data->cur_flag);
     data->cur_flag = 0;
 }
