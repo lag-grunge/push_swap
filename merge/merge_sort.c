@@ -26,4 +26,6 @@ void 	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *cmn_data)
         data.i_A = count_chunks(*stack_A);
         data.i_B = count_chunks(*stack_B);
     }
+    //debug_print_stack(stack_A, stack_B);
+
 }

@@ -2,7 +2,7 @@
 #include "push_swap.h"
 #include "libft.h"
 
-void	insert(t_dlist *cur, size_t i, int *arr_sorted)
+static void	insert(t_dlist *cur, size_t i, int *arr_sorted)
 {
 	int	new_elem;
 
@@ -28,19 +28,6 @@ static void correct_pos_for_elem(t_dlist *cur, void *arr_sorted)
         i++;
     content->pos = i;
 }
-
-/*void	correct_pos(t_dlist *stack, int *arr_sorted)
-{
-	size_t	i;
-	t_dlist	*cur;
-
-	cur = stack;
-	while (cur)
-	{
-        correct_pos_for_elem(cur, arr_sorted);
-		cur = cur->next;
-	}
-}*/
 
 int		*insertion_sort(t_dlist *stack, size_t size)
 {
@@ -70,7 +57,7 @@ void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 
 	cur = *stack;
 	i = 0;
-	while (cur)
+	while (cur != *stack || !i)
 	{
 		if (!(seek_pos(cur, i, 1)))
 		{

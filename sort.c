@@ -1,15 +1,39 @@
 #include "push_swap.h"
 
-void big_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+void sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
 {
-    //asipes_sort(stack_A, stack_B, data->size);
-    radix_sort(stack_A, stack_B, data->size);
-    /* 8 - WRONG
-     * 10 - WRONG
-     * 20 - WRONG
-     * 50 - ???? AVG: 421 MAX:  713
-     * 100 -
-     * 500 - ??? AVG: 7022 MAX:  7318
+    t_dlist 	*stack_B;
+
+    if (data.size > 1 && data.size < 6) { small_size(&stack_A, data.size); }
+    else {
+        init_stack(0, NULL, &stack_B, &data);
+        big_sort(&stack_A, &stack_B, &data);
+        free_stack(stack_B);
+    }
+    // 0 (ARG= )
+    // 1 - 0
+    // 2 - AVG - 0, MAX - 1 )))
+    // 3 - AVG - 1, MAX -  2
+    // 4 - AVG - 4, MAX - 7
+    // 5 - WRONG ------------------------------------
+
+    //asipes_sort(stack_A, stack_B, data);
+    /* 6 - AVG: 19, MAX:  22
+     * 10 - AVG: 37 MAX:  44
+     * 20 - AVG: 91 MAX:  105
+     * 50 - AVG: 292 MAX:  320
+     * 100 - AVG: 719 MAX:  776
+     * 500 - AVG: 6994 MAX:  7495
+    */
+
+    //radix_sort(stack_A, stack_B, data->size);
+    /* 6 - 29
+     * 8 - 52
+     * 10 - 65
+     * 20 - 160
+     * 50 - 467
+     * 100 - 1084
+     * 500 - 6784
 
      */
 	// merge_sort2(stack_A, stack_B, data);
@@ -20,8 +44,9 @@ void big_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
      * 100 - AVG: 959 MAX:  1063
      * 500 - AVG: 6606 MAX:  6824
      */
-    //merge_sort(stack_A, stack_B, data);
+    merge_sort(stack_A, stack_B, data);
     /* 6,7 - WRONG
+     * 6 - AVG: 25, MAX:  27
      * 8 - AVG: 33 MAX:  34
      * 10 - AVG: 56 MAX:  60
      * 20 - AVG: 145 MAX:  147

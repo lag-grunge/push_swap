@@ -22,7 +22,6 @@ void 	merge_fl_change(t_dlist *stack_A, int mode, size_t *flag);
 void 	merge_fl_change_bottom(t_dlist *stack_A, size_t count, size_t flag);
 void 	merge_fl_change_next(t_dlist *stack_A, size_t count, size_t flag);
 void    merge_set_flag_second(t_dlist *cur, size_t *start);
-void    merge_set_flag_third(t_dlist *cur, size_t start);
 
 void    init_2chnks(t_merge_data *data);
 void    init_data_flags_and_stacks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data, t_stck_data *cmn_data);
@@ -36,6 +35,6 @@ size_t  find_bottom_chunk_size(t_dlist *stack);
 size_t  count_chunks(t_dlist *stack);
 size_t get_chain_changes(t_dlist *stack_A);
 
-void    execute_n_command(int cmd_num, size_t n, t_merge_data *data);
+void    exec_n_cmd_merge(int cmd_num, size_t n, t_merge_data *data);
 
 #endif
