@@ -1,7 +1,7 @@
 #include "push_swap.h"
 #include "merge_sort.h"
 
-void    exec_n_cmd_merge(int cmd_num, size_t n, t_merge_data *data)
+void    exec_n_cmd_merge(int cmd_num, size_t n, t_merge *data)
 {
     size_t  i;
 

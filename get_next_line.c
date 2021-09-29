@@ -7,7 +7,7 @@ int	get_next_line(char **line)
 	size_t i;
 
 	i = 0;
-	buf = malloc(sizeof(char) * (MAX_COMMAND_LENGTH + 1));
+	buf = malloc(sizeof(char) * (MAX_COMMAND_LENGTH + 2));
 	*line = buf;
 	ret = read(0, buf, 1);
 	while (ret)
@@ -16,6 +16,8 @@ int	get_next_line(char **line)
 				break ;
 		ret = read(0, buf + ++i, 1);
 	}
-	buf[i] = 0;
+    if (i > MAX_COMMAND_LENGTH + 1)
+        i = MAX_COMMAND_LENGTH + 1;
+    buf[i] = 0;
 	return (ret);
 }

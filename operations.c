@@ -16,6 +16,8 @@ void	push(t_dlist **stack_for_input, t_dlist **stack_output)
 {
 	t_dlist *elem;
 
+    if (!*stack_output)
+        return ;
 	elem = ft_dlst_pop(stack_output, *stack_output);
     if (!*stack_for_input)
     {

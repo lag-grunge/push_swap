@@ -12,27 +12,6 @@ int is_same_chain(size_t a, size_t b, int mode)
     return (0);
 }
 
-size_t  find_bottom_chunk_size(t_dlist *stack)
-{
-    t_dlist     *cur;
-    size_t      flag;
-    size_t      ret;
-
-    if (!stack)
-        return (0);
-    ret = 1;
-    cur = stack->prev;
-    flag = get_flag(cur);
-    while (cur != stack)
-    {
-        cur = cur->prev;
-        if (!is_same_chain(get_flag(cur), flag, 1))
-            break ;
-        ret++;
-    }
-    return (ret);
-}
-
 size_t	find_chunk_size(t_dlist *stack, size_t cur_flag)
 {
     size_t	    flag;
@@ -79,24 +58,3 @@ size_t  count_chunks(t_dlist *stack)
     }
     return (res);
 }
-
-size_t get_chain_changes(t_dlist *stack_A)
-{
-    t_dlist *cur;
-    size_t cur_flag;
-    size_t next_flag;
-    size_t changes;
-
-    changes = 0;
-    cur = stack_A;
-    while (cur != stack_A || !changes)
-    {
-        cur_flag = get_flag(cur);
-        next_flag = get_flag(cur->next);
-        if (!is_same_chain(cur_flag, next_flag, 0))
-            changes++;
-        cur = cur->next;
-    }
-    return (changes);
-}
-

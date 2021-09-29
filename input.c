@@ -42,6 +42,8 @@ void exit_error(size_t err, void *strct, free_func fr_func, t_stck_data *data)
 		fr_func(strct);
 	if (data)
         free_data_stuff(data);
+    if (err == COMMAND_NOT_EXECUTES)
+        write(2, ERROR_MSG, ft_strlen(ERROR_MSG));
 	exit(err);
 }
 

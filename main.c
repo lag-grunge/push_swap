@@ -1,5 +1,4 @@
 #include "push_swap.h"
-#define IS_CHECKER 0
 
 static void init_data_stuff(t_stck_data *data)
 {

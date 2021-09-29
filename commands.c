@@ -47,27 +47,27 @@ command *init_command_array(t_stck_data *data)
 
 int execute_command(char *op_line, t_dlist **stack_A, t_dlist **stack_B)
 {
-	if (!ft_strncmp("ra", op_line, 3))
+	if (!ft_strncmp("ra", op_line, MAX_COMMAND_LENGTH + 1))
 		rotate(stack_A);
-	else if (!ft_strncmp("rra", op_line, 3))
+	else if (!ft_strncmp("rra", op_line, MAX_COMMAND_LENGTH + 1))
 		reverse_rotate(stack_A);
-	else if (!ft_strncmp("pa", op_line, 3))
+	else if (!ft_strncmp("pa", op_line, MAX_COMMAND_LENGTH + 1))
 		push(stack_A, stack_B);
-	else if (!ft_strncmp("sa", op_line, 3))
+	else if (!ft_strncmp("sa", op_line, MAX_COMMAND_LENGTH + 1))
 		swap(stack_A);
-	else if (!ft_strncmp("rb", op_line, 3))
+	else if (!ft_strncmp("rb", op_line, MAX_COMMAND_LENGTH + 1))
 		rotate(stack_B);
-	else if (!ft_strncmp("rrb", op_line, 3))
+	else if (!ft_strncmp("rrb", op_line, MAX_COMMAND_LENGTH + 1))
 		reverse_rotate(stack_B);
-	else if (!ft_strncmp("pb", op_line, 3))
+	else if (!ft_strncmp("pb", op_line, MAX_COMMAND_LENGTH + 1))
 		push(stack_B, stack_A);
-	else if (!ft_strncmp("sb", op_line, 3))
+	else if (!ft_strncmp("sb", op_line, MAX_COMMAND_LENGTH + 1))
 		swap(stack_B);
-	else if (!ft_strncmp("rr", op_line, 3))
+	else if (!ft_strncmp("rr", op_line, MAX_COMMAND_LENGTH + 1))
 		rotate_both(stack_A, stack_B);
-	else if (!ft_strncmp("rrr", op_line, 3))
+	else if (!ft_strncmp("rrr", op_line, MAX_COMMAND_LENGTH + 1))
 		reverse_rotate_both(stack_A, stack_B);
-	else if (!ft_strncmp("ss", op_line, 3))
+	else if (!ft_strncmp("ss", op_line, MAX_COMMAND_LENGTH + 1))
 		swap_both(stack_A, stack_B);
 	else
 		return (0);

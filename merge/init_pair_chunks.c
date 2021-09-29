@@ -19,7 +19,7 @@
  * 15 chunk = 15x2
  * */
 
-static void o_both_tail_equal(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+static void o_both_tail_equal(t_dlist **stack_A, t_dlist **stack_B, t_merge *data)
 {
     if (get_pos(*stack_A) < get_pos(*stack_B))
     {
@@ -39,7 +39,7 @@ static void o_both_tail_equal(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
     }
 }
 
-static void o_a_tail_longer(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+static void o_a_tail_longer(t_dlist **stack_A, t_dlist **stack_B, t_merge *data)
 {
     if (get_flag((*stack_A)->next) > data->cur_flag)
     {
@@ -57,7 +57,7 @@ static void o_a_tail_longer(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *
     }
     data->i_A++;
 }
-static void	o_tail_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+static void	o_tail_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge *data)
 {
     size_t  tailA;
     size_t  tailB;
@@ -72,7 +72,7 @@ static void	o_tail_2chnks(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *da
     data->cur_flag = 0;
 }
 
-static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge_data *data)
+static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge *data)
 {
     int retA;
     int retB;
@@ -96,7 +96,7 @@ static void oper_two_top_elem(t_dlist **stack_A, t_dlist **stack_B, t_merge_data
     data->cur_flag += 2;
 }
 
-void init_2chnks(t_merge_data *data)
+void init_2chnks(t_merge *data)
 {
     size_t  ib;
     size_t  ia;
@@ -113,9 +113,7 @@ void init_2chnks(t_merge_data *data)
     if (!ib && !ia)
     {
         data->cur_flag = 0;
-        //debug_print_stack(data->stack_A, data->stack_B);
-        return;
+        return ;
     }
     o_tail_2chnks(data->stack_A, data->stack_B, data);
-    //debug_print_stack(data->stack_A, data->stack_B);
 }
