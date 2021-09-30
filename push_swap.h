@@ -75,6 +75,7 @@ int 	asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 
 #define MAX_COMMAND_LENGTH 3
 #define COMMAND_NOT_EXECUTES 4
+#define GNL_READ_MALLOC_ERROR 5
 #define ERROR_MSG "Error\n"
 
 void    print_arr(int *arr, size_t size);

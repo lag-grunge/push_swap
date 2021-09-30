@@ -70,11 +70,11 @@ void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 	}
 	if (i < data->size)
 	{
-		write(1, "KO\n", 3);
-		exit_error(5, (void *)*stack, &free_stack, data);
+		write(2, "KO\n", 3);
+		exit_error(5, *stack, &free_stack, data);
 	}
 	else if (chckr)
-		write(1, "OK\n", 3);
-	else 
-		exit_error(0, (void *)*stack, &free_stack, data);
+		write(2, "OK\n", 3);
+    else
+	    exit_error(0, *stack, &free_stack, data);
 }

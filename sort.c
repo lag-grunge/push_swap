@@ -22,7 +22,7 @@ void sort(t_dlist **stack_A, t_stck_data *data)
 // 2 - AVG - 0, MAX - 1 )))
 // 3 - AVG - 1, MAX -  2
 // 4 - AVG - 4, MAX - 7
-// 5 - WRONG ------------------------------------
+// 5 - AVG: 7 MAX:  9
 
 //asipes_sort(stack_A, stack_B, data);
 /* 6 - AVG: 19, MAX:  22
