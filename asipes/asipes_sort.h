@@ -7,7 +7,7 @@ typedef struct s_cmn_asip_data {
 	size_t	mid;
 	size_t	next;
 	size_t	flag;
-	command	*cmd_array;
+	t_comnd	*cmd_array;
 	char	**op_lines;
 	t_dlist	**stack_A;
 	t_dlist	**stack_B;

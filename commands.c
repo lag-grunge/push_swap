@@ -23,11 +23,11 @@ static void	fill_op_lines(t_stck_data *data)
 	data->op_lines[CMDS_NUMBER] = NULL;
 }
 
-command	*init_command_array(t_stck_data *data)
+t_comnd	*init_command_array(t_stck_data *data)
 {
-	command	*cmd_array;
+	t_comnd	*cmd_array;
 
-	cmd_array = malloc(sizeof(command) * CMDS_NUMBER);
+	cmd_array = malloc(sizeof(t_comnd) * CMDS_NUMBER);
 	if (!cmd_array)
 		exit_error(3, NULL, NULL, NULL);
 	cmd_array[ra] = rotate;
