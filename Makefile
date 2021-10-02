@@ -16,7 +16,6 @@ SRCS = 	input.c sorted_array.c \
 		small_size.c \
 		print_stack.c get_next_line.c \
 
-
 HEADER = push_swap.h
 
 ASIPES_SRCS_LIST = asipes_sort.c asipes_utils.c asipes_utils_two.c
@@ -63,16 +62,16 @@ ${OBJS} : %.o : %.c ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 ${SORT_OBJS} : %.o : %.c
-	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=420 -c $< -o ${<:.c=.o}
+	gcc ${CFLAGS} ${INCLUDE} -DMERGE=${MERGE} -c $< -o ${<:.c=.o}
 
 ${LIBFT} : ${LIB_DIR}
 	make all bonus -C ${LIB_DIR}
 
 clean :
-	@rm ${OBJS} ${MERGE_OBJS}
+	rm ${OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
 
 fclean : clean 
-	@rm ${NAME} ${NAME_2}
+	rm ${NAME} ${NAME_2}
 
 re :	fclean all
 

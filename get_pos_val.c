@@ -34,10 +34,10 @@ void	partition(t_dlist **st_2, t_dlist **st_1, size_t start, size_t size)
 	{
 		if (seek_pos(*st_1, start, size))
 		{
-			execute_command("pb", st_1, st_2);
+			execute_command("pb", st_1, st_2, 0);
 			i++;
 		}
 		else
-			execute_command("ra", st_1, st_2);
+			execute_command("ra", st_1, st_2, 0);
 	}
 }

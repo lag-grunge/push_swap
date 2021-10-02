@@ -1,22 +1,25 @@
 #include "push_swap.h"
 
-void sort(t_dlist **stack_A, t_stck_data *data)
+void	sort(t_dlist **stack_A, t_stck_data *data)
 {
-    t_dlist 	*stack_B;
+	t_dlist	*stack_B;
 
-    if (data->size >= 2 && data->size <= 5)
-    {
-        small_size(stack_A, data->size);
-        return ;
-    }
-    init_stack(0, NULL, &stack_B, data);
-    if (6 <= data->size && data->size < ALGO_BORDER)
-        asipes_sort(stack_A, &stack_B, data);
-    else if (ALGO_BORDER <= data->size)
-        merge_sort(stack_A, &stack_B, data);
-    free_stack(stack_B);
+	if (data->size >= 2 && data->size <= 5)
+	{
+		small_size(stack_A, data->size);
+		return ;
+	}
+	init_stack(0, NULL, &stack_B, data);
+	//if (6 <= data->size && data->size <= ALGO_BORDER)
+#if MERGE == 0
+	asipes_sort(stack_A, &stack_B, data);
+	//else if (ALGO_BORDER < data->size)
+#else
+	printf("merge\n");
+	merge_sort(stack_A, &stack_B, data);
+#endif
+	free_stack(stack_B);
 }
-
 // 0 (ARG= )
 // 1 - 0
 // 2 - AVG - 0, MAX - 1 )))
@@ -42,7 +45,6 @@ void sort(t_dlist **stack_A, t_stck_data *data)
  * 100 - 1084
  * 500 - 6784
  */
-
 
 //merge_sort(stack_A, stack_B, data);
 /* 6,7 - WRONG

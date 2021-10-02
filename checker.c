@@ -20,7 +20,9 @@ static int	oper_lines(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
 		free_stack(*stack_B);
 		exit_error(GNL_READ_MALLOC_ERROR, *stack_A, free_stack, data);
 	}
-	if (!execute_command(op_line, stack_A, stack_B))
+	else if (ret == 0)
+		return (ret);
+	else if (!execute_command(op_line, stack_A, stack_B, 1))
 	{
 		free_stack(*stack_B);
 		exit_error(COMMAND_NOT_EXECUTES, *stack_A, free_stack, data);

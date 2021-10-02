@@ -37,23 +37,23 @@ static void	oper_elem(t_merge *data, int mode, int (*crit)(), size_t *im)
 	st_ptr = data->st_ptr;
 	if (st_ptr[stack_for_input] == data->stack_A)
 	{
-		if (crit(data, st_ptr, mode, from_b_to_a))
+		if (crit(data, mode, from_b_to_a))
 		{
-			execute_command("pa", data->stack_A, data->stack_B);
-			*im -= execute_command("ra", data->stack_A, data->stack_B);
+			execute_command("pa", data->stack_A, data->stack_B, 0);
+			*im -= execute_command("ra", data->stack_A, data->stack_B, 0);
 		}
-		else if (crit(data, st_ptr, mode, from_a_to_a))
-			*im -= execute_command("ra", data->stack_A, data->stack_B);
+		else if (crit(data, mode, from_a_to_a))
+			*im -= execute_command("ra", data->stack_A, data->stack_B, 0);
 	}
 	else if (st_ptr[stack_for_input] == data->stack_B)
 	{
-		if (crit(data, st_ptr, mode, from_a_to_b))
+		if (crit(data, mode, from_a_to_b))
 		{
-			execute_command("pb", data->stack_A, data->stack_B);
-			*im -= execute_command("rb", data->stack_A, data->stack_B);
+			execute_command("pb", data->stack_A, data->stack_B, 0);
+			*im -= execute_command("rb", data->stack_A, data->stack_B, 0);
 		}
-		else if (crit(data, st_ptr, mode, from_b_to_b))
-			*im -= execute_command("rb", data->stack_A, data->stack_B);
+		else if (crit(data, mode, from_b_to_b))
+			*im -= execute_command("rb", data->stack_A, data->stack_B, 0);
 	}
 }
 

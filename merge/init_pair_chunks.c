@@ -10,15 +10,15 @@ static void	o_both_tail_equal(t_merge *data)
 	stack_B = data->stack_B;
 	if (get_pos(*stack_A) < get_pos(*stack_B))
 	{
-		execute_command("pb", stack_A, stack_B);
-		exec_n_cmd_merge(data->cmd_array[rb], 2, data);
+		execute_command("pb", stack_A, stack_B, 0);
+		exec_n_cmd_merge(rb, 2, data);
 		merge_fl_change_bottom(*stack_B, 2, data->cur_flag);
 		data->i_B++;
 	}
 	else
 	{
-		execute_command("pa", stack_A, stack_B);
-		exec_n_cmd_merge(data->cmd_array[ra], 2, data);
+		execute_command("pa", stack_A, stack_B, 0);
+		exec_n_cmd_merge(ra, 2, data);
 		merge_fl_change_bottom(*stack_A, 2, data->cur_flag);
 		data->i_A++;
 	}
@@ -29,15 +29,15 @@ static void	o_a_tail_longer(t_dlist **stack_A, t_dlist **stack_B, t_merge *data)
 	if (get_flag((*stack_A)->next) > data->cur_flag)
 	{
 		if (get_pos(*stack_A) > get_pos((*stack_A)->next))
-			execute_command("sa", stack_A, stack_B);
-		execute_command("rr", stack_A, stack_B);
-		execute_command("ra", stack_A, stack_B);
+			execute_command("sa", stack_A, stack_B, 0);
+		execute_command("rr", stack_A, stack_B, 0);
+		execute_command("ra", stack_A, stack_B, 0);
 		merge_fl_change_bottom(*stack_A, 2, data->cur_flag);
 		merge_fl_change_bottom(*stack_B, 1, data->cur_flag + 1);
 	}
 	else
 	{
-		execute_command("ra", stack_A, stack_B);
+		execute_command("ra", stack_A, stack_B, 0);
 		merge_fl_change_bottom(*stack_A, 1, data->cur_flag);
 	}
 	data->i_A++;
@@ -78,8 +78,8 @@ static void	oper_two_top_elem(t_merge *data)
 		ret |= 2;
 	cmd_num = sa + (ret - 1) * 4;
 	if (ret)
-		exec_n_cmd_merge(data->cmd_array[cmd_num], 1, data);
-	exec_n_cmd_merge(data->cmd_array[rr], 2, data);
+		exec_n_cmd_merge(cmd_num, 1, data);
+	exec_n_cmd_merge(rr, 2, data);
 	merge_fl_change_bottom(*stack_B, 2, data->cur_flag);
 	merge_fl_change_bottom(*stack_A, 2, data->cur_flag + 1);
 	data->cur_flag += 2;

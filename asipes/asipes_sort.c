@@ -16,13 +16,13 @@ static void	moveA_B(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data)
 			i++;
 		if (cur_pos == data->next && get_pos(last_A) == data->next - 1)
 		{
-			execute_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B, 0);
 			data->next++;
 		}
 		else if (cur_pos > data->mid || cur_pos < data->next)
-			execute_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B, 0);
 		else
-			execute_command("pb", stack_A, stack_B);
+			execute_command("pb", stack_A, stack_B, 0);
 		last_A = last_A->next;
 	}
 	data->max = data->mid;
@@ -65,12 +65,11 @@ static void	operA(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data)
 		{
 			if (get_pos(*stack_A) <= data->next)
 			{
-				if (get_pos(*stack_A) == data->next)
-					data->next++;
-				execute_command("ra", stack_A, stack_B);
+				data->next++;
+				execute_command("ra", stack_A, stack_B, 0);
 			}
 			else
-				execute_command("pb", stack_A, stack_B);
+				execute_command("pb", stack_A, stack_B, 0);
 		}
 		operB(data, 1);
 	}

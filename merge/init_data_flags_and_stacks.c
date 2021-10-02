@@ -26,7 +26,7 @@ static void	half_2stack_b(size_t size, t_merge *data)
 	stack_B = data->stack_B;
 	while (i < size / 2)
 	{
-		execute_command("pb", stack_A, stack_B);
+		execute_command("pb", stack_A, stack_B, 0);
 		i++;
 	}
 	data->i_A = size - i;

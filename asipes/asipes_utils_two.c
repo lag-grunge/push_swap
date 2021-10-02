@@ -81,15 +81,15 @@ int	operBelem(t_cmn_asip_data *data, int sec)
 	stack_B = data->stack_B;
 	cur_pos = get_pos(*stack_B);
 	if (cur_pos <= data->mid && cur_pos != data->next)
-		execute_command(data->op_lines[rb], stack_A, stack_B);
+		execute_command(data->op_lines[rb], stack_A, stack_B, 0);
 	else
 	{
 		if (!sec)
 			*set_flag(*stack_B) = data->flag;
-		execute_command("pa", stack_A, stack_B);
+		execute_command("pa", stack_A, stack_B, 0);
 		if (cur_pos == data->next)
 		{
-			execute_command("ra", stack_A, stack_B);
+			execute_command("ra", stack_A, stack_B, 0);
 			data->next++;
 		}
 	}

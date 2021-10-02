@@ -44,7 +44,7 @@ void	swap_both(t_dlist **stack1, t_dlist **stack2);
 void	partition(t_dlist **stack2, t_dlist **stack1, size_t part, size_t size);
 int		get_next_line(char **line);
 void	put_command(char *op_line);
-int		execute_command(char *op_line, t_dlist **stack_A, t_dlist **stack_B);
+int		execute_command(char *op, t_dlist **stck_A, t_dlist **stck_B, int chkr);
 t_comnd	*init_command_array(t_stck_data *data);
 
 int		*insertion_sort(t_dlist *stack, size_t size);
