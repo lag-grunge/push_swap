@@ -36,7 +36,7 @@ int	*insertion_sort(t_dlist *stack, size_t size)
 	cur = stack;
 	arr_sorted = (int *)malloc(sizeof(int) * size);
 	if (!arr_sorted)
-		exit_error(3, NULL, NULL, NULL);
+		exit_error(MALLOC_ERROR, NULL, NULL, NULL);
 	i = 0;
 	while (i < size)
 	{
@@ -55,9 +55,9 @@ void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 
 	cur = *stack;
 	i = 0;
-	while (cur != *stack || !i)
+	while (cur && (cur != *stack || !i))
 	{
-		if (!(seek_pos(cur, i, 1)))
+		if (get_pos(cur) != i)
 		{
 			if (chckr)
 				break ;
@@ -69,10 +69,10 @@ void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 	if (i < data->size)
 	{
 		write(2, "KO\n", 3);
-		exit_error(5, *stack, &free_stack, data);
+		exit_error(STACK_NOT_SORTED_O_NOT_FULL, *stack, &free_stack, data);
 	}
 	else if (chckr)
 		write(2, "OK\n", 3);
 	else
-		exit_error(0, *stack, &free_stack, data);
+		exit_error(OK_STACK_SORTED, *stack, &free_stack, data);
 }

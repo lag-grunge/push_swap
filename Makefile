@@ -10,12 +10,12 @@ ASIPES_DIR = ./asipes
 LIBFT = libft.a
 LIB_SORT = libsort.a
 
-SRCS = 	input.c sorted_array.c \
+SRCS = 	input.c input_utils.c \
+		sorted_array.c \
 	   	init_stack.c init_stack_utils.c \
 	   	operations.c both_operations.c \
 		commands.c get_pos_val.c \
-		small_size.c \
-		print_stack.c get_next_line.c \
+		small_size.c get_next_line.c
 
 HEADER = push_swap.h
 
@@ -66,16 +66,19 @@ ${OBJS} : %.o : %.c ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 ${SORT_OBJS} : %.o : %.c
-	gcc ${CFLAGS} ${INCLUDE} -DMERGE=${MERGE} -c $< -o ${<:.c=.o}
+	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=385 -c $< -o ${<:.c=.o}
 
 ${LIBFT} : ${LIB_DIR}
-	make all bonus -C ${LIB_DIR}
+	make all -C ${LIB_DIR}
 
 clean :
-	rm ${OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
+	@make clean -C ${LIB_DIR}
+	@rm -rf ${OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
 
-fclean : clean 
-	rm ${NAME} ${NAME_2}
+fclean :
+	@make clean
+	@rm -rf ${LIBFT}
+	@rm -rf ${NAME} ${NAME_2} ${LIB_SORT}
 
 re :	fclean all
 

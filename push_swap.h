@@ -2,7 +2,6 @@
 # define PUSH_SWAP_H
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h> 
 # include "libft/libft.h"
 # include "libft/ft_dlst/ft_dlst.h"
 
@@ -50,6 +49,7 @@ t_comnd	*init_command_array(t_stck_data *data);
 int		*insertion_sort(t_dlist *stack, size_t size);
 void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data);
 
+int check_for_forbidden_symbols(char *s);
 void	check_input(int argc, char *argv[], t_stck_data *stck_data);
 void	init_stack(int argc, char *argv[], t_dlist **stack, t_stck_data *data);
 int		proc_elem(t_dlist **stack, char **arg_sp, int j);
@@ -66,16 +66,19 @@ int		asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 
 # ifndef ALGO_BORDER
-#  define ALGO_BORDER 420
+#  define ALGO_BORDER 381
 # endif
 
 # define CMDS_NUMBER 11
 # define MAX_COMMAND_LENGTH 3
-# define COMMAND_NOT_EXECUTES 4
-# define GNL_READ_MALLOC_ERROR 5
+# define OK_STACK_SORTED 0
+# define NON_CORRECT_INPUT 1
+# define INPUT_OVERFLOW 2
+# define NOT_UNIQUE_ELEM 3
+# define MALLOC_ERROR 4
+# define NON_CORRECT_COMMAND 5
+# define STACK_NOT_SORTED_O_NOT_FULL 6
+# define GNL_READ_MALLOC_ERROR 7
 # define ERROR_MSG "Error\n"
 
-void	print_arr(int *arr, size_t size);
-void	print_stack(t_dlist *stack);
-void	debug_print_stack(t_dlist **stack_A, t_dlist **stack_B);
 #endif

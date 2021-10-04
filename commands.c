@@ -9,6 +9,8 @@ void	put_command(char *op_line)
 static void	fill_op_lines(t_stck_data *data)
 {
 	data->op_lines = (char **)malloc(sizeof(char *) * (CMDS_NUMBER + 1));
+	if (!data->op_lines)
+		return ;
 	data->op_lines[ra] = ft_strdup("ra");
 	data->op_lines[rra] = ft_strdup("rra");
 	data->op_lines[sa] = ft_strdup("sa");
@@ -29,7 +31,7 @@ t_comnd	*init_command_array(t_stck_data *data)
 
 	cmd_array = malloc(sizeof(t_comnd) * CMDS_NUMBER);
 	if (!cmd_array)
-		exit_error(3, NULL, NULL, NULL);
+		return (NULL);
 	cmd_array[ra] = rotate;
 	cmd_array[rra] = reverse_rotate;
 	cmd_array[sa] = swap;

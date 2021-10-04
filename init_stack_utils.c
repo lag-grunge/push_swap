@@ -46,8 +46,8 @@ int	proc_elem(t_dlist **stack, char **arg_sp, int j)
 
 	elem = ft_atoi(arg_sp[j]);
 	if (!(check_is_uniq(*stack, elem)))
-		return (2);
+		return (NOT_UNIQUE_ELEM);
 	else if (!(add_new_elem(stack, elem)))
-		return (3);
+		return (MALLOC_ERROR);
 	return (0);
 }

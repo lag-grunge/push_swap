@@ -25,7 +25,7 @@ static int	oper_lines(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
 	else if (!execute_command(op_line, stack_A, stack_B, 1))
 	{
 		free_stack(*stack_B);
-		exit_error(COMMAND_NOT_EXECUTES, *stack_A, free_stack, data);
+		exit_error(NON_CORRECT_COMMAND, *stack_A, free_stack, data);
 	}
 	free(op_line);
 	op_line = 0;
@@ -49,5 +49,5 @@ int	main(int argc, char *argv[])
 		ret = oper_lines(&stack_A, &stack_B, &data);
 	free_stack(stack_B);
 	check_if_stack_sorted(&stack_A, IS_CHECKER, &data);
-	exit_error(0, stack_A, &free_stack, &data);
+	exit_error(OK_STACK_SORTED, stack_A, &free_stack, &data);
 }
