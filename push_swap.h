@@ -26,7 +26,7 @@ typedef struct s_stck_data {
 
 void	free_split(void *data);
 void	free_stack(void *data);
-void	exit_error(size_t err, void *strct, t_fr_func f, t_stck_data *data);
+void	exit_error(size_t code, void *strct, t_fr_func f, t_stck_data *data);
 
 int		seek_pos(t_dlist *stack, size_t part, size_t size);
 size_t	get_pos(t_dlist *stack_elem);
@@ -77,8 +77,8 @@ void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 # define NOT_UNIQUE_ELEM 3
 # define MALLOC_ERROR 4
 # define INCORRECT_COMMAND 5
-# define STACK_NOT_SORTED_O_NOT_FULL 6
-# define GNL_READ_MALLOC_ERROR 7
+# define GNL_READ_MALLOC_ERROR 6
+# define STACK_NOT_SORTED_O_NOT_FULL 7
 # define ERROR_MSG "Error\n"
 
 #endif

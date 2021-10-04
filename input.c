@@ -36,15 +36,15 @@ void	free_data_stuff(void *stck_data)
 		free_split(data->op_lines);
 }
 
-void	exit_error(size_t err, void *strct, t_fr_func func, t_stck_data *data)
+void	exit_error(size_t code, void *strct, t_fr_func func, t_stck_data *data)
 {
 	if (strct)
 		func(strct);
 	if (data)
 		free_data_stuff(data);
-	if (err > 0)
+	if (code != OK_STACK_SORTED && code != STACK_NOT_SORTED_O_NOT_FULL)
 		write(2, ERROR_MSG, ft_strlen(ERROR_MSG));
-	exit(err);
+	exit(code);
 }
 
 void	check_input(int argc, char *argv[], t_stck_data *data)
