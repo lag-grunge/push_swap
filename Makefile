@@ -46,17 +46,17 @@ LIBRARIES = -L${LIB_DIR} -lft
 
 all : ${LIBFT} ${LIB_SORT} ${NAME} ${NAME_2}
 
-${NAME} : main.c ${OBJS} ${SORT_OBJS}
+${NAME} : main.c ${OBJS} ${SORT_OBJS} ${LIB_SORT}
 	gcc ${CFLAGS} $^ ${LIBRARIES} -lsort -L. -DIS_CHECKER=0 -o $@
 
 ${NAME_2} : checker.c ${OBJS}
 	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=1 -o $@
 
-${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER}
+${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER} ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 	ar rcs ${LIB_SORT} $@
 
-${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER}
+${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER} ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 ${LIB_SORT} : ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
@@ -65,7 +65,7 @@ ${LIB_SORT} : ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
 ${OBJS} : %.o : %.c ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
-${SORT_OBJS} : %.o : %.c
+${SORT_OBJS} : %.o : %.c ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=385 -c $< -o ${<:.c=.o}
 
 ${LIBFT} : ${LIB_DIR}
