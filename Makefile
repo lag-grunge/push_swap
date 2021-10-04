@@ -14,10 +14,11 @@ SRCS = 	input.c input_utils.c \
 		sorted_array.c \
 	   	init_stack.c init_stack_utils.c \
 	   	operations.c both_operations.c \
-		commands.c get_pos_val.c \
-		small_size.c get_next_line.c
+		commands.c get_pos_val.c get_next_line.c
 
 HEADER = push_swap.h
+
+SMALL_SRCS = small_size.c 
 
 ASIPES_SRCS_LIST = asipes_sort.c asipes_utils.c asipes_utils_two.c
 ASIPES_SRCS = ${addprefix ${ASIPES_DIR}/, ${ASIPES_SRCS_LIST}}
@@ -35,10 +36,11 @@ RADIX_SRCS = radix_sort.c
 SORT_SRCS = sort.c
 
 OBJS = ${SRCS:.c=.o}
+SMALL_OBJS = small_size.o
 MERGE_OBJS = ${MERGE_SRCS:.c=.o}
 ASIPES_OBJS = ${ASIPES_SRCS:.c=.o}
-SORT_OBJS = ${SORT_SRCS:.c=.o}
-RADIX_OBJS = ${RADIX_SRCS:.c=.o}
+SORT_OBJS = sort.o
+RADIX_OBJS = radix_sort.o
 
 CFLAGS = -Wall -Wextra -Werror
 INCLUDE = -I. -I${LIB_DIR} -I${LIB_DLST_DIR} -I${MERGE_DIR}
@@ -47,33 +49,32 @@ LIBRARIES = -L${LIB_DIR} -lft
 all : ${LIBFT} ${LIB_SORT} ${NAME} ${NAME_2}
 
 ${NAME} : main.c ${OBJS} ${SORT_OBJS} ${LIB_SORT}
-	gcc ${CFLAGS} $^ ${LIBRARIES} -lsort -L. -DIS_CHECKER=0 -o $@
+	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=0 -o $@
 
 ${NAME_2} : checker.c ${OBJS}
 	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=1 -o $@
 
-${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER} ${HEADER}
-	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
-	ar rcs ${LIB_SORT} $@
-
-${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER} ${HEADER}
-	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
-
-${LIB_SORT} : ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
+${LIB_SORT} : ${SMALL_OBJS} ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
 	ar rcs ${LIB_SORT} $^
 
-${OBJS} : %.o : %.c ${HEADER}
+${LIBFT} : ${LIB_DIR}
+	make all -C ${LIB_DIR}
+
+${OBJS} ${SMALL_OBJS} : %.o : %.c ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
+
+${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER} ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
+
+${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER} ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 ${SORT_OBJS} : %.o : %.c ${HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=385 -c $< -o ${<:.c=.o}
 
-${LIBFT} : ${LIB_DIR}
-	make all -C ${LIB_DIR}
-
 clean :
 	@make clean -C ${LIB_DIR}
-	@rm -rf ${OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
+	@rm -rf ${OBJS} ${SMALL_OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
 
 fclean :
 	@make clean
