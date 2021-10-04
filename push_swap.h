@@ -49,7 +49,7 @@ t_comnd	*init_command_array(t_stck_data *data);
 int		*insertion_sort(t_dlist *stack, size_t size);
 void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data);
 
-int check_for_forbidden_symbols(char *s);
+int		check_for_forbidden_symbols(char *s);
 void	check_input(int argc, char *argv[], t_stck_data *stck_data);
 void	init_stack(int argc, char *argv[], t_dlist **stack, t_stck_data *data);
 int		proc_elem(t_dlist **stack, char **arg_sp, int j);
@@ -72,11 +72,11 @@ void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 # define CMDS_NUMBER 11
 # define MAX_COMMAND_LENGTH 3
 # define OK_STACK_SORTED 0
-# define NON_CORRECT_INPUT 1
+# define INCORRECT_INPUT 1
 # define INPUT_OVERFLOW 2
 # define NOT_UNIQUE_ELEM 3
 # define MALLOC_ERROR 4
-# define NON_CORRECT_COMMAND 5
+# define INCORRECT_COMMAND 5
 # define STACK_NOT_SORTED_O_NOT_FULL 6
 # define GNL_READ_MALLOC_ERROR 7
 # define ERROR_MSG "Error\n"

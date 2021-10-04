@@ -66,7 +66,7 @@ void	check_input(int argc, char *argv[], t_stck_data *data)
 		while (arg_sp[++j])
 		{
 			if (!check_for_forbidden_symbols(arg_sp[j]))
-				exit_error(NON_CORRECT_INPUT, (void *)arg_sp, &free_split, NULL);
+				exit_error(INCORRECT_INPUT, (void *)arg_sp, &free_split, NULL);
 			ft_atoi_base(arg_sp[j], "0123456789", "\0", &ovflw);
 			if (ovflw)
 				exit_error(INPUT_OVERFLOW, (void *)arg_sp, &free_split, NULL);
