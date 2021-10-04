@@ -63,6 +63,7 @@ void	small_5(t_dlist	**stack);
 void	sort(t_dlist **stack_A, t_stck_data *data);
 void	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 int		asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
+void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 
 # ifndef ALGO_BORDER
 #  define ALGO_BORDER 420

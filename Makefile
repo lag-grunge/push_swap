@@ -1,5 +1,6 @@
+ifndef NAME
 NAME = push_swap
-
+endif
 NAME_2 = checker
 
 LIB_DIR = ./libft
@@ -29,14 +30,17 @@ MERGE_SRCS_LIST = merge_sort.c flags.c flags_two.c \
 MERGE_SRCS = ${addprefix ${MERGE_DIR}/, ${MERGE_SRCS_LIST}}
 MERGE_HEADER = ${MERGE_DIR}/merge_sort.h
 
+RADIX_SRCS = radix_sort.c
+
 SORT_SRCS = sort.c
 
 OBJS = ${SRCS:.c=.o}
 MERGE_OBJS = ${MERGE_SRCS:.c=.o}
 ASIPES_OBJS = ${ASIPES_SRCS:.c=.o}
 SORT_OBJS = ${SORT_SRCS:.c=.o}
+RADIX_OBJS = ${RADIX_SRCS:.c=.o}
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 INCLUDE = -I. -I${LIB_DIR} -I${LIB_DLST_DIR} -I${MERGE_DIR}
 LIBRARIES = -L${LIB_DIR} -lft
 
@@ -55,7 +59,7 @@ ${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER}
 ${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER}
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
-${LIB_SORT} : ${ASIPES_OBJS} ${MERGE_OBJS}
+${LIB_SORT} : ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
 	ar rcs ${LIB_SORT} $^
 
 ${OBJS} : %.o : %.c ${HEADER}
