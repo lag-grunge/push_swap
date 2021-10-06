@@ -44,7 +44,8 @@ int	*insertion_sort(t_dlist *stack, size_t size)
 		cur = cur->next;
 		i++;
 	}
-	ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
+	if (size > 0)
+		ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
 	return (arr_sorted);
 }
 

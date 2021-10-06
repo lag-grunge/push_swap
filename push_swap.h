@@ -5,9 +5,36 @@
 # include "libft/libft.h"
 # include "libft/ft_dlst/ft_dlst.h"
 
+# ifndef ALGO_BORDER
+#  define ALGO_BORDER 385
+# endif
+
+# define CMDS_NUMBER 11
+# define MAX_COMMAND_LENGTH 3
+# define OK_STACK_SORTED 0
+# define INCORRECT_INPUT 1
+# define INPUT_OVERFLOW 2
+# define NOT_UNIQUE_ELEM 3
+# define MALLOC_ERROR 4
+# define INCORRECT_COMMAND 5
+# define GNL_READ_MALLOC_ERROR 6
+# define STACK_NOT_SORTED_O_NOT_FULL 7
+# define ERROR_MSG "Error\n"
+
 typedef void	(*t_fr_func)(void *);
 typedef void	(*t_comnd)();
-enum e_cmds_codes {ra, rra, sa, pa, rb, rrb, sb, pb, rr, rrr, ss};
+enum e_cmds_codes {
+					ra, 
+					rra, 
+					sa, 
+					pa, 
+					rb, 
+					rrb, 
+					sb, 
+					pb, 
+					rr, 
+					rrr, 
+					ss};
 
 typedef struct s_ps_data {
 	int		val;
@@ -65,20 +92,5 @@ void	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 int		asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
 
-# ifndef ALGO_BORDER
-#  define ALGO_BORDER 381
-# endif
-
-# define CMDS_NUMBER 11
-# define MAX_COMMAND_LENGTH 3
-# define OK_STACK_SORTED 0
-# define INCORRECT_INPUT 1
-# define INPUT_OVERFLOW 2
-# define NOT_UNIQUE_ELEM 3
-# define MALLOC_ERROR 4
-# define INCORRECT_COMMAND 5
-# define GNL_READ_MALLOC_ERROR 6
-# define STACK_NOT_SORTED_O_NOT_FULL 7
-# define ERROR_MSG "Error\n"
 
 #endif

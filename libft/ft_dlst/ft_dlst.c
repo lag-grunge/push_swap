@@ -86,6 +86,7 @@ void	ft_dlst_clear(t_dlist **dlst, void	(*free_func)(void *))
 		tmp = next;
 	}
 }
+
 /*
 int main(int argc, char *argv[])
 {
