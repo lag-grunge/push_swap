@@ -1,58 +1,58 @@
 #include "push_swap.h"
 
-void	rotate(t_list **stack)
+void	rotate(t_dlist **stack)
 {
-	t_list	*elem;
-
-	elem = *stack;
-	if (!elem || !elem->next)
-		return ;
-	*stack = elem->next;
-	(ft_lstlast(*stack))->next = elem;
-	elem->next = NULL;
+	if (stack && *stack)
+		*stack = (*stack)->next;
 }
 
-void	reverse_rotate(t_list **stack)
+void	reverse_rotate(t_dlist **stack)
 {
-	t_list	*elem;
-	t_list	*cur;
-
-	cur = *stack;
-	if (!cur || !cur->next)
-		return ;
-	elem = ft_lstlast(*stack);
-	while (cur->next != elem)
-		cur = cur->next;
-	cur->next = NULL;
-	ft_lstadd_front(stack, elem);
+	if (stack && *stack)
+		*stack = (*stack)->prev;
 }
 
-void	push(t_list **stack1, t_list **stack2)
+void	push(t_dlist **stack_for_input, t_dlist **stack_output)
 {
-	t_list	*elem;
+	t_dlist	*elem;
 
-	elem = *stack2;
-	if (!elem)
+	if (!*stack_output)
 		return ;
-	*stack2 = elem->next;
-	elem->next = NULL;
-	ft_lstadd_front(stack1, elem);
+	elem = ft_dlst_pop(stack_output, *stack_output);
+	if (!*stack_for_input)
+	{
+		elem->next = elem;
+		elem->prev = elem;
+		*stack_for_input = elem;
+		return ;
+	}
+	elem->next = *stack_for_input;
+	elem->prev = (*stack_for_input)->prev;
+	(*stack_for_input)->prev->next = elem;
+	(*stack_for_input)->prev = elem;
+	*stack_for_input = elem;
 }
 
-void	swap(t_list **stack)
+void	swap(t_dlist **stack)
 {
-	t_list	*elem;
-	t_list	*second;
-	t_list	*third;
+	t_dlist	*first;
+	t_dlist	*second;
+	t_dlist	*third;
+	t_dlist	*last;
 
-	elem = *stack;
-	if (!elem)
+	first = *stack;
+	if (!first)
 		return ;
-	second = elem->next;
-	if (!second)
-		return ;
+	second = first->next;
 	third = second->next;
-	second->next = elem;
-	elem->next = third;
+	last = first->prev;
 	*stack = second;
+	if (second == first || third == first)
+		return ;
+	first->next = third;
+	second->next = first;
+	last->next = second;
+	first->prev = second;
+	second->prev = last;
+	third->prev = first;
 }

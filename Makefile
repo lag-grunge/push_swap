@@ -1,45 +1,85 @@
+ifndef NAME
 NAME = push_swap
-
+endif
 NAME_2 = checker
 
-SRCS = input.c sorted_array.c \
-	   init_stack.c operations.c \
-		both_operations.c \
-		commands.c get_pos_val.c \
-		small_size.c \
-		print_stack.c get_next_line.c \
-		sort.c \
-		asipes_sort.c asipes_utils.c asipes_utils_two.c \
-		merge_sort.c \
-		radix_sort.c
+LIB_DIR = ./libft
+LIB_DLST_DIR = ${LIB_DIR}/ft_dlst
+MERGE_DIR = ./merge
+ASIPES_DIR = ./asipes
+LIBFT = libft.a
+LIB_SORT = libsort.a
+
+SRCS = 	input.c input_utils.c \
+		sorted_array.c \
+	   	init_stack.c init_stack_utils.c \
+	   	operations.c both_operations.c \
+		commands.c get_pos_val.c get_next_line.c
+
+HEADER = push_swap.h
+
+SMALL_SRCS = small_size.c 
+
+ASIPES_SRCS_LIST = asipes_sort.c asipes_utils.c asipes_utils_two.c
+ASIPES_SRCS = ${addprefix ${ASIPES_DIR}/, ${ASIPES_SRCS_LIST}}
+ASIPES_HEADER = ${ASIPES_DIR}/asipes_sort.h
+
+MERGE_SRCS_LIST = merge_sort.c flags.c flags_two.c \
+		init_pair_chunks.c oper_n_chunks.c \
+		find_size.c execute_n_command.c \
+		init_data_flags_and_stacks.c
+MERGE_SRCS = ${addprefix ${MERGE_DIR}/, ${MERGE_SRCS_LIST}}
+MERGE_HEADER = ${MERGE_DIR}/merge_sort.h
+
+RADIX_SRCS = radix_sort.c
+
+SORT_SRCS = sort.c
 
 OBJS = ${SRCS:.c=.o}
+SMALL_OBJS = small_size.o
+MERGE_OBJS = ${MERGE_SRCS:.c=.o}
+ASIPES_OBJS = ${ASIPES_SRCS:.c=.o}
+SORT_OBJS = sort.o
+RADIX_OBJS = radix_sort.o
 
-LIB_DIR = ./libft
+CFLAGS = -Wall -Wextra -Werror
+INCLUDE = -I. -I${LIB_DIR} -I${LIB_DLST_DIR} -I${MERGE_DIR}
+LIBRARIES = -L${LIB_DIR} -lft
 
-LIBFT = libft.a
+all : ${LIBFT} ${LIB_SORT} ${NAME} ${NAME_2}
 
-CFLAGS = -g -Wall -Wextra -Werror
-
-all : ${LIBFT} ${NAME} ${NAME_2}
-
-${NAME} : main.c ${OBJS}
-	gcc ${CFLAGS} $^ -L${LIB_DIR} -lft -o $@ -I${LIB_DIR} 
+${NAME} : main.c ${OBJS} ${SORT_OBJS} ${LIB_SORT}
+	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=0 -o $@
 
 ${NAME_2} : checker.c ${OBJS}
-	gcc ${CFLAGS} $^ -L${LIB_DIR} -lft -o $@ -I${LIB_DIR}  
+	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=1 -o $@
 
-${OBJS} : %.o : %.c
-	gcc ${CFLAGS} -c $< -o ${<:.c=.o} -I${LIB_DIR} 
+${LIB_SORT} : ${SMALL_OBJS} ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
+	ar rcs ${LIB_SORT} $^
 
 ${LIBFT} : ${LIB_DIR}
 	make all -C ${LIB_DIR}
 
-clean :
-	rm ${OBJS}
+${OBJS} ${SMALL_OBJS} : %.o : %.c ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
-fclean : clean 
-	rm ${NAME} ${NAME_2}
+${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER} ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
+
+${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER} ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
+
+${SORT_OBJS} : %.o : %.c ${HEADER}
+	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=385 -c $< -o ${<:.c=.o}
+
+clean :
+	@make clean -C ${LIB_DIR}
+	@rm -rf ${OBJS} ${SMALL_OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
+
+fclean :
+	@make clean
+	@rm -rf ${LIBFT}
+	@rm -rf ${NAME} ${NAME_2} ${LIB_SORT}
 
 re :	fclean all
 

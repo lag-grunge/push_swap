@@ -86,27 +86,3 @@ void	ft_dlst_clear(t_dlist **dlst, void	(*free_func)(void *))
 		tmp = next;
 	}
 }
-/*
-int main(int argc, char *argv[])
-{
-	size_t	i;
-	t_dlist	*dlst;
-	t_dlist	*tmp;
-	
-	i = 1;
-	while (i < argc)
-	{
-		ft_dlst_add(&dlst, argv[i]);
-		i++;
-	}
-	i = 1;
-	tmp = dlst;
-	while (i < argc)
-	{
-		ft_putstr_fd(tmp->content, 1);
-		printf("%p\n", tmp);
-		i++;
-		tmp = tmp->next;
-	}
-	ft_dlst_clear(dlst, free);
-}*/

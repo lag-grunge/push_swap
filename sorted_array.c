@@ -1,17 +1,6 @@
-
 #include "push_swap.h"
-#include "libft.h"
 
-/*		ВЫДЕЛИТЬ ДВА МАССИВА ЦЕЛЫХ ЧИСЕЛ РАЗМЕРОВ В КОЛИЧЕСТВО ЭЛЕМЕНТОВ
-		ОТСОРТИРОВАТЬ МАССИВ (СОРТИРОВКА ВСТАВКОЙ)
-			ДЛЯ КАЖДОГО ЭЛЕМЕНТА МАССИВА
-				СРАВНИВАТЬ НОВОЕ ЧИСЛО С ПОСЛЕДНИМ ЭЛЕМЕНТОМ МАССИВА СОРТИРОВКОЙ
-				ПОКА НИ НЕ ДОЙДЕМ ДО НАЧАЛА И НЕ БУДЕТ БОЛЬШЕ НОВЫЙ ЭЛЕМЕНТ СРАВНИТЬ С ПРЕДЫДУЩИМ 
-					ПРИРАВНЯТЬ СЛЕДУЮЩИЙ ПРЕДЫДУЩЕМУ
-				ЗАПИСАТЬ НОВОЕ ЧИСЛО В МАССИВ СОРТИРОВКОЙ НА ТЕКУЩЕЕ МЕСТО
-*/			
-
-void	insert(t_list *cur, size_t i, int *arr_sorted)
+static void	insert(t_dlist *cur, size_t i, int *arr_sorted)
 {
 	int	new_elem;
 
@@ -24,34 +13,30 @@ void	insert(t_list *cur, size_t i, int *arr_sorted)
 	arr_sorted[i] = new_elem;
 }
 
-void	correct_pos(t_list *stack, int *arr_sorted)
+static void	correct_pos_for_elem(t_dlist *cur, void *arr_sorted)
 {
-	int		elem;
-	size_t	i;
-	t_list	*cur;
+	t_ps_data	*content;
+	int			elem;
+	size_t		i;
 
-	cur = stack;
-	while (cur)
-	{
-		elem = ((t_ps_data *)(cur->content))->val;
-		i = 0;
-		while (elem != arr_sorted[i])
-			i++;
-		((t_ps_data *)(cur->content))->pos = i;
-		cur = cur->next;
-	}
+	content = cur->content;
+	elem = content->val;
+	i = 0;
+	while (elem != ((int *)arr_sorted)[i])
+		i++;
+	content->pos = i;
 }
 
-int		*insertion_sort(t_list *stack, size_t size)
+int	*insertion_sort(t_dlist *stack, size_t size)
 {
 	int		*arr_sorted;
 	size_t	i;
-	t_list  *cur;
+	t_dlist	*cur;
 
 	cur = stack;
 	arr_sorted = (int *)malloc(sizeof(int) * size);
 	if (!arr_sorted)
-		exit_error(3, NULL, NULL, NULL);
+		exit_error(MALLOC_ERROR, NULL, NULL, NULL);
 	i = 0;
 	while (i < size)
 	{
@@ -59,20 +44,21 @@ int		*insertion_sort(t_list *stack, size_t size)
 		cur = cur->next;
 		i++;
 	}
-	correct_pos(stack, arr_sorted);
+	if (size > 0)
+		ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
 	return (arr_sorted);
 }
 
-void	check_if_stack_sorted(t_list **stack, int chckr, t_stck_data *data)
+void	check_if_stack_sorted(t_dlist **stack, int chckr, t_stck_data *data)
 {
-	t_list	*cur;
+	t_dlist	*cur;
 	size_t	i;
 
 	cur = *stack;
 	i = 0;
-	while (cur)
+	while (cur && (cur != *stack || !i))
 	{
-		if (!(seek_pos(cur, i, 1)))
+		if (get_pos(cur) != i)
 		{
 			if (chckr)
 				break ;
@@ -83,11 +69,11 @@ void	check_if_stack_sorted(t_list **stack, int chckr, t_stck_data *data)
 	}
 	if (i < data->size)
 	{
-		write(1, "KO\n", 3);
-		exit_error(5, (void *)*stack, &free_stack, data);
+		write(2, "KO\n", 3);
+		exit_error(STACK_NOT_SORTED_O_NOT_FULL, *stack, &free_stack, data);
 	}
 	else if (chckr)
-		write(1, "OK\n", 3);
-	else 
-		exit_error(0, (void *)*stack, &free_stack, data);
+		write(2, "OK\n", 3);
+	else
+		exit_error(OK_STACK_SORTED, *stack, &free_stack, data);
 }
