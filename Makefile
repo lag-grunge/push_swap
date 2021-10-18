@@ -33,7 +33,7 @@ ${OBJS} : %.o : %.c
 	gcc ${CFLAGS} -c $< -o ${<:.c=.o} -I${LIB_DIR} 
 
 ${LIBFT} : ${LIB_DIR}
-	make all bonus -C ${LIB_DIR}
+	make all -C ${LIB_DIR}
 
 clean :
 	rm ${OBJS}
