@@ -2,11 +2,14 @@ ifndef NAME
 NAME = push_swap
 endif
 NAME_2 = checker
+NAME_DEBUG = push_swap_debug
+
 
 LIB_DIR = ./libft
 LIB_DLST_DIR = ${LIB_DIR}/ft_dlst
 MERGE_DIR = ./merge
 ASIPES_DIR = ./asipes
+DISTANCE_DIR = ./distance
 LIBFT = libft.a
 LIB_SORT = libsort.a
 
@@ -33,48 +36,59 @@ MERGE_HEADER = ${MERGE_DIR}/merge_sort.h
 
 RADIX_SRCS = radix_sort.c
 
+DISTANCE_SRCS_LIST = distance.c distance_utils.c distance_utils_two.c
+DISTANCE_SRCS = ${addprefix ${DISTANCE_DIR}/, ${DISTANCE_SRCS_LIST}}
+DISTANCE_HEADER = ${DISTANCE_DIR}/distance.h
+
 SORT_SRCS = sort.c
+
+DEBUG_SRCS = debug.c
 
 OBJS = ${SRCS:.c=.o}
 SMALL_OBJS = small_size.o
 MERGE_OBJS = ${MERGE_SRCS:.c=.o}
+DISTANCE_OBJS = ${DISTANCE_SRCS:.c=.o}
 ASIPES_OBJS = ${ASIPES_SRCS:.c=.o}
 SORT_OBJS = sort.o
 RADIX_OBJS = radix_sort.o
+DEBUG_OBJS = debug.o
 
-CFLAGS = -Wall -Wextra -Werror
+DEPS = ${OBJS:.o=.d} ${SMALL_OBJS:.o=.d} ${MERGE_OBJS:.o=.d} ${DISTANCE_OBJS:.o=.d} \
+	${ASIPES_OBJS:.o=.d} ${SORT_OBJS:.o=.d} ${RADIX_OBJS:.o=.d} ${DEBUG_OBJS:.o=.d}
+
+CFLAGS := -Wall -Wextra -Werror -MMD
 INCLUDE = -I. -I${LIB_DIR} -I${LIB_DLST_DIR} -I${MERGE_DIR}
-LIBRARIES = -L${LIB_DIR} -lft
+LIBRARIES = -L${LIB_DIR} -lft -lasan
 
 all : ${LIBFT} ${LIB_SORT} ${NAME} ${NAME_2}
+dbg : ${NAME_DEBUG}
+dbg : CFLAGS += -g -fsanitize=address
+dbg : DEBUG=1
 
-${NAME} : main.c ${OBJS} ${SORT_OBJS} ${LIB_SORT}
-	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=0 -o $@
+${NAME} : main.c ${OBJS} $(if DEBUG,${DEBUG_OBJS}) ${SORT_OBJS} ${LIB_SORT} $(if DEBUG,${DEBUG_OBJS},)
+	gcc ${CFLAGS} $^ -DIS_CHECKER=0 -o $@ ${LIBRARIES}
+${NAME_DEBUG} : main.c ${OBJS} $(if DEBUG,${DEBUG_OBJS}) ${SORT_OBJS} ${LIB_SORT}
+	gcc ${CFLAGS} $^ -DIS_CHECKER=0 -o $@ ${LIBRARIES}
 
 ${NAME_2} : checker.c ${OBJS}
 	gcc ${CFLAGS} $^ ${LIBRARIES} -DIS_CHECKER=1 -o $@
 
-${LIB_SORT} : ${SMALL_OBJS} ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS}
+
+${LIB_SORT} : ${SMALL_OBJS} ${ASIPES_OBJS} ${MERGE_OBJS} ${RADIX_OBJS} ${DISTANCE_OBJS}
 	ar rcs ${LIB_SORT} $^
 
 ${LIBFT} : ${LIB_DIR}
 	make all -C ${LIB_DIR}
 
-${OBJS} ${SMALL_OBJS} : %.o : %.c ${HEADER}
+${DEBUG_OBJS} ${OBJS} ${SMALL_OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${DISTANCE_OBJS} : %.o : %.c
 	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
-${MERGE_OBJS} : %.o : %.c ${MERGE_HEADER} ${HEADER}
-	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
-
-${ASIPES_OBJS} : %.o : %.c ${ASIPES_HEADER} ${HEADER}
-	gcc ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
-
-${SORT_OBJS} : %.o : %.c ${HEADER}
+${SORT_OBJS} : %.o : %.c
 	gcc ${CFLAGS} ${INCLUDE} -DALGO_BORDER=385 -c $< -o ${<:.c=.o}
 
 clean :
 	@make clean -C ${LIB_DIR}
-	@rm -rf ${OBJS} ${SMALL_OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS}
+	@rm -rf ${OBJS} ${SMALL_OBJS} ${MERGE_OBJS} ${ASIPES_OBJS} ${SORT_OBJS} ${DISTANCE_OBJS} ${DEPS}
 
 fclean :
 	@make clean
@@ -83,4 +97,6 @@ fclean :
 
 re :	fclean all
 
-.PHONY : re clean fclean all
+-include ${DEPS}
+
+.PHONY : re clean fclean all dbg

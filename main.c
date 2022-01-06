@@ -5,8 +5,8 @@ static void	init_data_stuff(t_stck_data *data)
 	data->arr_sorted = NULL;
 	data->cmd_array = NULL;
 	data->op_lines = NULL;
-	data->i_A = data->size;
-	data->i_B = 0;
+	data->size_A = data->size;
+	data->size_B = 0;
 }
 
 int	main(int argc, char *argv[])

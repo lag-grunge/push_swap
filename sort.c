@@ -10,9 +10,10 @@ void	sort(t_dlist **stack_A, t_stck_data *data)
 		return ;
 	}
 	init_stack(0, NULL, &stack_B, data);
-	if (6 <= data->size && data->size <= ALGO_BORDER)
-		asipes_sort(stack_A, &stack_B, data);
-	else if (ALGO_BORDER < data->size)
-		merge_sort(stack_A, &stack_B, data);
+	distance_sort(stack_A, &stack_B, data);
+//	if (6 <= data->size && data->size <= ALGO_BORDER)
+//		asipes_sort(stack_A, &stack_B, data);
+//	else if (ALGO_BORDER < data->size)
+//		merge_sort(stack_A, &stack_B, data);
 	free_stack(stack_B);
 }

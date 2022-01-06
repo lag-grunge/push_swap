@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    benchmark.sh                                       :+:      :+:    :+:    #
+#    benchmark7.sh                                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/29 17:15:18 by vbrazhni          #+#    #+#              #
-#    Updated: 2021/10/06 16:08:53 by sdalton          ###   ########.fr        #
+#    Updated: 2022/01/06 04:21:18 by sdalton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SUM=0
 
 for i in $(seq 1 $2)
 do
-		export ARG=`ruby -e "puts (1..$1).to_a.shuffle.join(' ')"`
+		export ARG="$(ruby -e "puts (1..$1).to_a.shuffle.join(' ')")"
 		if ./$3 $ARG | ./checker $ARG | grep -q KO
 		then
 			echo "Error!"
@@ -38,8 +38,8 @@ do
 			MAX=$NUMBER;
 		fi
 		echo $i ":" $NUMBER
-		let SUM+=$NUMBER;
-		let ITERATIONS+=1
+		SUM=$(($SUM+$NUMBER));
+		ITERATIONS=$((ITERATIONS+1));
 done
 
 echo "AVG: $(($SUM / $ITERATIONS))"

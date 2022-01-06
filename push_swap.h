@@ -44,8 +44,8 @@ typedef struct s_ps_data {
 
 typedef struct s_stck_data {
 	size_t	size;
-	size_t	i_A;
-	size_t	i_B;
+	size_t	size_A;
+	size_t	size_B;
 	int		*arr_sorted;
 	t_comnd	*cmd_array;
 	char	**op_lines;
@@ -91,6 +91,7 @@ void	sort(t_dlist **stack_A, t_stck_data *data);
 void	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 int		asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
+void	distance_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 
 
 #endif
