@@ -6,7 +6,7 @@
 #    By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/29 17:15:18 by vbrazhni          #+#    #+#              #
-#    Updated: 2022/01/06 04:21:18 by sdalton          ###   ########.fr        #
+#    Updated: 2022/01/17 12:00:11 by sdalton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,13 +21,13 @@ SUM=0
 for i in $(seq 1 $2)
 do
 		export ARG="$(ruby -e "puts (1..$1).to_a.shuffle.join(' ')")"
-		if ./$3 $ARG | ./checker $ARG | grep -q KO
+		if ./push_swap $ARG | ./checker_linux $ARG | grep -q KO
 		then
 			echo "Error!"
 			echo $ARG
 			break
 		fi
-		NUMBER="$(./$3 $ARG | wc -l | sed 's/ //g')"
+		NUMBER="$(./push_swap $ARG | wc -l | sed 's/ //g')"
 		if [ "$NUMBER" -gt "$LIMIT" ]
 			then
 			echo $NUMBER >> $FILE

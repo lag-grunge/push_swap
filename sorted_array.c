@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sorted_array.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 11:00:09 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 11:00:12 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static void	insert(t_dlist *cur, size_t i, int *arr_sorted)
@@ -34,6 +46,8 @@ int	*insertion_sort(t_dlist *stack, size_t size)
 	t_dlist	*cur;
 
 	cur = stack;
+	if (!size)
+		return (NULL);
 	arr_sorted = (int *)malloc(sizeof(int) * size);
 	if (!arr_sorted)
 		exit_error(MALLOC_ERROR, NULL, NULL, NULL);
@@ -44,8 +58,7 @@ int	*insertion_sort(t_dlist *stack, size_t size)
 		cur = cur->next;
 		i++;
 	}
-	if (size > 0)
-		ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
+	ft_dlstmap(stack, &correct_pos_for_elem, arr_sorted);
 	return (arr_sorted);
 }
 

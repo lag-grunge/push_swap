@@ -1,96 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asipes_sort.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:31:28 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 10:31:36 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include "asipes_sort.h"
 
-static void	moveA_B(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data)
+static void	move_a_b(t_dlist **stack_a, t_dlist **stack_b, \
+					t_cmn_asip_data *data)
 {
 	size_t	i;
 	size_t	cur_pos;
-	t_dlist	*last_A;
+	t_dlist	*last_a;
 
 	i = data->next;
-	last_A = (*stack_A)->prev;
+	last_a = (*stack_a)->prev;
 	while (i <= data->mid)
 	{
-		cur_pos = get_pos(*stack_A);
+		cur_pos = get_pos(*stack_a);
 		if (cur_pos <= data->mid && cur_pos >= data->next)
 			i++;
-		if (cur_pos == data->next && get_pos(last_A) == data->next - 1)
+		if (cur_pos == data->next && get_pos(last_a) == data->next - 1)
 		{
-			execute_command("ra", stack_A, stack_B, 0);
+			execute_command("ra", stack_a, stack_b, 0);
 			data->next++;
 		}
 		else if (cur_pos > data->mid || cur_pos < data->next)
-			execute_command("ra", stack_A, stack_B, 0);
+			execute_command("ra", stack_a, stack_b, 0);
 		else
-			execute_command("pb", stack_A, stack_B, 0);
-		last_A = last_A->next;
+			execute_command("pb", stack_a, stack_b, 0);
+		last_a = last_a->next;
 	}
 	data->max = data->mid;
 }
 
-static void	operB( t_cmn_asip_data *data, int sec)
+static void	oper_b(t_cmn_asip_data *data, int sec)
 {
 	int		i;
-	int		Ib;
-	t_dlist	**stack_A;
-	t_dlist	**stack_B;
+	int		size_b;
+	t_dlist	**stack_a;
+	t_dlist	**stack_b;
 
-	stack_A = data->stack_A;
-	stack_B = data->stack_B;
-	Ib = ft_dlst_size(*stack_B);
-	correctAchain(stack_A, data);
+	stack_a = data->stack_a;
+	stack_b = data->stack_b;
+	size_b = ft_dlst_size(*stack_b);
+	correct_a_chain(stack_a, data);
 	i = 0;
-	while (Ib)
+	while (size_b)
 	{
 		if (!sec)
 			data->flag++;
 		data->mid = (data->max + data->next) / 2;
-		while (i < Ib)
-			i += operBelem(data, sec);
-		Ib = ft_dlst_size(*stack_B);
+		while (i < size_b)
+			i += oper_b_elem(data, sec);
+		size_b = ft_dlst_size(*stack_b);
 		data->max = data->mid;
 		i = 0;
 	}
 }
 
-static void	operA(t_dlist **stack_A, t_dlist **stack_B, t_cmn_asip_data *data)
+static void	oper_a(t_dlist **stack_a, t_dlist **stack_b, t_cmn_asip_data *data)
 {
 	size_t	cur_flag;
 
-	while (get_flag(*stack_A))
+	while (get_flag(*stack_a))
 	{
-		cur_flag = get_flag(*stack_A);
+		cur_flag = get_flag(*stack_a);
 		restore_data_max_mid(data);
-		while (get_flag(*stack_A) == cur_flag)
+		while (get_flag(*stack_a) == cur_flag)
 		{
-			if (get_pos(*stack_A) <= data->next)
+			if (get_pos(*stack_a) <= data->next)
 			{
 				data->next++;
-				execute_command("ra", stack_A, stack_B, 0);
+				execute_command("ra", stack_a, stack_b, 0);
 			}
 			else
-				execute_command("pb", stack_A, stack_B, 0);
+				execute_command("pb", stack_a, stack_b, 0);
 		}
-		operB(data, 1);
+		oper_b(data, 1);
 	}
 }
 
-int	asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+int	asipes_sort(t_dlist **stack_a, t_dlist **stack_b, t_stck_data *data)
 {
 	t_cmn_asip_data	cmn_data;
 
-	asip_fl_change(stack_A);
+	asip_fl_change(stack_a);
 	init_data(&cmn_data, data);
-	cmn_data.stack_A = stack_A;
-	cmn_data.stack_B = stack_B;
+	cmn_data.stack_a = stack_a;
+	cmn_data.stack_b = stack_b;
 	while (cmn_data.next <= cmn_data.size)
 	{
 		restore_size(&cmn_data, data);
-		moveA_B(stack_A, stack_B, &cmn_data);
-		operB(&cmn_data, 0);
+		move_a_b(stack_a, stack_b, &cmn_data);
+		oper_b(&cmn_data, 0);
 		if (cmn_data.next > cmn_data.size)
 			break ;
-		operA(stack_A, stack_B, &cmn_data);
+		oper_a(stack_a, stack_b, &cmn_data);
 	}
 	return (0);
 }

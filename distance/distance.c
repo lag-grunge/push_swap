@@ -1,44 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   distance.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:59:11 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 10:59:13 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../push_swap.h"
 #include "distance.h"
 
-static void move_B(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+static void	move_b(t_dlist **stack_a, t_dlist **stack_b, t_stck_data *data)
 {
 	int	i;
-	int pos;
+	int	pos;
 
 	i = 0;
-	while (i < (int)data->size - 2 || ft_dlst_size(*stack_A) > 2)
+	while (i < (int)data->size - 2 || ft_dlst_size(*stack_a) > 2)
 	{
-		pos = (int)get_pos(*stack_A);
+		pos = (int)get_pos(*stack_a);
 		if (pos != 0 && pos != (int)data->size - 1)
 		{
-			execute_command("pb", stack_A, stack_B, 0);
+			execute_command("pb", stack_a, stack_b, 0);
 			if (pos < (int)data->size / 2)
-				execute_command("rb", stack_A, stack_B, 0);
+				execute_command("rb", stack_a, stack_b, 0);
 		}
 		else
-			execute_command("ra", stack_A, stack_B, 0);
+			execute_command("ra", stack_a, stack_b, 0);
 		i++;
 	}
 }
 
-static void exec_n_cmds(char *op_line, t_dlist **stack_A, t_dlist **stack_B, int n)
+static int	same_directions(int *actions, t_dlist **stack_A, \
+							t_dlist **stack_B, t_stck_data *data)
 {
-	int i;
-
-	i = 0;
-	while (i < n)
-	{
-		execute_command(op_line, stack_A, stack_B, 0);
-		i++;
-	}
-}
-
-
-static int same_directions(int *actions, t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
-{
-	int m;
-	int d;
+	int	m;
+	int	d;
 
 	if (actions[f(ra)] && actions[f(rb)])
 	{
@@ -63,29 +63,30 @@ static int same_directions(int *actions, t_dlist **stack_A, t_dlist **stack_B, t
 	return (0);
 }
 
-static void exec_cmds(int *actions, t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+static void	exec_cmds(int *actions, t_dlist **stack_a, \
+					t_dlist **stack_b, t_stck_data *data)
 {
-	if (same_directions(actions, stack_A, stack_B, data))
+	if (same_directions(actions, stack_a, stack_b, data))
 		return ;
 	if (actions[f(ra)])
-		exec_n_cmds(data->op_lines[ra], stack_A, stack_B, actions[f(ra)]);
+		exec_n_cmds(data->op_lines[ra], stack_a, stack_b, actions[f(ra)]);
 	else if (actions[f(rra)])
-		exec_n_cmds(data->op_lines[rra], stack_A, stack_B, actions[f(rra)]);
+		exec_n_cmds(data->op_lines[rra], stack_a, stack_b, actions[f(rra)]);
 	if (actions[f(rrb)])
-		exec_n_cmds(data->op_lines[rrb], stack_A, stack_B, actions[f(rrb)]);
+		exec_n_cmds(data->op_lines[rrb], stack_a, stack_b, actions[f(rrb)]);
 	else if (actions[f(rb)])
-		exec_n_cmds(data->op_lines[rb], stack_A, stack_B, actions[f(rb)]);
+		exec_n_cmds(data->op_lines[rb], stack_a, stack_b, actions[f(rb)]);
 }
 
-static void correct_A(t_dlist **stack_A)
+static void	correct_a(t_dlist **stack_a)
 {
 	int		dist1;
-	t_dlist *prev;
-	t_dlist *next;
+	t_dlist	*prev;
+	t_dlist	*next;
 	char	*op;
 
-	prev = *stack_A;
-	next = *stack_A;
+	prev = *stack_a;
+	next = *stack_a;
 	dist1 = 0;
 	while (get_pos(prev) > get_pos(prev->prev) && \
 			get_pos(next) > get_pos(next->prev))
@@ -96,29 +97,26 @@ static void correct_A(t_dlist **stack_A)
 	}
 	if (get_pos(prev) < get_pos(prev->prev))
 		op = ft_strdup("rra");
-	else//if (get_pos(next) < get_pos(next->prev))
+	else
 		op = ft_strdup("ra");
-	exec_n_cmds(op, stack_A, NULL, dist1);
+	exec_n_cmds(op, stack_a, NULL, dist1);
 	free(op);
 }
 
-
-void print_stack(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
-
-void distance_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data)
+void	distance_sort(t_dlist **stack_a, t_dlist **stack_b, t_stck_data *data)
 {
-	int min_actions[4];
+	int	min_actions[4];
 
-	move_B(stack_A, stack_B, data);
-	data->size_A = 2;
-	data->size_B = data->size - data->size_A;
-	while (data->size_B)
+	move_b(stack_a, stack_b, data);
+	data->size_a = 2;
+	data->size_b = data->size - data->size_a;
+	while (data->size_b)
 	{
-		find_best_actions(min_actions, stack_A, stack_B, data);
-		exec_cmds(min_actions, stack_A, stack_B, data);
-		execute_command("pa", stack_A, stack_B, 0);
-		data->size_B--;
-		data->size_A++;
+		find_best_actions(min_actions, stack_a, stack_b, data);
+		exec_cmds(min_actions, stack_a, stack_b, data);
+		execute_command("pa", stack_a, stack_b, 0);
+		data->size_b--;
+		data->size_a++;
 	}
-	correct_A(stack_A);
+	correct_a(stack_a);
 }

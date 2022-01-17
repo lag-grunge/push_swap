@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   small_size.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:56:37 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 10:56:44 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	small_2(t_dlist	**stack_A)
@@ -18,41 +30,41 @@ void	small_3(t_dlist	**stack_A, int start)
 	return ;
 }
 
-void	small_4(t_dlist	**stack_A)
+void	small_4(t_dlist	**stack_a)
 {
-	t_dlist	*stack_B;
+	t_dlist	*stack_b;
 
-	stack_B = NULL;
-	partition(&stack_B, stack_A, 0, 1);
-	small_3(stack_A, 1);
-	execute_command("pa", stack_A, &stack_B, 0);
+	stack_b = NULL;
+	partition(&stack_b, stack_a, 0, 1);
+	small_3(stack_a, 1);
+	execute_command("pa", stack_a, &stack_b, 0);
 }
 
-void	small_5(t_dlist	**stack_A)
+void	small_5(t_dlist	**stack_a)
 {
 	int		res;
-	t_dlist	*stack_B;
+	t_dlist	*stack_b;
 
-	stack_B = NULL;
+	stack_b = NULL;
 	res = 0;
-	partition(&stack_B, stack_A, 0, 2);
-	if (get_pos(stack_B) == 0)
+	partition(&stack_b, stack_a, 0, 2);
+	if (get_pos(stack_b) == 0)
 	{
-		if (get_pos(*stack_A) == 4)
-			res = execute_command("rr", stack_A, &stack_B, 0);
-		else if (get_pos((*stack_A)->next) == 4)
-			res = execute_command("rrr", stack_A, &stack_B, 0);
-		if (!res && get_pos(*stack_A) == 3)
-			execute_command("ss", stack_A, &stack_B, 0);
-		else if (get_pos(*stack_A) == 3)
-			execute_command("sa", stack_A, &stack_B, 0);
+		if (get_pos(*stack_a) == 4)
+			res = execute_command("rr", stack_a, &stack_b, 0);
+		else if (get_pos((*stack_a)->next) == 4)
+			res = execute_command("rrr", stack_a, &stack_b, 0);
+		if (!res && get_pos(*stack_a) == 3)
+			execute_command("ss", stack_a, &stack_b, 0);
+		else if (get_pos(*stack_a) == 3)
+			execute_command("sa", stack_a, &stack_b, 0);
 		else if (!res)
-			execute_command("sb", stack_A, &stack_B, 0);
+			execute_command("sb", stack_a, &stack_b, 0);
 	}
 	else
-		small_3(stack_A, 2);
-	execute_command("pa", stack_A, &stack_B, 0);
-	execute_command("pa", stack_A, &stack_B, 0);
+		small_3(stack_a, 2);
+	execute_command("pa", stack_a, &stack_b, 0);
+	execute_command("pa", stack_a, &stack_b, 0);
 }
 
 void	small_size(t_dlist **stack_A, size_t size)

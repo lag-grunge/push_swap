@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asipes_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:31:10 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 10:32:21 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include "asipes_sort.h"
 
@@ -16,14 +28,14 @@ void	restore_size(t_cmn_asip_data *cmn_data, t_stck_data *data)
 	cmn_data->mid = (cmn_data->max + cmn_data->next) / 2;
 }
 
-void	asip_fl_change(t_dlist **stack_A)
+void	asip_fl_change(t_dlist **stack_a)
 {
 	t_dlist		*cur;
 	t_ps_data	*content;
 
-	cur = *stack_A;
+	cur = *stack_a;
 	content = NULL;
-	while (cur != *stack_A || !content)
+	while (cur != *stack_a || !content)
 	{
 		content = cur->content;
 		content->flag = 0;
@@ -39,13 +51,13 @@ void	exec_n_cmd_asip(int cmd_num, size_t n, t_cmn_asip_data *data)
 	while (i < n)
 	{
 		if (ra <= cmd_num && cmd_num < pa)
-			data->cmd_array[cmd_num](data->stack_A);
+			data->cmd_array[cmd_num](data->stack_a);
 		else if (rb <= cmd_num && cmd_num < pb)
-			data->cmd_array[cmd_num](data->stack_B);
+			data->cmd_array[cmd_num](data->stack_b);
 		else if (pa == cmd_num || (rr <= cmd_num && cmd_num <= ss))
-			data->cmd_array[cmd_num](data->stack_A, data->stack_B);
+			data->cmd_array[cmd_num](data->stack_a, data->stack_b);
 		else if (pb == cmd_num)
-			data->cmd_array[cmd_num](data->stack_B, data->stack_A);
+			data->cmd_array[cmd_num](data->stack_b, data->stack_a);
 		put_command(data->op_lines[cmd_num]);
 		i++;
 	}

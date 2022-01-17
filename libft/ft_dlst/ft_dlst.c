@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_dlst.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:57:29 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 11:51:29 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_dlst.h"
 #include "libft.h"
 
@@ -69,7 +81,7 @@ t_dlist	*ft_dlst_pop(t_dlist **dlst, t_dlist *cur)
 	return (cur);
 }
 
-void	ft_dlst_clear(t_dlist **dlst, void	(*free_func)(void *))
+void	ft_dlst_clear(t_dlist **dlst, void (*free_func)(void *))
 {
 	t_dlist	*tmp;
 	t_dlist	*next;

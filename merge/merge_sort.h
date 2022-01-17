@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   merge_sort.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 11:04:34 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 11:04:35 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MERGE_SORT_H
 # define MERGE_SORT_H
 
 typedef struct s_merge_data
 {
-	t_dlist	**stack_A;
-	t_dlist	**stack_B;
+	t_dlist	**stack_a;
+	t_dlist	**stack_b;
 	t_dlist	***st_ptr;
 	size_t	size;
-	size_t	i_A;
-	size_t	i_B;
+	size_t	i_a;
+	size_t	i_b;
 	size_t	cur_flag;
 	t_comnd	*cmd_array;
 	char	**op_lines;
@@ -34,7 +46,7 @@ void	merge_fl_change_bottom(t_dlist *stack_A, size_t count, size_t flag);
 
 void	init_2chnks(t_merge *data);
 void	init_data_flags(t_merge *data, t_stck_data *cmn_data);
-void	init_data_stacks(t_merge *data, t_dlist **stack_B, t_dlist **stack_A);
+void	init_data_stacks(t_merge *data, t_dlist **stack_b, t_dlist **stack_a);
 
 void	merge_chunks_of_one_size(t_merge *data);
 size_t	init_oper_one_nchnk(t_merge *data, size_t *chunk_0, size_t *chunk_1);

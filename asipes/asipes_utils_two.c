@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asipes_utils_two.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 10:32:47 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 10:34:08 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include "asipes_sort.h"
 
@@ -50,7 +62,7 @@ static int	find_dest_ab(t_dlist *a, t_dlist *b)
 	return (dest_next);
 }
 
-int	correctAchain(t_dlist **stack_A, t_cmn_asip_data *data)
+int	correct_a_chain(t_dlist **stack_a, t_cmn_asip_data *data)
 {
 	t_dlist	*next_list;
 	int		cmd_num;
@@ -58,10 +70,10 @@ int	correctAchain(t_dlist **stack_A, t_cmn_asip_data *data)
 
 	if (data->next == 0)
 		return (0);
-	next_list = *stack_A;
+	next_list = *stack_a;
 	while (get_pos(next_list) != data->next - 1)
 		next_list = next_list->next;
-	dest = find_dest_ab(next_list, (*stack_A)->prev);
+	dest = find_dest_ab(next_list, (*stack_a)->prev);
 	if (!dest)
 		return (0);
 	cmd_num = ra + (dest < 0);
@@ -71,25 +83,25 @@ int	correctAchain(t_dlist **stack_A, t_cmn_asip_data *data)
 	return (0);
 }
 
-int	operBelem(t_cmn_asip_data *data, int sec)
+int	oper_b_elem(t_cmn_asip_data *data, int sec)
 {
 	size_t	cur_pos;
-	t_dlist	**stack_A;
-	t_dlist	**stack_B;
+	t_dlist	**stack_a;
+	t_dlist	**stack_b;
 
-	stack_A = data->stack_A;
-	stack_B = data->stack_B;
-	cur_pos = get_pos(*stack_B);
+	stack_a = data->stack_a;
+	stack_b = data->stack_b;
+	cur_pos = get_pos(*stack_b);
 	if (cur_pos <= data->mid && cur_pos != data->next)
-		execute_command(data->op_lines[rb], stack_A, stack_B, 0);
+		execute_command(data->op_lines[rb], stack_a, stack_b, 0);
 	else
 	{
 		if (!sec)
-			*set_flag(*stack_B) = data->flag;
-		execute_command("pa", stack_A, stack_B, 0);
+			*set_flag(*stack_b) = data->flag;
+		execute_command("pa", stack_a, stack_b, 0);
 		if (cur_pos == data->next)
 		{
-			execute_command("ra", stack_A, stack_B, 0);
+			execute_command("ra", stack_a, stack_b, 0);
 			data->next++;
 		}
 	}

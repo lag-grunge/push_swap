@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/16 11:16:34 by sdalton           #+#    #+#             */
+/*   Updated: 2022/01/16 11:16:40 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 # include <unistd.h>
@@ -24,17 +36,18 @@
 typedef void	(*t_fr_func)(void *);
 typedef void	(*t_comnd)();
 enum e_cmds_codes {
-					ra, 
-					rra, 
-					sa, 
-					pa, 
-					rb, 
-					rrb, 
-					sb, 
-					pb, 
-					rr, 
-					rrr, 
-					ss};
+	ra,
+	rra,
+	sa,
+	pa,
+	rb,
+	rrb,
+	sb,
+	pb,
+	rr,
+	rrr,
+	ss
+};
 
 typedef struct s_ps_data {
 	int		val;
@@ -44,8 +57,8 @@ typedef struct s_ps_data {
 
 typedef struct s_stck_data {
 	size_t	size;
-	size_t	size_A;
-	size_t	size_B;
+	size_t	size_a;
+	size_t	size_b;
 	int		*arr_sorted;
 	t_comnd	*cmd_array;
 	char	**op_lines;
@@ -71,6 +84,7 @@ void	partition(t_dlist **stack2, t_dlist **stack1, size_t part, size_t size);
 int		get_next_line(char **line);
 void	put_command(char *op_line);
 int		execute_command(char *op, t_dlist **stck_A, t_dlist **stck_B, int chkr);
+void	exec_n_cmds(char *op_line, t_dlist **stack_A, t_dlist **stack_B, int n);
 t_comnd	*init_command_array(t_stck_data *data);
 
 int		*insertion_sort(t_dlist *stack, size_t size);
@@ -84,14 +98,13 @@ int		proc_elem(t_dlist **stack, char **arg_sp, int j);
 void	small_size(t_dlist **stack_A, size_t size);
 void	small_2(t_dlist	**stack);
 void	small_3(t_dlist	**stack, int start);
-void	small_4(t_dlist	**stack);
-void	small_5(t_dlist	**stack);
+void	small_4(t_dlist	**stack_a);
+void	small_5(t_dlist	**stack_a);
 
-void	sort(t_dlist **stack_A, t_stck_data *data);
+void	sort(t_dlist **stack_a, t_stck_data *data);
 void	merge_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 int		asipes_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
 void	radix_sort(t_dlist **stack_A, t_dlist **stack_B, size_t size);
-void	distance_sort(t_dlist **stack_A, t_dlist **stack_B, t_stck_data *data);
-
+void	distance_sort(t_dlist **stack_a, t_dlist **stack_b, t_stck_data *data);
 
 #endif

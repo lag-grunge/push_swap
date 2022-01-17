@@ -71,11 +71,11 @@ static int	get_digits(int n)
 
 static int	near_overflow(int digits)
 {
-	static int	INT_MAX_dig;
+	static int	int_max_dig;
 
-	if (!INT_MAX_dig)
-		INT_MAX_dig = get_digits(INT_MAX);
-	return (digits == INT_MAX_dig - 1);
+	if (!int_max_dig)
+		int_max_dig = get_digits(INT_MAX);
+	return (digits == int_max_dig - 1);
 }
 
 int	ft_atoi(char *s)
