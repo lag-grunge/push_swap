@@ -97,7 +97,7 @@ clean :
 
 fclean :
 	@make clean
-	@rm -rf ${LIBFT}
+	@rm -rf ${LIB_DIR}/${LIBFT}
 	@rm -rf ${NAME} ${NAME_2} ${LIB_SORT} ${NAME_DEBUG}
 
 re :	fclean all
